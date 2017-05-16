@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.modular.sirius.definition.ext" name="Sirius" schema="schema/org.modular.sirius.definition.ext.exsd"/>
+
+</plugin>

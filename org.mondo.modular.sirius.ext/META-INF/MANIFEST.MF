@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Sirius.Ext
+Bundle-SymbolicName: org.mondo.modular.sirius.ext;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.mondo.modular.sirius.ext.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.e4.core.di.annotations,
+ org.eclipse.emf.common.util
+Export-Package: org.mondo.modular.sirius.ext

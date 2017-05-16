@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.mondo.generate.visbility.project/src" modelPluginID="org.mondo.generate.visbility.project"
+    modelName="Visibility" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>Visibility.ecore</foreignModel>
+  <genPackages prefix="Visibility" disposableProviderFactory="true" ecorePackage="Visibility.ecore#/">
+    <genClasses ecoreClass="Visibility.ecore#//VisibilityClass">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Visibility.ecore#//VisibilityClass/eolExpressionWS"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Visibility.ecore#//VisibilityClass/eolExpressionProject"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Visibility.ecore#//VisibilityClass/eolExpressionPackage"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

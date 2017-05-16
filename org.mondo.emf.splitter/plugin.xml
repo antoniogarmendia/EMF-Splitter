@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="org.mondo.emf.splitter.category"
+            name="Category EMF Splitter">
+      </category>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuCreateModularPluginProject"
+            name="Create Modular Project">
+      </command>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuCreateFilterPluginProject"
+            name="Create Filter Project">
+      </command>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuCreateVisualPluginProject"
+            name="Create Visual Plugin Project">
+      </command>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuCreateAllPluginProjects"
+            name="Create All Plugin Project">
+      </command>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuDefineConcreteVisualization"
+            name="Define Concrete Visualization">
+      </command>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuDefineConcreteTableVisualization"
+            name="Define Concrete Table Visualization">
+      </command>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuCreateScopePluginProject"
+            name="Create Scope Project">
+      </command>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuCreateVisbilityPluginProject"
+            name="Create Visibility Project">
+      </command>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuDefineModularPattern"
+            name="Define Modular Pattern">
+      </command>
+   </extension>
+   <extension
+         id="org.mondo.emf.splitter.popupmenuHandler"
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.mondo.emf.splitter.actions.CreateVisualPluginProject"
+            commandId="org.mondo.emf.splitter.popupmenuCreateVisualPluginProject">
+      </handler>
+      <handler
+            class="org.mondo.emf.splitter.actions.CreateFilterPluginProject"
+            commandId="org.mondo.emf.splitter.popupmenuCreateFilterPluginProject">
+      </handler>
+      <handler
+            class="org.mondo.emf.splitter.actions.CreateModularPluginProject"
+            commandId="org.mondo.emf.splitter.popupmenuCreateModularPluginProject">
+      </handler>
+      <handler
+            class="org.mondo.emf.splitter.actions.CreateAllProjects"
+            commandId="org.mondo.emf.splitter.popupmenuCreateAllPluginProjects">
+      </handler>
+      <handler
+            class="org.mondo.emf.splitter.actions.DefineConcreteVisualization"
+            commandId="org.mondo.emf.splitter.popupmenuDefineConcreteVisualization">
+      </handler>
+      <handler
+            class="org.mondo.emf.splitter.actions.DefineTableConcreteVisualization"
+            commandId="org.mondo.emf.splitter.popupmenuDefineConcreteTableVisualization">
+      </handler>
+      <handler
+            class="org.mondo.emf.splitter.actions.CreateScopePluginProject"
+            commandId="org.mondo.emf.splitter.popupmenuCreateScopePluginProject">
+      </handler>
+      <handler
+            class="org.mondo.emf.splitter.actions.CreateVisibilityPluginProject"
+            commandId="org.mondo.emf.splitter.popupmenuCreateVisbilityPluginProject">
+      </handler>
+      <handler
+            class="org.mondo.emf.splitter.actions.DefineModularPattern"
+            commandId="org.mondo.emf.splitter.popupmenuDefineModularPattern">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="true"
+            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer?after=additions">
+         <menu
+               label="EMF-Splitter">
+            <command
+                  commandId="org.mondo.emf.splitter.popupmenuCreateModularPluginProject"
+                  id="PopupMenu.menu.SplitterCreateModularProject"
+                  label="Create Modular Project"
+                  mnemonic="S"
+                  style="push">
+            </command>
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeMenuSelection">
+                  <iterate
+                        ifEmpty="false">
+                     <adapt
+                           type="org.eclipse.core.resources.IResource">
+                        <test
+                              property="org.eclipse.core.resources.name"
+                              value="*.ecore">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+            <command
+                  commandId="org.mondo.emf.splitter.popupmenuCreateFilterPluginProject"
+                  id="PopupMenu.menu.SplitterCreateModularFilterProject"
+                  label="Create Filter Project"
+                  mnemonic="S"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.mondo.emf.splitter.popupmenuCreateVisualPluginProject"
+                  id="PopupMenu.menu.SplitterCreateModularFilterVisualEditor Project"
+                  label="Create Visual Editor Project"
+                  mnemonic="S"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.mondo.emf.splitter.popupmenuCreateScopePluginProject"
+                  id="PopupMenu.menu.SplitterCreateModularScopeProject"
+                  label="Create Scope Project"
+                  mnemonic="S"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.mondo.emf.splitter.popupmenuCreateVisibilityPluginProject"
+                  id="PopupMenu.menu.SplitterCreateModularVisbilityProject"
+                  label="Create Visibility Project"
+                  mnemonic="S"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.mondo.emf.splitter.popupmenuCreateAllPluginProjects"
+                  id="PopupMenu.menu.SplitterCreateAllProjects"
+                  label="Create All Projects"
+                  mnemonic="S"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.mondo.emf.splitter.popupmenuDefineConcreteVisualization"
+                  id="PopupMenu.menu.SplitterCreateAllProjects"
+                  label="Define Concrete Visualization"
+                  mnemonic="S"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.mondo.emf.splitter.popupmenuDefineConcreteTableVisualization"
+                  id="PopupMenu.menu.SplitterCreateAllProjects"
+                  label="Define Table Representation"
+                  mnemonic="S"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.mondo.emf.splitter.popupmenuDefineModularPattern"
+                  id="PopupMenu.menu.DefineModularPattern"
+                  label="Define Modular Pattern"
+                  mnemonic="S"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.mondo.editor.extensionpoints.patternImplementation">
+      <client
+            class="org.mondo.emf.splitter.dsl.tao.DSLtaoCreateModularProject"
+            pattern="Modularity">
+      </client>
+      <client
+            class="org.mondo.emf.splitter.dsl.tao.DSLtaoCreateFilterProject"
+            pattern="Filter">
+      </client>
+      <client
+            class="org.mondo.emf.splitter.dsl.tao.DSLtaoCreateVisualizationProject"
+            pattern="Graph-based Representation">
+      </client>
+      <client
+            class="org.mondo.emf.splitter.dsl.tao.DSLtaoCreateScopeProject"
+            pattern="Scope">
+      </client>
+      <client
+            class="org.mondo.emf.splitter.dsl.tao.DSLtaoCreateVisibilityProject"
+            pattern="Visibility">
+      </client>
+      <client
+            class="org.mondo.emf.splitter.dsl.tao.DSLtaoCreateIndexAttributeProject"
+            pattern="IndexAttribute">
+      </client>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated RepresentationGraph -->
+      <package
+            uri="http://mondo.dsl.org/mmPatterns/representationGraph"
+            class="RepresentationGraph.RepresentationGraphPackage"
+            genModel="model/RepresentationGraph.genmodel"/>
+   </extension>
+
+</plugin>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.uam.eps.miso.diagram.editor.mobile.MobileServerCategory"
+            name="Mobile Server">
+      </category>
+      <view
+            allowMultiple="true"
+            category="org.uam.eps.miso.diagram.editor.mobile.MobileServerCategory"
+            class="org.uam.eps.miso.diagram.editor.mobile.view.MobileServerView"
+            icon="icons/appIcon.png"
+            id="org.uam.eps.miso.diagram.editor.mobile.MobileServerView"
+            name="Mobile Server View"
+            restorable="true">
+      </view>
+   </extension>
+
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="org.mondo.mobile.server"
+            name="Category Mobile Server">
+      </category>
+      <command
+            categoryId="org.mondo.mobile.server"
+            id="org.uam.eps.miso.diagram.editor.mobile.PostEcore"
+            name="Post Ecore">
+      </command>
+      <command
+            categoryId="org.mondo.mobile.server"
+            id="org.uam.eps.miso.diagram.editor.mobile.PostGraphicR"
+            name="Post Graphic Representation">
+      </command>
+      <command
+            categoryId="org.mondo.mobile.server"
+            id="org.uam.eps.miso.diagram.editor.mobile.PostEcoreGraphicR"
+            name="Post Ecore + Graphic Representation">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.uam.eps.miso.diagram.editor.mobile.actions.PostEcore"
+            commandId="org.uam.eps.miso.diagram.editor.mobile.PostEcore">
+      </handler>
+      <handler
+            class="org.uam.eps.miso.diagram.editor.mobile.actions.PostGraphicR"
+            commandId="org.uam.eps.miso.diagram.editor.mobile.PostGraphicR">
+      </handler>
+      <handler
+            class="org.uam.eps.miso.diagram.editor.mobile.actions.PostEcoreGraphicRepresentation"
+            commandId="org.uam.eps.miso.diagram.editor.mobile.PostEcoreGraphicR">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="true"
+            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer?after=additions">
+         <menu
+               label="Mobile Server">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeMenuSelection">
+                  <iterate
+                        ifEmpty="false">
+                     <adapt
+                           type="org.eclipse.core.resources.IResource">
+                        <or>
+                           <test
+                                 property="org.eclipse.core.resources.name"
+                                 value="*.ecore">
+                           </test>
+                           <test
+                                 property="org.eclipse.core.resources.name"
+                                 value="*.graphicR">
+                           </test></or>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+            <command
+                  commandId="org.uam.eps.miso.diagram.editor.mobile.PostEcore"
+                  id="PopupMenu.menu.MobilePostEcore"
+                  label="Post Ecore"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <adapt
+                           type="org.eclipse.core.resources.IResource">
+                        <or>
+                           <test
+                                 property="org.eclipse.core.resources.name"
+                                 value="*.ecore">
+                           </test>
+                        </or>
+                     </adapt>
+                  </iterate>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.uam.eps.miso.diagram.editor.mobile.PostGraphicR"
+                  id="PopupMenu.menu.MobilePostGraphicR"
+                  label="Post Graphic Representation"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeMenuSelection">
+                     <iterate
+                           ifEmpty="false">
+                        <adapt
+                              type="org.eclipse.core.resources.IResource">
+                           <or>
+                              <test
+                                    property="org.eclipse.core.resources.name"
+                                    value="*.graphicR">
+                              </test>
+                           </or>
+                        </adapt>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.uam.eps.miso.diagram.editor.mobile.PostEcoreGraphicR"
+                  id="PopupMenu.menu.MobilePostEcoreGraphicRepresentation"
+                  label="Post Ecore and Graphic Representation"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+
+</plugin>

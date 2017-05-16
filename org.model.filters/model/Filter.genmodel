@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.model.filters/src" modelPluginID="org.model.filters"
+    modelName="Filter" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
+    usedGenPackages="../../org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore" operationReflection="true"
+    importOrganizing="true">
+  <foreignModel>Filter.ecore</foreignModel>
+  <genPackages prefix="DslFilter" disposableProviderFactory="true" ecorePackage="Filter.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Filter.ecore#//EnumLogicOperation">
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumLogicOperation/AND"/>
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumLogicOperation/OR"/>
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumLogicOperation/XOR"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Filter.ecore#//EnumNumberOperation">
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumNumberOperation/EQUALTO"/>
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumNumberOperation/NOTEQUALTO"/>
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumNumberOperation/LESSTHAN"/>
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumNumberOperation/GREATERTHAN"/>
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumNumberOperation/LESSTHANOREQUALTO"/>
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumNumberOperation/GREATERTHANOREQUALTO"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Filter.ecore#//EnumStringOperation">
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumStringOperation/CONTAINS"/>
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumStringOperation/STARTSWITH"/>
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumStringOperation/ENDSWITH"/>
+      <genEnumLiterals ecoreEnumLiteral="Filter.ecore#//EnumStringOperation/REGULAREXPRESSION"/>
+    </genEnums>
+    <genClasses ecoreClass="Filter.ecore#//AllFilters">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//AllFilters/negative"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Filter.ecore#//AllFilters/groupfilters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//AllFilters/modelURI"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Filter.ecore#//AllFilters/List_EClasses"/>
+      <genOperations ecoreOperation="Filter.ecore#//AllFilters/Execute">
+        <genParameters ecoreParameter="Filter.ecore#//AllFilters/Execute/tree"/>
+      </genOperations>
+      <genOperations ecoreOperation="Filter.ecore#//AllFilters/LastGroupFilter"/>
+      <genOperations ecoreOperation="Filter.ecore#//AllFilters/InitAllFilters"/>
+      <genOperations ecoreOperation="Filter.ecore#//AllFilters/GetClassName">
+        <genParameters ecoreParameter="Filter.ecore#//AllFilters/GetClassName/anEObject"/>
+      </genOperations>
+      <genOperations ecoreOperation="Filter.ecore#//AllFilters/GetAllContainmentsClasses">
+        <genParameters ecoreParameter="Filter.ecore#//AllFilters/GetAllContainmentsClasses/anEObject"/>
+      </genOperations>
+      <genOperations ecoreOperation="Filter.ecore#//AllFilters/GetAllContainmentsClasses_Recursive">
+        <genParameters ecoreParameter="Filter.ecore#//AllFilters/GetAllContainmentsClasses_Recursive/anEClass"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="Filter.ecore#//FilterGroup">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Filter.ecore#//FilterGroup/contents"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Filter.ecore#//FilterGroup/MapSatifiesCondition"/>
+      <genOperations ecoreOperation="Filter.ecore#//FilterGroup/AddEObjectToMap">
+        <genParameters ecoreParameter="Filter.ecore#//FilterGroup/AddEObjectToMap/key"/>
+        <genParameters ecoreParameter="Filter.ecore#//FilterGroup/AddEObjectToMap/value"/>
+      </genOperations>
+      <genOperations ecoreOperation="Filter.ecore#//FilterGroup/InitFilterGroup">
+        <genParameters ecoreParameter="Filter.ecore#//FilterGroup/InitFilterGroup/count"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="Filter.ecore#//Filter">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Filter.ecore#//Filter/anRule"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Filter.ecore#//Filter/anEClass"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Filter.ecore#//Filter/anEStructuralFeature"/>
+      <genOperations ecoreOperation="Filter.ecore#//Filter/GetEStructuralFeatures"/>
+      <genOperations ecoreOperation="Filter.ecore#//Filter/GetRules"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Filter.ecore#//Rule">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//Rule/anExp"/>
+      <genOperations ecoreOperation="Filter.ecore#//Rule/SatifiesRule">
+        <genParameters ecoreParameter="Filter.ecore#//Rule/SatifiesRule/value"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="Filter.ecore#//CNumberOperation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//CNumberOperation/anNumberOperation"/>
+    </genClasses>
+    <genClasses ecoreClass="Filter.ecore#//CStringOperation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//CStringOperation/anStringOperation"/>
+    </genClasses>
+    <genClasses ecoreClass="Filter.ecore#//CStructuralEObject">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Filter.ecore#//CStructuralEObject/anEObject"/>
+    </genClasses>
+    <genClasses ecoreClass="Filter.ecore#//CLogicOperation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//CLogicOperation/anLogicOperation"/>
+    </genClasses>
+    <genClasses ecoreClass="Filter.ecore#//IntToEObjectMap">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//IntToEObjectMap/key"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Filter.ecore#//IntToEObjectMap/value"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Filter.ecore#//FilterContent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//FilterContent/negative"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//FilterContent/execute"/>
+      <genOperations ecoreOperation="Filter.ecore#//FilterContent/Execute">
+        <genParameters ecoreParameter="Filter.ecore#//FilterContent/Execute/anEObject"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Filter.ecore#//FilterAttributes">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//FilterAttributes/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Filter.ecore#//FilterAttributes/anLogicOperation"/>
+    </genClasses>
+    <genClasses ecoreClass="Filter.ecore#//BasicCStringOperation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//BasicCStringOperation/anEnumStringOperation"/>
+      <genOperations ecoreOperation="Filter.ecore#//BasicCStringOperation/EnumToStringArray"/>
+    </genClasses>
+    <genClasses ecoreClass="Filter.ecore#//BasicCNumberOperation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//BasicCNumberOperation/anEnumNumberOperation"/>
+      <genOperations ecoreOperation="Filter.ecore#//BasicCNumberOperation/EnumToStringArray"/>
+    </genClasses>
+    <genClasses ecoreClass="Filter.ecore#//BasicCLogicOperation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Filter.ecore#//BasicCLogicOperation/anEnumLogicOperation"/>
+      <genOperations ecoreOperation="Filter.ecore#//BasicCLogicOperation/EnumToStringArray"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

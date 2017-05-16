@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated Filter -->
+      <package
+            uri="http://mondo.dsl.org/mmPatterns/filter"
+            class="Filter.FilterPackage"
+            genModel="model/Filter.genmodel"/>
+   </extension>
+
+</plugin>

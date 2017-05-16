@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.emf.splitter.feature"
+      label="EMF-Splitter"
+      version="0.1.0.qualifier"
+      provider-name="Autonomous University of Madrid(Grupo Miso)">
+
+   <description url="http://antoniogarmendia.github.io/EMF-Splitter">
+      Copyright (c) 2015 Autonomous University of Madrid, Miso Group.
+(http://www.miso.es). All rights reserved.
+   </description>
+
+   <copyright url="https://www.eclipse.org/legal/epl-v10.html">
+      https://www.eclipse.org/legal/epl-v10.html
+   </copyright>
+
+   <license url="https://www.eclipse.org/legal/epl-v10.html">
+      Copyright (c) 2015 Autonomous University of Madrid, Miso Group.
+(http://www.miso.es). All rights reserved.
+   </license>
+
+   <url>
+      <update label="EMF-Splitter" url="http://antoniogarmendia.github.io/EMF-Splitter/update-site/"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.core.resources" version="3.9.1" match="greaterOrEqual"/>
+      <import plugin="org.mondo.generate.modular.project" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.mondo.generate.filter.project" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.mondo.generate.sirius" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.mondo.editor.extensionpoints"/>
+      <import plugin="org.mondo.editor.graphiti" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.mondo.visualization.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.mondo.generate.scope.project" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.mondo.editor.ui" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.graphiti.ui" version="0.12.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.graphiti" version="0.12.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.transaction" version="1.9.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.gef" version="3.10.1" match="greaterOrEqual"/>
+      <import plugin="org.mondo.miso.table.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.mondo.dsl"/>
+      <import plugin="org.eclipse.emf.ecore.xmi"/>
+      <import plugin="org.eclipse.ocl"/>
+      <import plugin="org.eclipse.ocl.ecore"/>
+      <import plugin="org.eclipse.acceleo.common" version="3.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.acceleo.model" version="3.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.acceleo.profiler" version="3.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.acceleo.engine" version="3.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.core" version="3.10.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.ui" version="3.10.1" match="greaterOrEqual"/>
+      <import plugin="org.mondo.emf.splitter.library" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.mondo.dsl" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.eclipse.core.commands" version="3.7.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.m2m.atl.core" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.m2m.atl.common" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.m2m.atl.graphictoviewpoint" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.mondo.graphic.representation" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.m2m.atl.core.emf"/>
+      <import plugin="org.eclipse.sirius.diagram"/>
+      <import plugin="org.eclipse.emf.codegen.ecore" version="2.10.1" match="greaterOrEqual"/>
+      <import plugin="com.google.guava" version="15.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.sirius"/>
+      <import plugin="org.eclipse.core.runtime" version="3.10.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.codec" version="1.6.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.io" version="2.2.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.e4.core.di" version="1.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.e4.core.di.annotations"/>
+      <import plugin="org.mondo.mm.heuristic.visualization" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.ecore.xmi" version="2.10.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.sirius.diagram" version="1.0.1" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.lang" version="2.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.edit.ui" version="2.10.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.filesystem" version="1.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.m2m.atl.engine.emfvm"/>
+      <import plugin="org.eclipse.sirius.table" version="3.1.5" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.core" version="3.10.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt" version="3.10.1" match="greaterOrEqual"/>
+      <import plugin="org.uam.eps.miso.diagram.editor.jersey" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.uam.eps.miso.diagram.editor.json" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.e4.ui.di" version="1.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.11.0" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="org.mondo.emf.splitter"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.generate.filter.project"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.generate.modular.project"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.generate.sirius"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.emf.splitter.library"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.model.filters"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.graphic.representation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.mm.heuristic.visualization"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.modular.filterui.ext"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.modular.sirius.ext"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.visualization.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.modular.references.ext"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.m2m.atl.graphictoviewpoint"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.generate.scope.project"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.sirius.model"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.miso.table.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.uam.eps.miso.diagram.editor.jersey"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.uam.eps.miso.diagram.editor.json"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.uam.eps.miso.diagram.editor.mobile"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.generate.visibility.project"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.generate.index.project"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.miso.wizard.instantiate.modular.pattern"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.miso.ecore.statistics"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mondo.generate.modular.project.general"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

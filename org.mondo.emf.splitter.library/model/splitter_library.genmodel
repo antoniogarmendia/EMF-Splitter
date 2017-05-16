@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.mondo.emf.splitter.library/src" modelPluginID="org.mondo.emf.splitter.library"
+    modelName="Splitter_library" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>splitter_library.ecore</foreignModel>
+  <genPackages prefix="SplitterLibrary" disposableProviderFactory="true" ecorePackage="splitter_library.ecore#/">
+    <genDataTypes ecoreDataType="splitter_library.ecore#//DTProject"/>
+    <genDataTypes ecoreDataType="splitter_library.ecore#//DTIProgressMonitor"/>
+    <genDataTypes ecoreDataType="splitter_library.ecore#//DTGenModel"/>
+    <genDataTypes ecoreDataType="splitter_library.ecore#//DTIFile"/>
+    <genDataTypes ecoreDataType="splitter_library.ecore#//DTJavaProject"/>
+    <genDataTypes ecoreDataType="splitter_library.ecore#//DTIPackageFragment"/>
+    <genDataTypes ecoreDataType="splitter_library.ecore#//DTIClasspathEntry"/>
+    <genDataTypes ecoreDataType="splitter_library.ecore#//DTResourceSet"/>
+    <genDataTypes ecoreDataType="splitter_library.ecore#//DTResource"/>
+    <genClasses ecoreClass="splitter_library.ecore#//CreateEclipseProject">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//CreateEclipseProject/ProjectName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//CreateEclipseProject/project"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//CreateEclipseProject/isPlugin"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//CreateEclipseProject/monitor"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//CreateEclipseProject/isMavenProject"/>
+      <genOperations ecoreOperation="splitter_library.ecore#//CreateEclipseProject/CreateFolder">
+        <genParameters ecoreParameter="splitter_library.ecore#//CreateEclipseProject/CreateFolder/foldername"/>
+      </genOperations>
+      <genOperations ecoreOperation="splitter_library.ecore#//CreateEclipseProject/CreateProject"/>
+      <genOperations ecoreOperation="splitter_library.ecore#//CreateEclipseProject/AddNatureToProject">
+        <genParameters ecoreParameter="splitter_library.ecore#//CreateEclipseProject/AddNatureToProject/natureIds"/>
+        <genParameters ecoreParameter="splitter_library.ecore#//CreateEclipseProject/AddNatureToProject/desc"/>
+      </genOperations>
+      <genOperations ecoreOperation="splitter_library.ecore#//CreateEclipseProject/CreateJavaPackages">
+        <genParameters ecoreParameter="splitter_library.ecore#//CreateEclipseProject/CreateJavaPackages/anJavaProject"/>
+        <genParameters ecoreParameter="splitter_library.ecore#//CreateEclipseProject/CreateJavaPackages/anPackage"/>
+      </genOperations>
+      <genOperations ecoreOperation="splitter_library.ecore#//CreateEclipseProject/Create_Src_Classpath">
+        <genParameters ecoreParameter="splitter_library.ecore#//CreateEclipseProject/Create_Src_Classpath/anJavaProject"/>
+        <genParameters ecoreParameter="splitter_library.ecore#//CreateEclipseProject/Create_Src_Classpath/monitor"/>
+        <genParameters ecoreParameter="splitter_library.ecore#//CreateEclipseProject/Create_Src_Classpath/classEntries"/>
+      </genOperations>
+      <genOperations ecoreOperation="splitter_library.ecore#//CreateEclipseProject/Copy_Image">
+        <genParameters ecoreParameter="splitter_library.ecore#//CreateEclipseProject/Copy_Image/source"/>
+        <genParameters ecoreParameter="splitter_library.ecore#//CreateEclipseProject/Copy_Image/name"/>
+        <genParameters ecoreParameter="splitter_library.ecore#//CreateEclipseProject/Copy_Image/target"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="splitter_library.ecore#//GenModelEMF">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//GenModelEMF/model_code"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//GenModelEMF/edit_code"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//GenModelEMF/editor_code"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//GenModelEMF/contain_proxies"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//GenModelEMF/genModel"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference splitter_library.ecore#//GenModelEMF/nemf"/>
+      <genOperations ecoreOperation="splitter_library.ecore#//GenModelEMF/CreateGenModel"/>
+      <genOperations ecoreOperation="splitter_library.ecore#//GenModelEMF/getFilepath"/>
+    </genClasses>
+    <genClasses ecoreClass="splitter_library.ecore#//EcoreEMF">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//EcoreEMF/fileuri"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference splitter_library.ecore#//EcoreEMF/list_classes"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference splitter_library.ecore#//EcoreEMF/packMetamodel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//EcoreEMF/res"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//EcoreEMF/rs"/>
+      <genOperations ecoreOperation="splitter_library.ecore#//EcoreEMF/GetRoot"/>
+      <genOperations ecoreOperation="splitter_library.ecore#//EcoreEMF/GetIFile"/>
+      <genOperations ecoreOperation="splitter_library.ecore#//EcoreEMF/GetRootPackage"/>
+      <genOperations ecoreOperation="splitter_library.ecore#//EcoreEMF/GetClassifiers"/>
+      <genOperations ecoreOperation="splitter_library.ecore#//EcoreEMF/setPackagebyName">
+        <genParameters ecoreParameter="splitter_library.ecore#//EcoreEMF/setPackagebyName/anpackname"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="splitter_library.ecore#//DTProjectDescription"/>
+    <genClasses ecoreClass="splitter_library.ecore#//ArrayIndexComparator">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute splitter_library.ecore#//ArrayIndexComparator/array"/>
+      <genOperations ecoreOperation="splitter_library.ecore#//ArrayIndexComparator/createIndexArray">
+        <genParameters ecoreParameter="splitter_library.ecore#//ArrayIndexComparator/createIndexArray/array"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="splitter_library.ecore#//Comparator">
+      <genTypeParameters ecoreTypeParameter="splitter_library.ecore#//Comparator/Integer"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

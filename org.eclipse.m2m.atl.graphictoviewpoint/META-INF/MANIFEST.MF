@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ATLTransformationGraphicRToOdesign
+Bundle-SymbolicName: org.eclipse.m2m.atl.graphictoviewpoint; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipse.m2m.atl.graphictoviewpoint.Activator
+Bundle-Vendor: Eclipse Modeling Project
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.sirius.diagram,
+ org.eclipse.m2m.atl.engine.emfvm,
+ org.eclipse.sirius.table;bundle-version="3.1.5",
+ org.mondo.sirius.model;bundle-version="0.1.0",
+ org.mondo.graphic.representation;bundle-version="0.1.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Eclipse-LazyStart: true
+Export-Package: org.eclipse.m2m.atl.graphictoviewpoint.files

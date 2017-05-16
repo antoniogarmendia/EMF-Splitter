@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+   <extension-point id="OpenWithExtension" name="miso.open.with.ext" schema="schema/OpenWithExtension.exsd"/>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated Modularity -->
+      <package
+            uri="http://mondo.dsl.org/mmPatterns/modularity"
+            class="Modularity.ModularityPackage"
+            genModel="model/Modularity.genmodel"/>
+   </extension>
+
+</plugin>

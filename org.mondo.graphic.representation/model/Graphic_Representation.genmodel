@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.mondo.graphic.representation/src" modelPluginID="org.mondo.graphic.representation"
+    modelName="Graphic_Representation" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
+    usedGenPackages="../../org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.sirius/model/viewpoint.genmodel#//viewpoint"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>Graphic_Representation.ecore</foreignModel>
+  <genPackages prefix="Graphic_representation" disposableProviderFactory="true" ecorePackage="Graphic_Representation.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Graphic_Representation.ecore#//GRFontFormat">
+      <genEnumLiterals ecoreEnumLiteral="Graphic_Representation.ecore#//GRFontFormat/italic"/>
+      <genEnumLiterals ecoreEnumLiteral="Graphic_Representation.ecore#//GRFontFormat/bold"/>
+      <genEnumLiterals ecoreEnumLiteral="Graphic_Representation.ecore#//GRFontFormat/underline"/>
+      <genEnumLiterals ecoreEnumLiteral="Graphic_Representation.ecore#//GRFontFormat/strike_through"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Graphic_Representation.ecore#//LabelPosition">
+      <genEnumLiterals ecoreEnumLiteral="Graphic_Representation.ecore#//LabelPosition/border"/>
+      <genEnumLiterals ecoreEnumLiteral="Graphic_Representation.ecore#//LabelPosition/node"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Graphic_Representation.ecore#//ChildrenPresentation">
+      <genEnumLiterals ecoreEnumLiteral="Graphic_Representation.ecore#//ChildrenPresentation/FREEFORM"/>
+      <genEnumLiterals ecoreEnumLiteral="Graphic_Representation.ecore#//ChildrenPresentation/LIST"/>
+      <genEnumLiterals ecoreEnumLiteral="Graphic_Representation.ecore#//ChildrenPresentation/HORIZONTALSTACK"/>
+      <genEnumLiterals ecoreEnumLiteral="Graphic_Representation.ecore#//ChildrenPresentation/VERTICALSTACK"/>
+    </genEnums>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//MMGraphic_Representation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//MMGraphic_Representation/extension"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//MMGraphic_Representation/listRepresentations"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//MMGraphic_Representation/isGeopalette"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Graphic_Representation.ecore#//AllElements"/>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//DiagramElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//DiagramElement/anEClass"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//DiagramElement/diag_palette"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//DiagramElement/containerReference"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//AbstractElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//AbstractElement/anEClass"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//AbstractElement/node_elements"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Edge">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Edge/directions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Edge/edge_style"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Edge/edgeLabel"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//EdgeLabelEAttribute">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//EdgeLabelEAttribute/labelEAttribute"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Node">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Node/node_elements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Node/node_shape"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Node/expandable"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Node/conditionalStyle"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Node/presentation"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//IconElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//IconElement/filepath"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//IconElement/embeddedImage"/>
+      <genOperations ecoreOperation="Graphic_Representation.ecore#//IconElement/ImageBase64"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//PaletteDescription">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//PaletteDescription/icon_filepath"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//PaletteDescription/palette_name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//PaletteDescription/isDraggable"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Node_Element">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Node_Element/LabelanEAttribute"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Node_Element/linkPalette"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Node_Element/affixedCompartmentElements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Node_Element/expandableItems"/>
+      <genOperations ecoreOperation="Graphic_Representation.ecore#//Node_Element/isCompartment"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//ExpandableItem">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//ExpandableItem/index"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//ExpandableItem/anEReference"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Edge_Style">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Edge_Style/LineStyle"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Edge_Style/LineWidth"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Root">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Root/anEClass"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Root/root_node_elements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Root/root_shape"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Root/rootLayer"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Edge_Direction">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Edge_Direction/sourceLink"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Edge_Direction/targetLink"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//GraphicRepresentation">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//GraphicRepresentation/allGraphicRepresentation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//GraphicRepresentation/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//GraphicRepresentation/userColors"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Shape"/>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//ShapeCompartmentGradient">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//ShapeCompartmentGradient/width"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//ShapeCompartmentGradient/height"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//ShapeCompartmentGradient/cornerHeight"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//ShapeCompartmentGradient/cornerWidth"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//ShapeCompartmentGradient/foreGroundColor"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//ShapeCompartmentParallelogram">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//ShapeCompartmentParallelogram/width"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//ShapeCompartmentParallelogram/height"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Ellipse">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Ellipse/horizontalDiameter"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Ellipse/verticalDiameter"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Note">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Note/size"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Diamond">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Diamond/size"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Rectangle">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Rectangle/width"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Rectangle/height"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Graphic_Representation.ecore#//ShapeColor">
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//ShapeColor/color"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Link">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Link/anEReference"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Link/anDiagramElement"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Link/decoratorName"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//PaletteDescriptionLink">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//PaletteDescriptionLink/sourceDecoratorName"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Graphic_Representation.ecore#//Layer">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Layer/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Layer/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//DefaultLayer"/>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//AdditionalLayer"/>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//AffixedElement"/>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//CompartmentElement"/>
+    <genClasses image="false" ecoreClass="Graphic_Representation.ecore#//AffixedCompartmentElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//AffixedCompartmentElement/anEReference"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//AffixedCompartmentElement/nodes"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//LabelEAttribute">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//LabelEAttribute/anEAttribute"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Graphic_Representation.ecore#//Border">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Border/borderStyle"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//Border/borderWidth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Border/borderColor"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Graphic_Representation.ecore#//Color"/>
+    <genClasses image="false" ecoreClass="Graphic_Representation.ecore#//GRUserColor"/>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//GRUserColorDef">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//GRUserColorDef/color"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Graphic_Representation.ecore#//GRColorDescription">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//GRColorDescription/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Graphic_Representation.ecore#//RGBColorDescription">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//RGBColorDescription/name"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//RGBColor">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//RGBColor/red"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//RGBColor/green"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//RGBColor/blue"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//SiriusSystemColors">
+      <genOperations ecoreOperation="Graphic_Representation.ecore#//SiriusSystemColors/getSystemColorDescription">
+        <genParameters ecoreParameter="Graphic_Representation.ecore#//SiriusSystemColors/getSystemColorDescription/name"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Graphic_Representation.ecore#//GRLabelStyleDescription">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//GRLabelStyleDescription/labelFormat"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//GRLabelStyleDescription/showIcon"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//GRLabelStyleDescription/labelPosition"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//Representation"/>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//RepresentationDD">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//RepresentationDD/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//RepresentationDD/root"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//RepresentationDD/layers"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//RepresentationTable">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//RepresentationTable/rootTable"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//RepresentationTable/lines"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//RepresentationTable/columns"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Graphic_Representation.ecore#//Line">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Line/featureReference"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//Line/listEClasses"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//LineGroup">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//LineGroup/listLines"/>
+    </genClasses>
+    <genClasses ecoreClass="Graphic_Representation.ecore#//ConditionalStyle">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//ConditionalStyle/eAttribute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Graphic_Representation.ecore#//ConditionalStyle/value"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Graphic_Representation.ecore#//ConditionalStyle/conditionalStyle"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

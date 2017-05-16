@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.model.filterui.definition.ext" name="FilterUI" schema="schema/org.model.filterui.definition.ext.exsd"/>   
+</plugin>

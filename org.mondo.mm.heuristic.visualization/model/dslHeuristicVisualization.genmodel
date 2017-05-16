@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.mondo.mm.heuristic.visualization/src" modelPluginID="org.mondo.mm.heuristic.visualization"
+    modelName="DslHeuristicVisualization" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
+    usedGenPackages="../../org.mondo.graphic.representation/model/Graphic_Representation.genmodel#//graphic_representation ../../org.mondo.emf.splitter.library/model/splitter_library.genmodel#//splitterLibrary ../../org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.sirius/model/viewpoint.genmodel#//viewpoint"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>dslHeuristicVisualization.ecore</foreignModel>
+  <genPackages prefix="DslHeuristicVisualization" disposableProviderFactory="true"
+      ecorePackage="dslHeuristicVisualization.ecore#/">
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//HeuristicStrategy">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//HeuristicStrategy/graphic_representation"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//HeuristicStrategy/nemf"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//HeuristicStrategy/ecoreContainment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dslHeuristicVisualization.ecore#//HeuristicStrategy/currentRepresentation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dslHeuristicVisualization.ecore#//HeuristicStrategy/currentMMGR"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//HeuristicStrategy/listRepresentation"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//HeuristicStrategy/ExecuteHeuristics"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//HeuristicStrategy/Execute_Root_Element"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//HeuristicStrategy/Execute_Graphical_Elements"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//HeuristicStrategy/GetFeatureName">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//HeuristicStrategy/GetFeatureName/parentEClass"/>
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//HeuristicStrategy/GetFeatureName/childEClass"/>
+      </genOperations>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//HeuristicStrategy/GetEListEClassfromEReference">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//HeuristicStrategy/GetEListEClassfromEReference/anEReference"/>
+      </genOperations>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//HeuristicStrategy/ExecuteDirectPathMatrix"/>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteStrategyLink"/>
+    <genClasses image="false" ecoreClass="dslHeuristicVisualization.ecore#//StrategyLabel">
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//StrategyLabel/GetLabel">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyLabel/GetLabel/anEClass"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteStrategyLabelFirstString"/>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteStrategyLabelIdentifier"/>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteStrategyLabelParameter">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//ConcreteStrategyLabelParameter/label_parameter"/>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//LabelParameter">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dslHeuristicVisualization.ecore#//LabelParameter/list_label"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//LabelParameter/toCommaSeparatedStringLabel"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//LabelParameter/DefaultParameters"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dslHeuristicVisualization.ecore#//StrategyRootSelection">
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//StrategyRootSelection/Get_Root">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyRootSelection/Get_Root/ContainmentMatrix"/>
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyRootSelection/Get_Root/listEClass"/>
+      </genOperations>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//StrategyRootSelection/List_Root">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyRootSelection/List_Root/ContainmentMatrix"/>
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyRootSelection/List_Root/listEClass"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteStrategyMaxContainment"/>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteStrategyNoParent"/>
+    <genClasses image="false" ecoreClass="dslHeuristicVisualization.ecore#//StrategyPalette">
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//StrategyPalette/Get_Palette">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyPalette/Get_Palette/anEObject"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteStrategyPalette"/>
+    <genClasses image="false" ecoreClass="dslHeuristicVisualization.ecore#//StrategyArcSelection">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//StrategyArcSelection/arc_direction"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//StrategyArcSelection/IsArc">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyArcSelection/IsArc/anEClass"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteStrategyArcSelection"/>
+    <genClasses image="false" ecoreClass="dslHeuristicVisualization.ecore#//StrategyArcDirection">
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//StrategyArcDirection/Get_Direction">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyArcDirection/Get_Direction/anEClass"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dslHeuristicVisualization.ecore#//ArcParameter">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dslHeuristicVisualization.ecore#//ArcParameter/source"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dslHeuristicVisualization.ecore#//ArcParameter/target"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//ArcParameter/DefaultParam"/>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//DefaultArcParameter">
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//DefaultArcParameter/toCommaSeparatedStringSource"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//DefaultArcParameter/toCommaSeparatedStringTarget"/>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteStrategyArcDirection">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//ConcreteStrategyArcDirection/param"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//ConcreteStrategyArcDirection/ContainsStringEReferenceName">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//ConcreteStrategyArcDirection/ContainsStringEReferenceName/ListStrings"/>
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//ConcreteStrategyArcDirection/ContainsStringEReferenceName/anString"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteStrategyDefaultDirection"/>
+    <genClasses image="false" ecoreClass="dslHeuristicVisualization.ecore#//StrategyNodeSelection">
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//StrategyNodeSelection/IsNode">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyNodeSelection/IsNode/anEClass"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteStrategyDefaultNodeSelection"/>
+    <genClasses image="false" ecoreClass="dslHeuristicVisualization.ecore#//StrategyPossibleElements">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//StrategyPossibleElements/EClassNoElements"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//StrategyPossibleElements/PossibleElements">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyPossibleElements/PossibleElements/rootEClass"/>
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyPossibleElements/PossibleElements/pathMatrix"/>
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyPossibleElements/PossibleElements/listEClass"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteStrategyContainmentDiagramElement"/>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//EcoreMatrixContainment">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dslHeuristicVisualization.ecore#//EcoreMatrixContainment/direct_MatrixContainment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dslHeuristicVisualization.ecore#//EcoreMatrixContainment/pathMatrix"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/GetParent">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/GetParent/index"/>
+      </genOperations>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/GetDirectMatrixContainment">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/GetDirectMatrixContainment/listEClass"/>
+      </genOperations>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/GetPathMatrix"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/CopyMatrix"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/PrintDirectMatrixContainment">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/PrintDirectMatrixContainment/listEClass"/>
+      </genOperations>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/getEAllChilds">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/getEAllChilds/eClass"/>
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/getEAllChilds/listEClass"/>
+      </genOperations>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/getAllParents">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//EcoreMatrixContainment/getAllParents/index"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//HeuristicStrategySettings">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//HeuristicStrategySettings/strategy_label"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//HeuristicStrategySettings/strategy_root"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//HeuristicStrategySettings/strategy_palette"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//HeuristicStrategySettings/strategy_arcSelection"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//HeuristicStrategySettings/strategy_node_selection"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//HeuristicStrategySettings/strategy_possibleElements"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//HeuristicStrategySettings/strategy_linkcompartment"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dslHeuristicVisualization.ecore#//StrategyLinkCompartment">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//StrategyLinkCompartment/listLinks"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//StrategyLinkCompartment/listCompartment"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//StrategyLinkCompartment/listAffixed"/>
+      <genOperations ecoreOperation="dslHeuristicVisualization.ecore#//StrategyLinkCompartment/ExecuteLinkCompartmentsHeuristics">
+        <genParameters ecoreParameter="dslHeuristicVisualization.ecore#//StrategyLinkCompartment/ExecuteLinkCompartmentsHeuristics/anEClass"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteContainmentasAffixed"/>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteContainmentasLinks"/>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//ConcreteContainmentasCompartments"/>
+    <genClasses ecoreClass="dslHeuristicVisualization.ecore#//RepreHeurSS">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dslHeuristicVisualization.ecore#//RepreHeurSS/heuristicStrategySettings"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

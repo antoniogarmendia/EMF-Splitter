@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.mondo.visualization.ui.preferences.GraphicRPreferencesInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.mondo.visualization.ui.preferences.GraphicRPreferencePage"
+            id="org.mondo.visualization.ui.GraphicRpage"
+            name="GraphicR Preferences">
+      </page>
+   </extension>
+
+</plugin>

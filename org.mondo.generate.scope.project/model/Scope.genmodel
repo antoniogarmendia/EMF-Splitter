@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.mondo.generate.scope.project/src" modelPluginID="org.mondo.generate.scope.project"
+    modelName="Scope" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>Scope.ecore</foreignModel>
+  <genPackages prefix="Scope" disposableProviderFactory="true" ecorePackage="Scope.ecore#/">
+    <genClasses ecoreClass="Scope.ecore#//ScopeClass">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Scope.ecore#//ScopeClass/rSamePackage"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Scope.ecore#//ScopeClass/rSameProject"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Scope.ecore#//ScopeClass/rSameWorkSpace"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Scope.ecore#//ScopeClass/rSameUnit"/>
+    </genClasses>
+    <genClasses ecoreClass="Scope.ecore#//Node"/>
+  </genPackages>
+</genmodel:GenModel>

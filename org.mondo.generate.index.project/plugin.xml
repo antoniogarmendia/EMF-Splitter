@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+   <extension-point id="indexattribute" name="IndexAttribute" schema="schema/indexattribute.exsd"/>
+   <extension-point id="executeindexattribute" name="Execute Index Attribute" schema="schema/executeindexattribute.exsd"/>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated IndexAttribute -->
+      <package
+            uri="http://mondo.dsl.org/mmPatterns/indexattribute"
+            class="IndexAttribute.IndexAttributePackage"
+            genModel="model/IndexAttribute.genmodel"/>
+   </extension>
+
+</plugin>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+   <extension-point id="visibility_definition" name="org.mondo.generate.visibility.project" schema="schema/visibility_definition.exsd"/>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated Visibility -->
+      <package
+            uri="http://mondo.dsl.org/mmPatterns/visibility"
+            class="Visibility.VisibilityPackage"
+            genModel="model/Visibility.genmodel"/>
+   </extension>
+
+</plugin>

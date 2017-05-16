@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+	
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated Graphic_Representation -->
+      <package
+            uri="http://mondo.org/graphic_representation/1.0.3"
+            class="graphic_representation.Graphic_representationPackage"
+            genModel="model/Graphic_Representation.genmodel"/>
+   </extension>
+	
+   
+</plugin>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+   <extension-point id="scope_definition" name="org.model.references.scope.definition.ext" schema="schema/scope_definition.exsd"/>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated Scope -->
+      <package
+            uri="http://mondo.dsl.org/mmPatterns/scope"
+            class="Scope.ScopePackage"
+            genModel="model/Scope.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ScopeDefinition -->
+      <package
+            uri="http://mondo.org/ScopeDefinition"
+            class="ScopeDefinition.ScopeDefinitionPackage"
+            genModel="model/ScopeDefinition.genmodel"/>
+   </extension>
+
+</plugin>
