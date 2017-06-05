@@ -30,7 +30,7 @@
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.emf.codegen.ecore_2.12.0.v20160526-0356.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.emf.codegen_2.11.0.v20160526-0356.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/com.google.guava_15.0.0.v201403281430.jar"/>
-        <pathelement location="${ECLIPSE_HOME}/plugins/org.mondo.dsl_0.1.0.201602251610.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mondo.dsl_0.1.0.201706050910.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.core.resources_3.11.1.v20161107-2032.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.jdt.ui_3.12.2.v20160929-0804.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.core.commands_3.8.1.v20161221-1651.jar"/>
