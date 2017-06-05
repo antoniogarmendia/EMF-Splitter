@@ -52,6 +52,11 @@
             id="org.mondo.emf.splitter.popupmenuDefineModularPattern"
             name="Define Modular Pattern">
       </command>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuDefineConstraintPattern"
+            name="Define Constraint Pattern">
+      </command>
    </extension>
    <extension
          id="org.mondo.emf.splitter.popupmenuHandler"
@@ -91,6 +96,10 @@
       <handler
             class="org.mondo.emf.splitter.actions.DefineModularPattern"
             commandId="org.mondo.emf.splitter.popupmenuDefineModularPattern">
+      </handler>
+      <handler
+            class="org.mondo.emf.splitter.actions.DefineConstraintsPattern"
+            commandId="org.mondo.emf.splitter.popupmenuDefineConstraintPattern">
       </handler>
    </extension>
    <extension
@@ -176,6 +185,13 @@
                   commandId="org.mondo.emf.splitter.popupmenuDefineModularPattern"
                   id="PopupMenu.menu.DefineModularPattern"
                   label="Define Modular Pattern"
+                  mnemonic="S"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.mondo.emf.splitter.popupmenuDefineConstraintPattern"
+                  id="PopupMenu.menu.DefineConstraintPattern"
+                  label="Define Contraint Pattern"
                   mnemonic="S"
                   style="push">
             </command>

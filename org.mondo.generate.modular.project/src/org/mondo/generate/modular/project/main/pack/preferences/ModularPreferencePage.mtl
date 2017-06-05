@@ -4,8 +4,8 @@
 
 [template public ModularPreferencePage(anProjectName : String, c : ClassRoleInstance)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + c.element.name).replaceAll('\\.','/').concat('/preferences/').concat(c.element.name.toString()).concat('PreferencePage.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLowerCase()/].preferences;
+[file ('src/'.concat(anProjectName.toLower() + '.' + c.element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/preferences/').concat(c.element.name.toString()).concat('PreferencePage.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[c.element.name.toLowerCase()/][getProperty('prefix_name')/].preferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +17,8 @@ import org.mondo.generate.index.project.execute.EvaluateExecuteIndexedAttributeC
 import org.mondo.modular.references.ext.EvaluateCrossReferencesContributor;
 
 import org.eclipse.ui.IWorkbench;
-import [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLowerCase()/].Activator;
-import [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLowerCase()/].wizard.[c.element.name/]NewProjectNature;
+import [anProjectName.toLower()/].[c.element.name.toLowerCase()/][getProperty('prefix_name')/].Activator;
+import [anProjectName.toLower()/].[c.element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[c.element.name/]NewProjectNature;
 
 /**
  * This class represents a preference page that

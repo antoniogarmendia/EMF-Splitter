@@ -5,8 +5,8 @@
 
 [template public ModularNewProjectWizardJAVA(anProjectName : String, anPatternInstance : PatternInstance, anEObjectGenModel : GenModel)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + anPatternInstance.Get_ProjectClass().name).replaceAll('\\.','/').concat('/wizard/').concat(anPatternInstance.Get_ProjectClass().name.toString()).concat('NewProjectWizard.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClass().name.toLowerCase()/].wizard;
+[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClass().name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/wizard/').concat(anPatternInstance.Get_ProjectClass().name.toString()).concat('NewProjectWizard.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClass().name.toLowerCase()/][getProperty('prefix_name')/].wizard;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
@@ -17,7 +17,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.osgi.service.prefs.BackingStoreException;
 import java.io.IOException;
-import [anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClass().name.toLowerCase()/].ModularModel;
+import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClass().name.toLowerCase()/][getProperty('prefix_name')/].ModularModel;
 import org.mondo.modular.sirius.ext.EvaluateSiriusProjectCreation;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.dialogs.MessageDialog;

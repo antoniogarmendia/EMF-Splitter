@@ -15,9 +15,9 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IWorkbench;
-import [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLower()/].wizard.[c.element.name/]NewProjectWizard;
-import [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLower()/].ModularModel;
-import [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLower()/].wizard.[c.element.name/]NewProjectInfo;
+import [anProjectName.toLower()/].[c.element.name.toLower()/][getProperty('prefix_name')/].wizard.[c.element.name/]NewProjectWizard;
+import [anProjectName.toLower()/].[c.element.name.toLower()/][getProperty('prefix_name')/].ModularModel;
+import [anProjectName.toLower()/].[c.element.name.toLower()/][getProperty('prefix_name')/].wizard.[c.element.name/]NewProjectInfo;
 
 public class [c.element.name /]CreateFolderWizard extends [c.element.name/]NewProjectWizard {
 

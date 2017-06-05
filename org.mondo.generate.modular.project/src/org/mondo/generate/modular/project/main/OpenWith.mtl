@@ -4,8 +4,8 @@
 
 [template public generateOpenWith(anProjectName : EString, anProjectInstance : ClassRoleInstance)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + anProjectInstance.element.name).replaceAll('\\.','/').concat('/OpenWithMenu.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[anProjectInstance.element.name.toLowerCase()/];
+[file ('src/'.concat(anProjectName.toLower() + '.' + anProjectInstance.element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/OpenWithMenu.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[anProjectInstance.element.name.toLowerCase()/][getProperty('prefix_name')/];
 
 import java.util.HashMap;
 

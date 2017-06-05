@@ -4,8 +4,8 @@
 
 [template public ModularPropertySource(anProjectName : String, anPatternInstance : PatternInstance)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name).replaceAll('\\.','/').concat('/editors/').concat('ModularPropertySource.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].editors;
+[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/editors/').concat('ModularPropertySource.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,13 +19,13 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 public class ModularPropertySource extends PropertySource{
 
 	public ModularPropertySource(Object object, IItemPropertySource itemPropertySource) {
-		super(object, itemPropertySource);
-		// TODO Auto-generated constructor stub
+
+		super(object, itemPropertySource);		
 	}
 
 	@Override
 	public IPropertyDescriptor['['/]] getPropertyDescriptors() {
-		// TODO Auto-generated method stub
+		
 		Collection<IPropertyDescriptor> result = new ArrayList<IPropertyDescriptor>();
 	    List<IItemPropertyDescriptor> itemPropertyDescriptors = itemPropertySource.getPropertyDescriptors(object);
 	    if (itemPropertyDescriptors != null)

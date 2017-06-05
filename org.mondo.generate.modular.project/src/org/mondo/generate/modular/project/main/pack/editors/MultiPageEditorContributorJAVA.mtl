@@ -4,8 +4,8 @@
 
 [template public MultiPageEditorContributorJAVA(anProjectName : String, anPackageName : String, anPatternInstance : PatternInstance, anEObjectGenModel : GenModel)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')+ '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name).replaceAll('\\.','/').concat('/editors/').concat('MultiPageEditorContributor.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].editors;
+[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/editors/').concat('MultiPageEditorContributor.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors;
 
 [if(anEObjectGenModel.genPackages->select(anPack : GenPackage | anPack.prefix.equalsIgnoreCase(anPackageName) = true)->first().basePackage->isEmpty() = false)]
 import [anEObjectGenModel.genPackages->select(anPack : GenPackage | anPack.prefix.equalsIgnoreCase(anPackageName) = true)->first().basePackage/].[anPackageName/].[anPackageName/].presentation.[anPackageName.toUpperFirst()/]ActionBarContributor;

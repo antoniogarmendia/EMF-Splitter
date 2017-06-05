@@ -27,7 +27,7 @@
       </category>	  
      <wizard
             category="[anProjectName/].project[Get_ProjectClass(anPatternInstance).name/]"
-            class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].wizard.[Get_ProjectClass(anPatternInstance).name/]NewProjectWizard"
+            class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[Get_ProjectClass(anPatternInstance).name/]NewProjectWizard"
             id="[anProjectName/].[Get_ProjectClass(anPatternInstance).name.toLower()/].[Get_ProjectClass(anPatternInstance).name/]NewProject"
             name="[Get_ProjectClass(anPatternInstance).name/] Project"
             project="true"
@@ -40,7 +40,7 @@
 	 <wizard
 			category="[anProjectName/].project[Get_ProjectClass(anPatternInstance).name/]/[anProjectName/].project[Get_ProjectClass(anPatternInstance).name/].Packages"
 			icon="[c.Get_ClassRoleInstance_Folder_Icon() /]"
-			class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].wizard.folder.[c.element.name/]CreateFolderWizard"
+			class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.folder.[c.element.name/]CreateFolderWizard"
 			name="[c.element.name/] Folder"
 			id="[anProjectName/].[c.element.name.toLower()/].[c.element.name.toLower()/]NewPackage"
 			project="false"
@@ -53,7 +53,7 @@
 	  <wizard
 			category="[anProjectName/].project[Get_ProjectClass(anPatternInstance).name/]/[anProjectName/].project[Get_ProjectClass(anPatternInstance).name/].Files"
 			icon="[c.Get_ClassRoleInstance_File_Icon() /]"
-			class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].wizard.file.[c.element.name/]CreateFileWizard"
+			class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.file.[c.element.name/]CreateFileWizard"
 			name="[c.element.name/] File"
 			id="[anProjectName/].[c.element.name.toLower()/].[c.element.name.toLower()/]NewFile"
 			project="false"
@@ -84,8 +84,8 @@
 		icon = "[anPatternInstance.Get_Extension_Icon(ext).Get_ClassRoleInstance_EAttribute('icon')/]"
 		[/if]		
 		[/if]
-		contributorClass="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].editors.MultiPageEditorContributor"
-		class = "[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].editors.MultiPageEditor"
+		contributorClass="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors.MultiPageEditorContributor"
+		class = "[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors.MultiPageEditor"
 		id="[anProjectName/].project[Get_ProjectClass(anPatternInstance).name.toString().toLower()/].editors.FigureEditor[ext.toUpperFirst()/]"
 		default="true">
 	</editor>
@@ -96,7 +96,7 @@
 		name = "Default Model Editor"
 		extensions = "[getProperty('default_extension')/]"
 		icon = "[getProperty('def_file_icon') /]"
-		contributorClass="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].editors.MultiPageEditorContributor"
+		contributorClass="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors.MultiPageEditorContributor"
 		class = "[anProjectName/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].editors.MultiPageEditor"
 		id="[anProjectName/].project[Get_ProjectClass(anPatternInstance).name.toString().toLower()/].editors.FigureEditor"
 		default="true">
@@ -119,7 +119,7 @@
 	[/let]
 	[else]
 	<parser
-          class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].resource.PerformantXMIResourceFactoryImpl"
+          class="org.mondo.generate.modular.project.general.create.project.main.api.PerformantXMIResourceFactoryImpl"
           type="[getProperty('default_extension')/]">
     </parser>
 	[/if]
@@ -130,7 +130,7 @@
          name="Modular Nature"
          point="org.eclipse.core.resources.natures">
          <runtime>
-        	 <run class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].wizard.[Get_ProjectClass(anPatternInstance).name.toString() /]NewProjectNature">
+        	 <run class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[Get_ProjectClass(anPatternInstance).name.toString() /]NewProjectNature">
          </run>
       </runtime>
    </extension>
@@ -153,14 +153,14 @@
             location="REPLACE"
             state="true"
             objectClass="org.eclipse.core.resources.IResource"
-            class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].decorator.ModularProjectDecorator">
+            class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].decorator.ModularProjectDecorator">
       </decorator>
    </extension> 
     <!-- PROPERTIES VIEW-->
    <extension
 		point = "org.eclipse.jdt.ui.javaElementFilters" >
 		<filter
-            class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].Package_Explorer_Selection"
+            class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].Package_Explorer_Selection"
             description="Package_Explorer_Selection"
             enabled="true"
             id="[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].filter"
@@ -179,8 +179,8 @@
                label="[Get_ProjectClass(anPatternInstance).name.toUpperFirst() /]"
                mnemonic="L">
             <command
-                  commandId="[anProjectName/].[getProperty('prefix_name')/].command.gendiag"
-                  id="[anProjectName/].[getProperty('prefix_name')/].gendiag"
+                  commandId="[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClass().name.toLowerCase()/].command.gendiag"
+                  id="[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClass().name.toLowerCase()/].gendiag"
                   label="Generate Model"
                   mnemonic="L"
                   style="push">
@@ -193,7 +193,7 @@
                         operator="and">
                      <test
                            property="org.eclipse.core.resources.projectNature"
-                           value="[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].ModularNature">
+                           value="[anProjectName/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].ModularNature">
                      </test>
                   </iterate>
                   <count
@@ -214,7 +214,7 @@
       </menuContribution>
       <menuContribution
             allPopups="true"
-            class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].CreateMenu"
+            class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].CreateMenu"
             locationURI="popup:org.eclipse.jdt.ui.PackageExplorer?after=group.new">
          <menu
                id="New"
@@ -231,7 +231,7 @@
                         operator="and">
                      <test
                            property="org.eclipse.core.resources.projectNature"
-                           value="[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].ModularNature">
+                           value="[anProjectName/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].ModularNature">
                      </test>
                   </iterate>
                </with>
@@ -241,7 +241,7 @@
 	  <!-- OPEN WITH COMMANDId-->
 	  <menuContribution
             allPopups="true"
-            class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].OpenWithMenu"
+            class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].OpenWithMenu"
             locationURI="popup:org.eclipse.jdt.ui.PackageExplorer?after=group.new">
          <menu
                id="OpenWith"
@@ -253,7 +253,7 @@
                   <and>
                      <test
                            property="org.eclipse.core.resources.projectNature"
-                           value="[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].ModularNature">
+                           value="[anProjectName/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].ModularNature">
                      </test>
                   </and>
                </with>
@@ -265,7 +265,7 @@
 	 <extension
          point="org.eclipse.ui.commands">
       <command
-            id="[anProjectName/].[getProperty('prefix_name')/].command.gendiag"
+            id="[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClass().name.toLowerCase()/].command.gendiag"
             name="Generate Model">
       </command>     
    </extension>
@@ -273,8 +273,8 @@
 	<extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].actions.GenerateModel"
-            commandId="[anProjectName/].[getProperty('prefix_name')/].command.gendiag">
+            class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].actions.GenerateModel"
+            commandId="[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClass().name.toLowerCase()/].command.gendiag">
       </handler>     
    </extension>
    <!-- MODEL CROSS REFERENCES -->
@@ -282,14 +282,14 @@
        point="org.model.references.definition.ext">
     <client
           Id="[Get_ProjectClass(anPatternInstance).name/]ModularCrossReferences"
-          class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].editors.[Get_ProjectClass(anPatternInstance).name/]ModularCrossReferences">
+          class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors.[Get_ProjectClass(anPatternInstance).name/]ModularCrossReferences">
     </client>
    </extension>
    <!-- MODEL PAGE  PREFERENCES -->
     <extension
        point="org.eclipse.ui.preferencePages">
     <page
-          class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].preferences.[Get_ProjectClass(anPatternInstance).name/]PreferencePage"
+          class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].preferences.[Get_ProjectClass(anPatternInstance).name/]PreferencePage"
           id="[anProjectName.toLower()/].[getProperty('prefix_name')/].preferences.[Get_ProjectClass(anPatternInstance).name/]PreferencePage"
           name="[Get_ProjectClass(anPatternInstance).name/] Preferences">
     </page>
@@ -298,7 +298,7 @@
  <extension
        point="org.eclipse.core.runtime.preferences">
     <initializer
-          class="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].preferences.[Get_ProjectClass(anPatternInstance).name/]PreferenceInitializer">
+          class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].preferences.[Get_ProjectClass(anPatternInstance).name/]PreferenceInitializer">
     </initializer>
  </extension>	
 </plugin> 	

@@ -173,6 +173,7 @@ public class CreateModularProject extends CreateEclipseProjectImpl{
 	
 	public void CreateAllPackages(IJavaProject anJavaProject){
 		
+		/*
 		CreateJavaPackages(anJavaProject, "");
 		CreateJavaPackages(anJavaProject,".editors");
 		CreateJavaPackages(anJavaProject,".decorator");
@@ -182,6 +183,7 @@ public class CreateModularProject extends CreateEclipseProjectImpl{
 		CreateJavaPackages(anJavaProject,".actions");
 		CreateJavaPackages(anJavaProject,".propertysource");
 		CreateJavaPackages(anJavaProject,".preferences");
+		*/
 	}
 	
 	public void Create_Src(IProgressMonitor monitor,IJavaProject anJavaProject){

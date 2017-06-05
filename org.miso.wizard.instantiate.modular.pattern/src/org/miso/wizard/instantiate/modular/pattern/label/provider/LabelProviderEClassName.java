@@ -3,10 +3,10 @@ package org.miso.wizard.instantiate.modular.pattern.label.provider;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import MetaModelGraph.Composition;
 import MetaModelGraph.Node;
@@ -14,6 +14,13 @@ import MetaModelGraph.SubClass;
 
 public class LabelProviderEClassName extends ColumnLabelProvider{
 
+	//íconos
+	final public static Image imageComposition = AbstractUIPlugin.
+			imageDescriptorFromPlugin("org.miso.wizard.instantiate.modular.pattern", "/icons/Containment.gif").createImage();
+	
+	final public static Image imageSubClass = AbstractUIPlugin.
+			imageDescriptorFromPlugin("org.miso.wizard.instantiate.modular.pattern", "/icons/Inheritance.gif").createImage();
+			
 	@Override
 	public String getText(Object element) {
 		
@@ -21,7 +28,7 @@ public class LabelProviderEClassName extends ColumnLabelProvider{
 			return ((Node) element).getEClass().getName();
 		
 		if(element instanceof Composition)
-			return /*((Composition) element).getEReference().getName() + "/" +*/ ((Composition) element).getTarget().getEClass().getName();
+			return ((Composition) element).getTarget().getEClass().getName();
 
 		if(element instanceof SubClass)
 			return ((SubClass) element).getTarget().getEClass().getName();
@@ -34,18 +41,12 @@ public class LabelProviderEClassName extends ColumnLabelProvider{
 	public Image getImage(Object element) {
 		
 		if(element instanceof Composition)
-			return getImageByName("/icons/Containment.gif");
+			return imageComposition;
 					
 		if(element instanceof SubClass)
-			return getImageByName("/icons/Inheritance.gif");
+			return imageSubClass;
 		
 		return super.getImage(element);
-	}
-	
-	private Image getImageByName(String path){
-		
-		Device device = Display.getCurrent();
-		return new Image(device, LabelProviderEClassName.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString().concat(path));
 	}
 	
 	@Override

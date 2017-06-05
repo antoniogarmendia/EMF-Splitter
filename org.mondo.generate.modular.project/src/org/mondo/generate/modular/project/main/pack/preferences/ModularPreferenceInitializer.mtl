@@ -4,15 +4,15 @@
 
 [template public ModularPreferenceInitializer(anProjectName : String, c : ClassRoleInstance)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + c.element.name).replaceAll('\\.','/').concat('/preferences/').concat(c.element.name.toString()).concat('PreferenceInitializer.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLowerCase()/].preferences;
+[file ('src/'.concat(anProjectName.toLower() + '.' + c.element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/preferences/').concat(c.element.name.toString()).concat('PreferenceInitializer.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[c.element.name.toLowerCase()/][getProperty('prefix_name')/].preferences;
 
 
 import java.util.List;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLowerCase()/].Activator;
+import [anProjectName.toLower()/].[c.element.name.toLowerCase()/][getProperty('prefix_name')/].Activator;
 
 /**
  * Class used to initialize default preference values.

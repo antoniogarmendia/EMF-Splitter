@@ -6,8 +6,8 @@
 
 [for (c : ClassRoleInstance | anPatternInstance.Get_FileClassRoleInstance() )]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name).replaceAll('\\.','/').concat('/wizard/file/').concat(c.element.name.toString()).concat('CreateFileWizardPage.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].wizard.file;
+[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/wizard/file/').concat(c.element.name.toString()).concat('CreateFileWizardPage.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.file;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;

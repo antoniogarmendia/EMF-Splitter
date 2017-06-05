@@ -3,8 +3,8 @@
 [import org::mondo::generate::modular::project::main::requests::global_queriesModularProject /]
 
 [template public CreateMenuJava(anProjectName : String, anPatternInstance : PatternInstance, anPackageName: String, anEObjectGenModel : GenModel)]
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name).replaceAll('\\.','/').concat('/CreateMenu.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/];
+[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/CreateMenu.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/];
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ import org.eclipse.ui.menus.ExtensionContributionFactory;
 import org.eclipse.ui.menus.IContributionRoot;
 import org.eclipse.ui.services.IServiceLocator;
 
-import [anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].wizard.[anPatternInstance.Get_ProjectClass().name/]NewProjectNature;
+import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[anPatternInstance.Get_ProjectClass().name/]NewProjectNature;
 [for (c : ClassRoleInstance | Get_FolderClassRoleInstance(anPatternInstance)->union(anPatternInstance.Get_ProjectClassRoleInstance()
 																						 ->select(anClassRoleInstance : ClassRoleInstance | anClassRoleInstance.referenceInstances
 																						 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence()))]

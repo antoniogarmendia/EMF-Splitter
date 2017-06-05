@@ -8,8 +8,8 @@
 																						 ->select(anClassRoleInstance : ClassRoleInstance | anClassRoleInstance.referenceInstances
 																						 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence()))]) ] 
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name).replaceAll('\\.','/').concat('/wizard/folder/').concat(c.element.name.toString()).concat('CreateFolderWizardPage.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].wizard.folder;
+[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/wizard/folder/').concat(c.element.name.toString()).concat('CreateFolderWizardPage.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.folder;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;

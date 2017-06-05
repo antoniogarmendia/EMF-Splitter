@@ -9,6 +9,7 @@ import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -19,6 +20,7 @@ import org.miso.wizard.instantiate.modular.pattern.wizard.DialogApplyModularPatt
 import org.miso.wizard.instantiate.modular.pattern.wizard.WizardApplyModularPattern;
 
 import MetaModelGraph.Graph;
+import MetaModelGraph.impl.MetaModelGraphFactoryImpl;
 import splitterLibrary.EcoreEMF;
 import splitterLibrary.impl.SplitterLibraryFactoryImpl;
 
@@ -26,14 +28,12 @@ public class DefineModularPattern implements IHandler{
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
-		// TODO Auto-generated method stub
-		
+				
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+			
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class DefineModularPattern implements IHandler{
 			EcoreEMF nemf = SplitterLibraryFactoryImpl.eINSTANCE.createEcoreEMF();
 			nemf.setFileuri(resource.getLocationURI().toString());
 			
-			WizardApplyModularPattern wizard = new WizardApplyModularPattern(null,nemf.getRs(),resource.getProject());
+			WizardApplyModularPattern wizard = new WizardApplyModularPattern(nemf.getRs(),resource.getProject());
 			DialogApplyModularPattern dialog = new DialogApplyModularPattern(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell()
 												,wizard);
 			wizard.setDialog(dialog);			
@@ -56,11 +56,10 @@ public class DefineModularPattern implements IHandler{
 			dialog.setPageSize(500, 300);
 			
 			//Search (Ecore Name).mmgraph
-			//Update/Override Modular Pattern
 			URI graphURI = URI.createURI(resource.getLocationURI().toString(), true).trimFileExtension().appendFileExtension("mmgraph");
 			
 			boolean fileExist = new ExtensibleURIConverterImpl().exists(graphURI, null);
-			
+			//Update/Override Modular Pattern
 			if(fileExist == true){
 				
 				boolean result = MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
@@ -71,16 +70,26 @@ public class DefineModularPattern implements IHandler{
 				
 				//Update
 				if(result==true){
-					Resource res = nemf.getRes().createResource(graphURI);
+					
+					Resource res = nemf.getRes().getResource(graphURI, true);		
+					
 					try {
 						res.load(null);
-						wizard.seteGraph((Graph) res.getContents().get(0));
-												
-					} catch (IOException e) {						
+						
+					} catch (IOException e) {
+						
 						e.printStackTrace();
 					}
-				}				
-			}
+					
+					wizard.seteGraph((Graph) res.getContents().get(0));						
+				} else {
+					
+					createGraphResource(nemf.getRes(), graphURI, wizard);					
+				}			
+			} else {
+				
+				createGraphResource(nemf.getRes(), graphURI, wizard);				
+			}				
 			
 			if (dialog.open() == Window.OK) 
 			{ 	
@@ -89,12 +98,19 @@ public class DefineModularPattern implements IHandler{
 			else
 			{
 				System.out.println("Cancel");
-			}
-			
+			}					
 		}	
 		
 		return null;
 	}
+	
+	public void createGraphResource(ResourceSet reset, URI graphURI, WizardApplyModularPattern wizard) {
+		
+		Resource gResource = reset.createResource(graphURI);
+		Graph  mmGraph = MetaModelGraphFactoryImpl.eINSTANCE.createGraph();
+		gResource.getContents().add(mmGraph);			
+		wizard.seteGraph(mmGraph);		
+	}	
 
 	@Override
 	public boolean isEnabled() {
@@ -110,8 +126,7 @@ public class DefineModularPattern implements IHandler{
 
 	@Override
 	public void removeHandlerListener(IHandlerListener handlerListener) {
-		// TODO Auto-generated method stub
-		
+				
 	}
 
 }

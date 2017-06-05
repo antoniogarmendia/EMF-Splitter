@@ -48,7 +48,6 @@ public class PageSelectClassProject extends WizardPage{
 		super(pageName);
 		setTitle("Select the Class Project");
 		setDescription("Select the appropriate class");
-		//this.eProjectClasses = new BasicEList<EClass>();
 		this.eList = eList;
 		this.ecoreContainment = ecoreContainment;
 		this.eListRoots = new BasicEList<EClass>();		

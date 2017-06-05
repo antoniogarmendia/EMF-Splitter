@@ -34,19 +34,19 @@ public class EClassFilter extends ViewerFilter {
 
 	@Override
 	public boolean isFilterProperty(Object element, String property) {
-		// TODO Auto-generated method stub
+		
 		return super.isFilterProperty(element, property);
 	}
 	
 	@Override
 	public Object[] filter(Viewer viewer, Object parent, Object[] elements) {
-		// TODO Auto-generated method stub
+		
 		return super.filter(viewer, parent, elements);
 	}
 	
 	@Override
 	public Object[] filter(Viewer viewer, TreePath parentPath, Object[] elements) {
-		// TODO Auto-generated method stub
+		
 		return super.filter(viewer, parentPath, elements);
 	}
 

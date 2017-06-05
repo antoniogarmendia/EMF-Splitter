@@ -30,7 +30,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import [anProjectName.toLower()/].[getProperty('prefix_name')/].nature.GeneralProjectNature;
 [for (c :  ClassRoleInstance | anPatternInstances.getClassesRoleProject())]
-import [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLower()/].wizard.[c.element.name/]NewProjectNature;
+import [anProjectName.toLower()/].[c.element.name.toLower()/][getProperty('prefix_name')/].wizard.[c.element.name/]NewProjectNature;
 [/for]
 import org.mondo.generate.modular.project.general.create.project.main.api.CopierReverseEngineering;
 
@@ -160,8 +160,8 @@ public class GeneralModularProjectWizard extends Wizard implements INewWizard {
 			[for(c : ClassRoleInstance | anPatternInstances.getClassesRoleProject())]
 			if(eObject instanceof [c.element.name /]){
 				
-				[anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLower()/].ModularModel createProject = 
-						new [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLower()/].ModularModel();
+				[anProjectName.toLower()/].[c.element.name.toLower()/][getProperty('prefix_name')/].ModularModel createProject = 
+						new [anProjectName.toLower()/].[c.element.name.toLower()/][getProperty('prefix_name')/].ModularModel();
 						createProject.reverseEngineeringContainer(([c.element.name /]) eObject,project,copier,reset);
 			}
 			[/for]

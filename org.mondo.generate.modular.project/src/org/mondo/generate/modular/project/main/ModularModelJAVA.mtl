@@ -4,8 +4,8 @@
 
 [template public Modular_DiagramJAVA(anProjectName : String, anPackageName : EString, anPatternInstance : PatternInstance, anEObjectGenModel : GenModel)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name).replaceAll('\\.','/').concat('/ModularModel.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/];
+[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/ModularModel.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/];
 
 import java.io.IOException;
 
@@ -18,8 +18,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.mondo.generate.modular.project.general.create.project.main.api.PerformantXMIUtils;
 import org.mondo.generate.modular.project.general.create.project.main.api.CopierReverseEngineering;
-import [anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].wizard.[Get_ProjectClass(anPatternInstance).name/]NewProjectInfo;
-import [anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].wizard.[Get_ProjectClass(anPatternInstance).name/]ProjectFeatures;
+import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[Get_ProjectClass(anPatternInstance).name/]NewProjectInfo;
+import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[Get_ProjectClass(anPatternInstance).name/]ProjectFeatures;
 import org.osgi.service.prefs.BackingStoreException;
 
 import [generateEClassImport(Get_ProjectClass(anPatternInstance))/];

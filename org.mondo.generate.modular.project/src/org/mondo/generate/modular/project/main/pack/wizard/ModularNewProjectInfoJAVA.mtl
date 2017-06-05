@@ -3,11 +3,12 @@
 [import org::mondo::generate::modular::project::main::requests::global_queriesModularProject /]
 
 [template public ModularNewProjectInfoJAVA(anProjectName : String, anPackageName : String,anPatternInstance : PatternInstance,c : ClassRoleInstance, anEObjectGenModel: GenModel)]
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name).replaceAll('\\.','/').concat('/wizard/').concat(c.element.name.toString()).concat('NewProjectInfo.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].wizard;
+[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/wizard/').concat(c.element.name.toString()).concat('NewProjectInfo.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
@@ -30,6 +31,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.edapt.internal.common.URIUtils;
 
 import [generateEClassImport(c.element)/];
 import [generateEClassImportFactoryImpl(c.element)/];
@@ -116,7 +118,7 @@ public class [c.element.name/]NewProjectInfo {
 	public IContainer createFolder(){
 		
 		
-		String folderName = features.Get_Name();
+		String folderName = checkFileName(features.Get_Name(), "[c.element.name/]");
 		
 		IFolder newFolder = project.getFolder(folderName);
 		if(newFolder.exists()==false){
@@ -136,16 +138,17 @@ public class [c.element.name/]NewProjectInfo {
 			while(version!=-1) {
 				
 				folderName = newFolder.getName() + version;
-				newFolder = project.getFolder(folderName);
-				if(!newFolder.exists()){
+				IFolder checkFolder = project.getFolder(folderName);
+				if(!checkFolder.exists()){
 					try {
-						newFolder.create(IResource.NONE, true, null);
+						checkFolder.create(IResource.NONE, true, null);
+						createXMIAssociated(checkFolder);
 						
-					} catch (CoreException e) {						
+					} catch (CoreException | IOException e) {						
 						e.printStackTrace();
 					}
-					System.out.println("Instead: " + newFolder.getName());
-					return newFolder;
+					System.out.println("Instead: " + checkFolder.getName());
+					return checkFolder;
 				}
 				version++;
 			}	
@@ -241,40 +244,39 @@ public class [c.element.name/]NewProjectInfo {
 			
 			EObject result = copierModular.copyFolder(eObject);
 			folderResource.getContents().add(result);	
-			//folderResource.save(null);
+			
+			LinkedHashMap<EObject, URI> structureMap = new LinkedHashMap<EObject,URI>();
+			structureMap.put(eObject, folderResource.getURI());			
 			
 			while (itContents.hasNext()) {
 				
 				eObject = itContents.next();				
 				String name = getFolder(eObject);
-				String path = GetObjectPath(eObject);
+				URI parentURI = getObjectParentURI(eObject, structureMap);
 				
 				if(name != null){
 					
-					createPackage(path,name,eObject,folderResource,copierModular,container);					
+					URI fileURI = createPackage(parentURI,name,eObject,folderResource,copierModular,container);		
+					structureMap.put(eObject, fileURI);					
 				}
 				else{
 					
 					name = getFile(eObject);					
 					if(name != null){
 						
-						createUnit(path,name,eObject,folderResource,copierModular,container);
+						createUnit(parentURI,name,eObject,folderResource,copierModular,container);
 						itContents.prune();
 					}
 					else{
 						/*
 						 * Objects that belonging to a package   
 						 */
-						addToPackage(path,name,eObject,folderResource,copierModular,container);
+						addToPackage(parentURI,eObject,folderResource,copierModular);
 						itContents.prune();
 					}
 				}
 				
-			}
-			
-			//copierModular.copyReferences();
-			//copierModular.copyIds();
-			//copierModular.clear();			
+			}						
 		}
 		
 		return folderResource;
@@ -298,31 +300,34 @@ public class [c.element.name/]NewProjectInfo {
 			CopierReverseEngineering copierModular = new CopierReverseEngineering(true,true);
 			EObject result = copierModular.copyFolder(eObject);
 			folderResource.getContents().add(result);	
-			//folderResource.save(null);
-			
+
+			LinkedHashMap<EObject, URI> structureMap = new LinkedHashMap<EObject,URI>();
+			structureMap.put(eObject, folderResource.getURI());	
+						
 			while (itContents.hasNext()) {
 				
 				eObject = itContents.next();				
 				String name = getFolder(eObject);
-				String path = GetObjectPath(eObject);
+				URI parentURI = getObjectParentURI(eObject, structureMap);
 				
 				if(name != null){
 					
-					createPackage(path,name,eObject,folderResource,copierModular,container);					
+					URI fileURI = createPackage(parentURI,name,eObject,folderResource,copierModular,container);		
+					structureMap.put(eObject, fileURI);				
 				}
 				else{
 					
 					name = getFile(eObject);					
 					if(name != null){
 						
-						createUnit(path,name,eObject,folderResource,copierModular,container);
+						createUnit(parentURI,name,eObject,folderResource,copierModular,container);
 						itContents.prune();
 					}
 					else{
 						/*
 						 * Objects that belonging to a package   
 						 */
-						addToPackage(path,name,eObject,folderResource,copierModular,container);
+						addToPackage(parentURI,eObject,folderResource,copierModular);
 						itContents.prune();
 					}
 				}
@@ -356,77 +361,110 @@ public class [c.element.name/]NewProjectInfo {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void addToPackage(String path, String name, EObject eObject, Resource folderResource,
-			CopierReverseEngineering copierModular, IContainer container) {
+	private void addToPackage(URI parentURI, EObject eObject, Resource folderResource,
+			CopierReverseEngineering copierModular) {
 		
 		try {
-			IContainer parent = this.createFolder(path,container);
+			
 			EObject result = copierModular.copy(eObject);
-			
-			String filePath = path.concat(parent.getName() + ".xmi");
-			URI fileUri = URI.createPlatformResourceURI(container.getFullPath().toString().concat(filePath),true);
-			
-			Resource parentResource = folderResource.getResourceSet().getResource(fileUri, true);
+			Resource parentResource = folderResource.getResourceSet().getResource(parentURI, true);
 			parentResource.load(null);			
-			((EList<EObject>)parentResource.getContents().get(0).eGet(eObject.eContainingFeature())).add(result);			
-				
-		} catch (CoreException | IOException e) {
-				
-				e.printStackTrace();
-		}
-		
+			((EList<EObject>)parentResource.getContents().get(0).eGet(eObject.eContainingFeature())).add(result);
+			
+		}catch (IOException e) {
+			
+			e.printStackTrace();
+		}		
 	}
 
-	public void createUnit(String path, String name, EObject eObject, Resource folderResource,
+	public void createUnit(URI parentURI, String name, EObject eObject, Resource folderResource,
 			CopierReverseEngineering copierModular, IContainer container) {
 		
+		//URI Folder
+		URI folderURI = parentURI.trimSegments(1);
+				
+		//Path to Create XMI File
+		URI fileURI = folderURI.appendSegment(name);
+		
+		EObject result = copierModular.copy(eObject);
+		
+		// Create XMI File
+		Resource resource = createFileUnit(fileURI,folderResource.getResourceSet(),result);
+		addProxyToParent(parentURI, eObject, resource);	
+		
 		try {
-			// Get Folder
-			IContainer parent = this.createFolder(path, container);
+			resource.save(null);
 			
-			//Path to Create XMI File
-			String filePath = path.concat(name);
-			
-			//Obtain File URI
-			URI fileUri = URI.createPlatformResourceURI(container.getFullPath().toString().concat(filePath),true);
-			
-			EObject result = copierModular.copy(eObject);
-			
-			// Create XMI File
-			Resource resource = createFile(fileUri,folderResource.getResourceSet(),result);
-			addProxyToParent(parent, eObject, resource);
-			
-		} catch (CoreException e) {
+		} catch (IOException e) {
 			
 			e.printStackTrace();
 		}
-		
 	}
 
-	public void createPackage(String path, String name, EObject eObject, Resource folderResource, 
+	private Resource createFileUnit(URI fileURI, ResourceSet resourceSet, EObject result) {
+		
+		//Check if the resource exists in the ResourceSet
+		boolean existResource = resourceSet.getURIConverter().exists(fileURI,null);
+		
+		if(existResource == false) {
+			Resource fileResource = resourceSet.createResource(fileURI);
+			fileResource.getContents().add(result);
+			return fileResource;
+		} else {
+			
+			System.out.println("Cannot be created: " + fileURI.path());
+			int version = 0;
+			
+			while(version != -1) {
+				
+				String fileName = fileURI.trimFileExtension().lastSegment() + version;
+				URI newURI = fileURI.trimSegments(1).appendSegment(fileName).appendFileExtension(fileURI.fileExtension());
+				existResource = resourceSet.getURIConverter().exists(newURI,null);
+				
+				if(existResource == false) {
+					Resource fileResource = resourceSet.createResource(newURI);
+					fileResource.getContents().add(result);
+					System.out.println("Instead: " + newURI.path());
+					return fileResource;
+				}	
+				version++;
+			}			
+		}
+		return null;		
+	}
+
+	public URI createPackage(URI parentURI, String name, EObject eObject, Resource folderResource, 
 			CopierReverseEngineering copierModular, IContainer container) {
 		
 		try {
+		
 			// Create Folder
-			IContainer fol = this.createFolder(path,container);
-						
+			String type = eObject.eClass().getName();
+			URI folderURI = parentURI.trimSegments(1);	
+			String folderName = checkFileName(name, type);
+			
+			IContainer fol = this.createFolder(folderURI, folderName, container);
+			
 			// Path to Create XMI File
-			String filePath = path.concat(name.concat(".xmi"));			
+			String filePath = fol.getFullPath().toString().concat("/"+fol.getName().concat(".xmi"));
 			
 			// Obtain File URI
-			URI fileUri = URI.createPlatformResourceURI(container.getFullPath().toString().concat(filePath),true);
+			URI fileUri = URI.createPlatformResourceURI(filePath,true);
 			
 			// Copy of the result object
-			EObject result =  copierModular.copyFolder(eObject);	
+			EObject result =  copierModular.copyFolder(eObject);
 			
 			// Create XMI File
 			Resource resource = createFile(fileUri,folderResource.getResourceSet(),result);
-			addProxyToParent(fol.getParent(),eObject,resource);
+			addProxyToParent(parentURI,eObject,resource);
+			
+			return fileUri;
 			
 		} catch (CoreException e) {
 			
 			e.printStackTrace();
-		}				
+		}
+		return null;					
 	}
 	
 	public Resource createFile(URI fileUri, ResourceSet resourceSet, EObject result){
@@ -434,46 +472,50 @@ public class [c.element.name/]NewProjectInfo {
 		Resource fileResource = resourceSet.createResource(fileUri);
 		fileResource.getContents().add(result);
 		
+		try {
+			fileResource.save(null);
+
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		
 		return fileResource;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void addProxyToParent(IContainer parent,EObject eObject, Resource resource){
+	public void addProxyToParent(URI parentURI,EObject eObject, Resource resource){
 		
-		URI parentURI = URI.createPlatformResourceURI(parent.getFullPath().toString().concat("/"+parent.getName().concat(".xmi")),true);
 		Resource parentResource = resource.getResourceSet().getResource(parentURI, true);		
 		((EList<EObject>)parentResource.getContents().get(0).eGet(eObject.eContainingFeature())).add(resource.getContents().get(0));
 	}
 
-	public IContainer createFolder(String path, IContainer container) throws CoreException
+	@SuppressWarnings("restriction")
+	public IContainer createFolder(URI folderParentURI, String name,IContainer container) throws CoreException
 	{
-		if(path.equals("/") == true)
-			return container;
-		IPath folderPath = new Path(path);
-		IFolder fol = container.getFolder(folderPath);
+		URI folderURI = folderParentURI.appendSegment(name);
+		IFolder fol = URIUtils.getFolder(folderURI);
 		if(!fol.exists()){
 			fol.create(IResource.NONE, true, null);			
-		}/*else {
+		} else {
 			
-			// the name of the folder is gonna be different from the name of the EObject
 			System.out.println("Cannot be created: " + fol.getName());
 			int version = 0;
 			while(version != -1) {
 				
 				String folderName = fol.getName() + version;
-				folderPath = folderPath.removeLastSegments(1).append(folderName);
-				fol = container.getFolder(folderPath);
+				folderURI = folderParentURI.appendSegment(folderName);
+				IFolder checkFolder = URIUtils.getFolder(folderURI); 				
 				
-				if(!fol.exists()){
-					fol.create(IResource.NONE, true, null);
-					System.out.println("Instead: " + fol.getName());
-					return fol;
+				if(!checkFolder.exists()){
+					checkFolder.create(IResource.NONE, true, null);
+					System.out.println("Instead: " + checkFolder.getName());
+					return checkFolder;
 				}
 				version++;
-			}			
-			
+			}				
 		}
-		*/
+				
 		return fol;
 	}
 
@@ -485,18 +527,10 @@ public class [c.element.name/]NewProjectInfo {
 		this.project = project;
 	}	
 	
-	public String GetObjectPath(EObject obj){
+	public URI getObjectParentURI(EObject eObject, LinkedHashMap<EObject, URI> structureMap) {
 		
-		String cad = "/"; 
-		EObject parent = obj;
-		String name_folder = null;
-		while(parent!=null){
-			name_folder = getFolder(parent);
-			if(name_folder!=null)
-				cad = "/".concat(name_folder).concat(cad);//Attribute annotated as name
-			parent = parent.eContainer();						
-		}						
-		return cad;
+		EObject parent = eObject.eContainer();
+		return structureMap.get(parent);
 	}
 	
 	[comment if(anPatternInstance.Get_FolderClassRoleInstance()->asSequence()->asSequence()->size()>0)/]
@@ -514,12 +548,46 @@ public class [c.element.name/]NewProjectInfo {
 		
 		[for(c : ClassRoleInstance | anPatternInstance.Get_FileClassRoleInstance())]
 		if(eObject instanceof [c.element.name.concat('Impl') /])
-			return (([c.element.name.concat('Impl') /])eObject).get[c.Get_ClassRoleInstance_TypeFeature_EAttribute('name').name.toString().toUpperFirst()/]().toString().concat(".[c.Get_ClassRoleInstance_EAttribute('extension')/]");			
+			return checkFileName((([c.element.name.concat('Impl') /]) eObject).get[c.Get_ClassRoleInstance_TypeFeature_EAttribute('name').name.toString().toUpperFirst()/](),"[c.element.name/]").concat(".[c.Get_ClassRoleInstance_EAttribute('extension')/]");						
 		[/for]		
 		
 		return null;
 	} 
 	
+	private static final char['['/]] ILLEGAL_CHARACTERS = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':' };
+	
+	public static String checkFileName(String fileName, String type) {
+		
+		if(fileName == null)
+			return type;
+		if(fileName.equals("")) 
+			return type;
+		
+		String result = removeIlegalCharacters(fileName);
+		
+		if(result.equals("")) 
+			return type;
+		
+		return result;			
+	}	
+	
+	public static String removeIlegalCharacters(String fileName) {
+		
+		String result = "";
+		char['['/]] name = fileName.toCharArray();		
+		for(int i=0; i<name.length;i++) {
+			
+			char ch = name['['/]i];
+			for (int j = 0; j < ILLEGAL_CHARACTERS.length; j++) {
+				
+				if(ch==ILLEGAL_CHARACTERS['['/]j])
+					break;				
+				if(j + 1 == ILLEGAL_CHARACTERS.length)
+					result = result + ch;
+			}			
+		}
+		return result;
+	}	
 }
 
 [/file]

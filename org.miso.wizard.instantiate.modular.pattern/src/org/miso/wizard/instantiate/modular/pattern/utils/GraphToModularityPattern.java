@@ -132,6 +132,7 @@ public class GraphToModularityPattern {
 					parentRoleInstance = addClassRoleInstance(currentNode,patternInstance,this.pack);
 					addReferenceInstance(composition, rootInstance);
 					
+					visitedNodes.add(currentNode);
 					// recursive
 					setPackagesAndUnits(subGraph, patternInstance, currentNode, parentRoleInstance, visitedNodes);
 				}
@@ -257,8 +258,7 @@ public class GraphToModularityPattern {
 		if(index!=-1)
 			return true;
 		return false;
-	}
-	
+	}	
 	
 	private boolean isUnit(Node node){
 	
@@ -268,8 +268,7 @@ public class GraphToModularityPattern {
 			return true;
 		return false;
 		
-	}
-	
+	}	
 
 	private ClassInterface getClassInterfaceByName(PatternMetaModel mainModularPattern, String name){
 		

@@ -4,8 +4,8 @@
 
 [template public Activatorjava(anProjectName : String,anProjectInstance : ClassRoleInstance)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + anProjectInstance.element.name).replaceAll('\\.','/').concat('/Activator.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[anProjectInstance.element.name.toLowerCase()/];
+[file ('src/'.concat(anProjectName.toLower() + '.' + anProjectInstance.element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/Activator.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[anProjectInstance.element.name.toLowerCase()/][getProperty('prefix_name')/];
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -16,7 +16,7 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "[anProjectName.toLower()/].[getProperty('prefix_name')/].[anProjectInstance.element.name.toLowerCase()/]"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "[anProjectName.toLower()/].[anProjectInstance.element.name.toLowerCase()/][getProperty('prefix_name')/]"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;

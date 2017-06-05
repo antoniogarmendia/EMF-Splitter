@@ -34,7 +34,7 @@
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.jdt.compiler.apt_1.2.100.v20160418-1457.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.jdt.compiler.tool_1.1.100.v20160418-1457.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.jdt.ui_3.12.2.v20160929-0804.jar"/>
-        <pathelement location="${ECLIPSE_HOME}/plugins/org.mondo.dsl_0.1.0.201602021551.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mondo.dsl_0.1.0.201602251610.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.core.resources_3.11.1.v20161107-2032.jar"/>
     </path>
 

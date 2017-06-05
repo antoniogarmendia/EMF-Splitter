@@ -4,8 +4,8 @@
 
 [template public ModularCrossReferences(anProjectName : String, c : ClassRoleInstance)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + c.element.name).replaceAll('\\.','/').concat('/editors/').concat(c.element.name.toString()).concat('ModularCrossReferences.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLowerCase()/].editors;
+[file ('src/'.concat(anProjectName.toLower() + '.' + c.element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/editors/').concat(c.element.name.toString()).concat('ModularCrossReferences.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[c.element.name.toLowerCase()/][getProperty('prefix_name')/].editors;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,17 +28,17 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.mondo.modular.references.ext.IEditorCrossReferences;
 
-import [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLowerCase()/].wizard.[c.element.name.toString()/]NewProjectNature;
+import [anProjectName.toLower()/].[c.element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[c.element.name.toString()/]NewProjectNature;
 
 public class [c.element.name.toString()/]ModularCrossReferences implements IEditorCrossReferences {
 
 	public [c.element.name.toString()/]ModularCrossReferences() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public EList<?> getChoicesOfValues(String modularNature,Resource res, boolean searchWS, EClass anEClass, String eolExpression) {
-		// TODO Auto-generated method stub
+		
 		if(searchWS==false)
 			return getChoicesOfValuesProject(res,anEClass);
 		else

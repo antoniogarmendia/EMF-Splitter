@@ -3,8 +3,8 @@
 
 [template public generateCreateWizardForCrossReferences(anProName : String, anEClass : EClass)]
 
-[file ('src/'.concat(anProName.toLower() + '.' + getProperty('prefix_name') + '.' + anEClass.name).replaceAll('\\.','/').concat('/editors/').concat('ModularFeatureEditorDialog.java'),false, 'UTF-8')]
-package [anProName.toLower()/].[getProperty('prefix_name')/].[anEClass.name.toLowerCase()/].editors;
+[file ('src/'.concat(anProName.toLower() + '.' + anEClass.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/editors/').concat('ModularFeatureEditorDialog.java'),false, 'UTF-8')]
+package [anProName.toLower()/].[anEClass.name.toLowerCase()/][getProperty('prefix_name')/].editors;
 
 
 import java.util.Collections;
@@ -68,7 +68,7 @@ import org.mondo.generate.scope.project.ext.EvaluateScopeCrossReferences;
 import org.mondo.generate.visibility.project.ext.EvaluateVisibilityEClass;
 import org.mondo.modular.references.ext.EvaluateCrossReferencesContributor;
 
-import [anProName.toLower()/].[getProperty('prefix_name')/].[anEClass.name.toLowerCase()/].wizard.[anEClass.name/]NewProjectNature;
+import [anProName.toLower()/].[anEClass.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[anEClass.name/]NewProjectNature;
 
 import ScopeDefinition.ScopeDefinitionEnum;
 

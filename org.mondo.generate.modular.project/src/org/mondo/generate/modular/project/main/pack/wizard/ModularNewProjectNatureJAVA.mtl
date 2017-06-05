@@ -4,8 +4,8 @@
 
 [template public ModularNewProjectNatureJAVA(anProjectName : String, anEClass : EClass)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + anEClass.name).replaceAll('\\.','/').concat('/wizard/').concat(anEClass.name.toString()).concat('NewProjectNature.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[anEClass.name.toLowerCase()/].wizard;
+[file ('src/'.concat(anProjectName.toLower() + '.' + anEClass.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/wizard/').concat(anEClass.name.toString()).concat('NewProjectNature.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[anEClass.name.toLowerCase()/][getProperty('prefix_name')/].wizard;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;

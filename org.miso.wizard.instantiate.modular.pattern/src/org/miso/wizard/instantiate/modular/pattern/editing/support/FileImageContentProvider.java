@@ -35,26 +35,24 @@ public class FileImageContentProvider implements ITreeContentProvider{
 	
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+				
 	}
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// TODO Auto-generated method stub
-		
+				
 	}
 
 	@Override
 	public Object[] getElements(Object inputElement) {
-		// TODO Auto-generated method stub
+		
 		return getChildren(inputElement);
 	}
 
 	@SuppressWarnings("restriction")
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		// TODO Auto-generated method stub
+		
 		if (parentElement instanceof IFileStore) {
 			IFileStore[] children = IDEResourceInfoUtils.listFileStores(
 					(IFileStore) parentElement, fileFilter,
@@ -68,7 +66,7 @@ public class FileImageContentProvider implements ITreeContentProvider{
 
 	@Override
 	public Object getParent(Object element) {
-		// TODO Auto-generated method stub
+		
 		if (element instanceof IFileStore) {
 			return ((IFileStore) element).getParent();
 		}
@@ -77,7 +75,7 @@ public class FileImageContentProvider implements ITreeContentProvider{
 
 	@Override
 	public boolean hasChildren(Object element) {
-		// TODO Auto-generated method stub
+	
 		return getChildren(element).length > 0;
 	}			
 }

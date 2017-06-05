@@ -4,8 +4,8 @@
 
 [template public ProjectFeaturesJAVA(anProjectName : String, anPackageName : String, c : ClassRoleInstance)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name') + '.' + c.element.name).replaceAll('\\.','/').concat('/wizard/').concat(c.element.name.toString()).concat('ProjectFeatures.java'),false, 'UTF-8')]
-package [anProjectName.toLower()/].[getProperty('prefix_name')/].[c.element.name.toLowerCase()/].wizard;
+[file ('src/'.concat(anProjectName.toLower() + '.' + c.element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/wizard/').concat(c.element.name.toString()).concat('ProjectFeatures.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[c.element.name.toLowerCase()/][getProperty('prefix_name')/].wizard;
 
 public class [c.element.name/]ProjectFeatures {
 	
