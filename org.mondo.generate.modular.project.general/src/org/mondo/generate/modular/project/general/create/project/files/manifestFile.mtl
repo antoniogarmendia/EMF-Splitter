@@ -25,7 +25,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.expressions,
  org.mondo.generate.modular.project.general,
  org.eclipse.emf.ecore,
- org.eclipse.core.runtime; bundle-version="1.0.0" 
+ org.eclipse.core.runtime; bundle-version="1.0.0",
+ org.eclipse.epsilon.concordance.core,
+ org.eclipse.epsilon.concordance.core.hashing;bundle-version="1.4.0",
+ org.eclipse.epsilon.flock.dt.concordance;bundle-version="1.4.0",
+ org.eclipse.epsilon.concordance.clients;bundle-version="1.4.0" 
 [/file]
 
 [/template]

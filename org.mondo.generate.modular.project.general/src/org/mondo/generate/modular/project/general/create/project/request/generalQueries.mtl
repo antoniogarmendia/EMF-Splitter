@@ -9,12 +9,12 @@
 		->asSequence()
 	/]
 
-[query public getClassesRoleProject(anPatternInstances : PatternInstances) : Sequence(ClassRoleInstance) = 
+[query public getClassesRoleProject (anPatternInstances : PatternInstances) : Sequence(ClassRoleInstance) = 
 	anPatternInstances.getModularPatterns()->collect(pattern : PatternInstance | pattern.classInstances)
 			->select(classRoleInstance : ClassRoleInstance | classRoleInstance.isClassRoleInstanceProject())	
 	/]
 
-[query public isClassRoleInstanceProject(classRoleInstance : ClassRoleInstance) : Boolean = 
+[query public isClassRoleInstanceProject (classRoleInstance : ClassRoleInstance) : Boolean = 
 	if (classRoleInstance.role.ref->select(anEClass : EClass | anEClass.name.equalsIgnoreCase('Project'))->size() > 0) then
 			true
 		else
@@ -22,7 +22,7 @@
 	endif
 	/]
 
-[query public getProjectIconByClassRoleInstance(classRoleInstance : ClassRoleInstance) : String = 
+[query public getProjectIconByClassRoleInstance (classRoleInstance : ClassRoleInstance) : String = 
 	if(getIconByClassRoleInstance(classRoleInstance).toString().equalsIgnoreCase('')) then
 		getProperty('defaultProjectIcon')
 			else
@@ -30,7 +30,7 @@
 			endif				
 /]
 
-[query public getIconByClassRoleInstance(classRoleInstance : ClassRoleInstance) : String = 
+[query public getIconByClassRoleInstance (classRoleInstance : ClassRoleInstance) : String = 
 	classRoleInstance.featureInstances->select(featInstance : FeatureRoleInstance | 
 		featInstance.oclIsKindOf(InstanceFeatureRoleInstance))->select(featInstanceRole : FeatureRoleInstance | 
 		    featInstanceRole.oclAsType(InstanceFeatureRoleInstance).role.ref->select(attribute : EAttribute |
@@ -39,16 +39,16 @@
 
 [comment Create Import String/]
 
-[query public generateEClassImport(anEClass : EClass) :
+[query public generateEClassImport (anEClass : EClass) :
 				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
 				'generateEClassImport(org.eclipse.emf.ecore.EClass)',Sequence{anEClass}).oclAsType(String)/]
 
 
-[query public generateEClassImportImpl(anEClass : EClass) :
+[query public generateEClassImportImpl (anEClass : EClass) :
 				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
 				'generateEClassImportImpl(org.eclipse.emf.ecore.EClass)',Sequence{anEClass}).oclAsType(String)/]
 
-[query public generateEClassImportFactoryImpl(anEClass : EClass) :
+[query public generateEClassImportFactoryImpl (anEClass : EClass) :
 				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
 				'generateEClassImportFactoryImpl(org.eclipse.emf.ecore.EClass)',Sequence{anEClass}).oclAsType(String)/]
 

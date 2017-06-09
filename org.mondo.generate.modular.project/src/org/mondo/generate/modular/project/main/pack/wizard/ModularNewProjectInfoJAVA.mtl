@@ -118,7 +118,7 @@ public class [c.element.name/]NewProjectInfo {
 	public IContainer createFolder(){
 		
 		
-		String folderName = checkFileName(features.Get_Name(), "[c.element.name/]");
+		String folderName = checkFileName(features.Get_name(), "[c.element.name/]");
 		
 		IFolder newFolder = project.getFolder(folderName);
 		if(newFolder.exists()==false){

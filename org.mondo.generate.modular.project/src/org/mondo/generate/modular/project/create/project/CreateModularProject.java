@@ -275,6 +275,8 @@ public class CreateModularProject extends CreateEclipseProjectImpl{
 		boolean project_img = false;
 		boolean folder_img = false;
 		boolean file_img = false;
+		
+		String currentPlugPath = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
 		while(tree.hasNext()){
 			obj = tree.next();
 			if(obj instanceof ClassRoleInstance){
@@ -292,7 +294,7 @@ public class CreateModularProject extends CreateEclipseProjectImpl{
 								{
 									if(!(inst_feat.getValue().equals("/root") || inst_feat.getValue().equals(""))){
 										String source = inst_feat.getValue().subSequence(inst_feat.getValue().lastIndexOf('/')+1, inst_feat.getValue().length()).toString();
-										Copy_Image(plug_path.concat("/"/*+current_project_name+"/"*/+inst_feat.getValue()),source, "icons");
+										Copy_Image(currentPlugPath.concat("/" + inst_feat.getValue()),source, "icons");
 									}
 								else 
 									{

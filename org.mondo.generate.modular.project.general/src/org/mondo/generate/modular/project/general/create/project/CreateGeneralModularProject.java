@@ -219,6 +219,8 @@ public class CreateGeneralModularProject extends CreateEclipseProjectImpl{
 		final String workspacePath = CreateGeneralModularProject.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		Copy_Image(workspacePath.concat("icons/Pro.png"),"Pro.png", "icons");	
 		
+		String currentPlugPath = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
+		
 		EObject rootEObject = getEObject();
 		if(rootEObject instanceof PatternInstances){
 			
@@ -240,13 +242,13 @@ public class CreateGeneralModularProject extends CreateEclipseProjectImpl{
 								if(featureRoleInstance instanceof InstanceFeatureRoleInstance) {
 									
 									InstanceFeatureRoleInstance instFeature = (InstanceFeatureRoleInstance)featureRoleInstance;
-									if(instFeature.getRole().getRef()!=null) {
+									if(instFeature.getRole().getRef() != null) {
 										
 										if(existInstanceFeature(instFeature.getRole().getRef(),"icon") == true){
 											
 											if(!(instFeature.getValue().equals("/root") || instFeature.getValue().equals(""))){
 												String source = instFeature.getValue().subSequence(instFeature.getValue().lastIndexOf('/')+1, instFeature.getValue().length()).toString();
-												Copy_Image(workspacePath.concat("/"+instFeature.getValue()),source, "icons");
+												Copy_Image(currentPlugPath.concat("/" + instFeature.getValue()),source, "icons");
 											}
 										}
 									}									
@@ -256,7 +258,7 @@ public class CreateGeneralModularProject extends CreateEclipseProjectImpl{
 				}
 			}			
 			
-			System.out.println("CopyICOn");
+			System.out.println("CopyIcons!");
 		}		
 	}
 	

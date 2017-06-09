@@ -32,8 +32,7 @@
 	[Package_Explorer_SelectionJAVA(anProjectName, anPatternInstance)/]
 	[XMI_FileJAVA(anProjectName, anPatternInstance)/]
     [CreateMenuJava(anProjectName, anPatternInstance,anPackageName,anEObjectGenModel) /]
-	[generateOpenWith(anProjectName,anProjectInstance)/]
-    
+	[generateOpenWith(anProjectName,anProjectInstance)/]    
 
 	[comment Package actions /]
 	[generatePackageactions(anProjectName,anPackageName, anPatternInstance)/]
@@ -63,4 +62,5 @@
 
 	[/let]
 	[/let]
+		
 [/template]

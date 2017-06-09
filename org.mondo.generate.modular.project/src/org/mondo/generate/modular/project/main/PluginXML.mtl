@@ -31,7 +31,9 @@
             id="[anProjectName/].[Get_ProjectClass(anPatternInstance).name.toLower()/].[Get_ProjectClass(anPatternInstance).name/]NewProject"
             name="[Get_ProjectClass(anPatternInstance).name/] Project"
             project="true"
-			icon="[Get_Pro_Path_Icon(anPatternInstance)/]">
+			[let path : String = Get_Pro_Path_Icon(anPatternInstance)]
+			icon="[getPathIcon(path)/]">
+			[/let]
       </wizard>
 	<!--WIZARD PACKAGE CATEGORY -->
 	[for (c :  ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance()->union(anPatternInstance.Get_ProjectClassRoleInstance()
@@ -39,7 +41,9 @@
 																						 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence()))]	
 	 <wizard
 			category="[anProjectName/].project[Get_ProjectClass(anPatternInstance).name/]/[anProjectName/].project[Get_ProjectClass(anPatternInstance).name/].Packages"
-			icon="[c.Get_ClassRoleInstance_Folder_Icon() /]"
+			[let path : String = c.Get_ClassRoleInstance_Folder_Icon()]
+			icon="[getPathIcon(path)/]"
+			[/let]
 			class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.folder.[c.element.name/]CreateFolderWizard"
 			name="[c.element.name/] Folder"
 			id="[anProjectName/].[c.element.name.toLower()/].[c.element.name.toLower()/]NewPackage"
@@ -52,7 +56,9 @@
 	[for (c :  ClassRoleInstance | anPatternInstance.Get_FileClassRoleInstance())]
 	  <wizard
 			category="[anProjectName/].project[Get_ProjectClass(anPatternInstance).name/]/[anProjectName/].project[Get_ProjectClass(anPatternInstance).name/].Files"
-			icon="[c.Get_ClassRoleInstance_File_Icon() /]"
+			[let path : String = c.Get_ClassRoleInstance_File_Icon()]
+			icon="[getPathIcon(path)/]"
+			[/let]
 			class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.file.[c.element.name/]CreateFileWizard"
 			name="[c.element.name/] File"
 			id="[anProjectName/].[c.element.name.toLower()/].[c.element.name.toLower()/]NewFile"
@@ -81,7 +87,9 @@
 			[if (anPatternInstance.Get_Extension_Icon(ext)->first().Get_ClassRoleInstance_EAttribute('icon').toString()='null')]
 				icon = "[getProperty('def_file_icon') /]"
 		[else]
-		icon = "[anPatternInstance.Get_Extension_Icon(ext).Get_ClassRoleInstance_EAttribute('icon')/]"
+		[let path : String = anPatternInstance.Get_Extension_Icon(ext)->first().Get_ClassRoleInstance_EAttribute('icon')]
+		icon = "[getPathIcon(path)/]"
+		[/let]
 		[/if]		
 		[/if]
 		contributorClass="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors.MultiPageEditorContributor"
@@ -137,7 +145,9 @@
    <extension
          point="org.eclipse.ui.ide.projectNatureImages">
          <image
-            icon="[anPatternInstance.Get_Pro_Path_Icon()/]"
+			[let path : String = anPatternInstance.Get_Pro_Path_Icon()]
+            icon="[getPathIcon(path)/]"
+			[/let]
             id="[anProjectName/][Get_ProjectClass(anPatternInstance).name.toString().toLower() /].image.Folder"
             natureId="[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].ModularNature">
       </image>
@@ -184,32 +194,25 @@
                   label="Generate Model"
                   mnemonic="L"
                   style="push">
-            </command>
-            <visibleWhen
-                  checkEnabled="true">
-            	 <with
-                     variable="activeMenuSelection">
-                  <iterate
-                        operator="and">
-                     <test
-                           property="org.eclipse.core.resources.projectNature"
-                           value="[anProjectName/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].ModularNature">
-                     </test>
-                  </iterate>
-                  <count
-                        value="1">
-                  </count>
-				  <iterate
-                        operator="and">
-                     <not>
-                        <test
-                              property="org.eclipse.core.resources.projectNature"
-                              value="[anProjectName.toLower()/].[getProperty('prefix_name')/].generalmodularnature">
-                        </test>
-                     </not>
-                  </iterate>
-               </with>
-            </visibleWhen>
+				<visibleWhen
+                     checkEnabled="true">
+                  <with
+                        variable="activeMenuSelection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           operator="and">
+                        <not>
+                           <test
+                                 property="org.eclipse.core.resources.projectNature"
+                                 value="[anProjectName.toLower()/].[getProperty('prefix_name')/].generalmodularnature">
+                           </test>
+                        </not>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>           
          </menu>
       </menuContribution>
       <menuContribution

@@ -42,7 +42,7 @@ public class [c.element.name/]ProjectFeatures {
 
 	//Get Methods
 	[for (attr : EAttribute | c.element.eAllAttributes)]	
-	public [attr.eType.instanceClassName  /] Get_[attr.name /]()
+	public [attr.eType.instanceClassName  /] Get_[attr.name.toLowerCase() /]()
 	{
 		return atr_[attr.name /];
 	}

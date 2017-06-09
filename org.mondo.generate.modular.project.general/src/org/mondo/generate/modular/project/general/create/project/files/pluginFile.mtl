@@ -67,8 +67,21 @@
                id="GeneralModularProjectNewMenu"
                label="New General Modular Project"
                mnemonic="L">
-            <visibleWhen
+             <visibleWhen
                   checkEnabled="true">
+               <with
+                     variable="activeMenuSelection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        operator="and">
+                     <test
+                           property="org.eclipse.core.resources.projectNature"
+                           value="[anProjectName.toLower()/].[getProperty('prefix_name')/].[getProperty('generalNature')/]">
+                     </test>
+                  </iterate>
+               </with>
             </visibleWhen>
          </menu>
       </menuContribution>
@@ -86,6 +99,22 @@
                   label="Generate Complete Model"
                   mnemonic="L"
                   style="push">
+			<visibleWhen
+                     checkEnabled="true">
+                  <with
+                        variable="activeMenuSelection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           operator="and">
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+                              value="[anProjectName.toLower()/].[getProperty('prefix_name')/].[getProperty('generalNature')/]">
+                        </test>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
          </menu>
       </menuContribution>
@@ -98,6 +127,20 @@
             commandId="[anProjectName.toLower()/].general.[getProperty('prefix_name')/].contrib">
       </handler>
    </extension>	
+ <!-- CONCORDANCE-->
+ <extension
+       point="org.eclipse.epsilon.concordance.core.ModelChangeListener">
+    <listener
+          changesDatabase="false"
+          class="[anProjectName.toLower()/].[getProperty('prefix_name')/].concordance.ModularReconcilerChangeListener">
+    </listener>
+ </extension>
+ <extension
+       point="org.eclipse.epsilon.concordance.core.ConcordanceModelFactory">
+    <factory
+          factory="[anProjectName.toLower()/].[getProperty('prefix_name')/].concordance.ModularModelFactory">
+    </factory>
+ </extension>
 </plugin>
 [/file]
 [/template]

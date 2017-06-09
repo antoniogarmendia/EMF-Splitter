@@ -274,4 +274,10 @@
 				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
 				'generateEClassImportFactoryImpl(org.eclipse.emf.ecore.EClass)',Sequence{anEClass}).oclAsType(String)/]
 
+[comment String Path from iconPath/]
+
+[query public getPathIcon(anPath : String) : 
+		  String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
+				'getIconPath(java.lang.String)',Sequence{anPath}).oclAsType(String)/]
+
 

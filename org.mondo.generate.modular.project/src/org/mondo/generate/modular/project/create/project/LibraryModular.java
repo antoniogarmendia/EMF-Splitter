@@ -35,7 +35,7 @@ public class LibraryModular {
 		try {
 			model = ModelUtils.load(new File(filepath),rs);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}		
 		return model;
@@ -92,6 +92,12 @@ public class LibraryModular {
 		}
 		
 		return result;		
+	}
+	
+	public String getIconPath(String iconPath) {
+		
+		String iconName = iconPath.substring(iconPath.lastIndexOf("/"), iconPath.length());
+		return "icons" + iconName;
 	}
 	
 }

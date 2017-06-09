@@ -5,6 +5,8 @@
 [import org::mondo::generate::modular::project::general::create::project::files::activatorFile /]
 [import org::mondo::generate::modular::project::general::create::project::common::nature /]
 [import org::mondo::generate::modular::project::general::create::project::common::wizard /]
+[import org::mondo::generate::modular::project::general::create::project::files::concordance::generatePackageconcordance /]
+
 
 [template public generalModularProject(anPatternInstances : PatternInstances, anProjectName : String)]
 [comment @main /]
@@ -18,5 +20,8 @@
 
 [comment generate package wizard /]
 [generateWizard(anProjectName, anPatternInstances)/]
+
+[comment generate package concordance /]
+[generatePackageconcordance(anProjectName)/]
 	
 [/template]

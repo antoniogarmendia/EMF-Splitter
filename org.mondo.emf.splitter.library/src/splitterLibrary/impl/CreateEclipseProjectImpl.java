@@ -23,7 +23,6 @@ import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.core.ClasspathAttribute;
@@ -371,15 +370,15 @@ public class CreateEclipseProjectImpl extends MinimalEObjectImpl.Container imple
 	 * @generated NOT
 	 */
 	public void Copy_Image(String source,String name, String target) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
+		
 		try {
 			IFolder imagesFolder = project.getFolder(target);
 			FileInputStream fileStream = new FileInputStream(source);
 			IFile new_fil = imagesFolder.getFile(name);
-			new_fil.create(fileStream, false, null);			
+			if (new_fil.exists() == false)
+				new_fil.create(fileStream, false, null);			
 		} catch (FileNotFoundException | CoreException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}

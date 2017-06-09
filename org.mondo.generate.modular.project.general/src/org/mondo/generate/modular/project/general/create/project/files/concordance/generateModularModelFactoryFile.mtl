@@ -1,0 +1,41 @@
+[comment encoding = UTF-8 /]
+[module generateModularModelFactoryFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+[template public generateModularModelFactory(anProjectName : String)]
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/concordance/ModularModelFactory.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[getProperty('prefix_name')/].concordance;
+
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.epsilon.concordance.model.IConcordanceModel;
+import org.eclipse.epsilon.concordance.model.IConcordanceModelFactory;
+
+public class ModularModelFactory implements IConcordanceModelFactory {
+
+	public ModularModelFactory() {
+		
+	}
+
+	@Override
+	public IConcordanceModel createModel(IResource resource) {
+		
+		return createModel(resource.getFullPath());
+	}
+
+	@Override
+	public IConcordanceModel createModel(IPath path) {
+		
+		return new ModularDomain(path);
+	}
+
+	@Override
+	public IConcordanceModel createModel(URI uri) {
+		
+		return new ModularDomain(uri);
+	}
+
+}
+
+[/file]
+[/template]

@@ -1,0 +1,156 @@
+[comment encoding = UTF-8 /]
+[module generateModularProxyAnalyserFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+[template public generateModularProxyAnalyser(anProjectName : String)]
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/concordance/ModularProxyAnalyser.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[getProperty('prefix_name')/].concordance;
+
+import static org.eclipse.emf.ecore.util.EcoreUtil.getURI;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.epsilon.concordance.model.CrossReference;
+import org.eclipse.epsilon.concordance.model.IConcordanceModel;
+import org.eclipse.epsilon.concordance.model.ModelElement;
+
+public class ModularProxyAnalyser {
+
+	private final IConcordanceModel sourceModel;
+	private final Set<CrossReference> xrefs = new HashSet<CrossReference>();
+	
+	public ModularProxyAnalyser(IConcordanceModel source) {
+		this.sourceModel = source;
+	}
+	
+	public Set<CrossReference> determineCrossReferences() {
+		try {
+			//Profiler.INSTANCE.start("DetermineCrossReferences");			
+			
+			for (TreeIterator<EObject> iter = EcoreUtil.getAllContents(sourceModel.getEmfResource(false),
+					false); iter.hasNext();) {
+				
+				EObject eObject = iter.next();
+				if (eObject.eIsProxy() == true) {
+					addProxyReference(eObject);					
+				} else {				
+					determineCrossReferencesFrom(eObject);
+				}				
+			}			
+			
+			//Profiler.INSTANCE.stop("DetermineCrossReferences");
+			
+		} catch (IOException e) {
+			System.out.println("Error encountered while trying to determine cross references for: " + sourceModel);
+			e.printStackTrace();
+		}
+		
+		return xrefs;
+	}
+
+	private void determineCrossReferencesFrom(EObject source) {
+		for (EReference reference : source.eClass().getEAllReferences()) {
+			if (isCrossReference(reference)) {				
+				for (EObject target : getReferencedValues(source, reference)) {
+					addCrossReference(reference, source, target);
+				}
+			}
+		}
+	}
+	
+	
+	private boolean isCrossReference(EReference reference) {
+		return reference.isChangeable()   &&
+		       !reference.isContainment() &&
+		       !reference.isDerived()     && 
+		       !oppositeIsContainment(reference);
+	}
+	
+	private boolean oppositeIsContainment(EReference reference) {
+		return reference.getEOpposite() != null && reference.getEOpposite().isContainment();
+	}
+
+
+	@SuppressWarnings("unchecked")
+	private Collection<EObject> getReferencedValues(EObject eObject, EReference reference) {
+		final Object value = eObject.eGet(reference, false);
+		final Collection<EObject> values;
+		
+		if (reference.isMany()) {
+			values = (Collection<EObject>)value;
+		
+		} else { 
+			values = new ArrayList<EObject>();
+
+			if (value != null)
+				values.add((EObject) value);
+		}
+				
+		return values;
+	}
+	
+	
+	private void addCrossReference(EReference reference, EObject source, EObject target) {
+		if (hasNoResource(target) || isInternalReference(source, target))
+			return;
+		
+		xrefs.add(new CrossReference(new ModelElement(sourceModel,    getURI(source).fragment(), getLabel(source)),
+		                             new ModelElement(getURI(target), getLabel(target)),
+		                             reference.getName())
+		);
+	}
+	
+	private void addProxyReference(EObject eObjectProxy) {
+		
+		try {
+			String objectURI = sourceModel.getEmfResource(false).getURIFragment(eObjectProxy);
+			URI targetURI = ((InternalEObject) eObjectProxy).eProxyURI();
+			final ModelElement sourceElement = new ModelElement(sourceModel,objectURI,getLabel(eObjectProxy));
+			final ModelElement targetElement = new ModelElement(targetURI, "target");
+			
+			xrefs.add(new CrossReference(sourceElement, targetElement, "proxy"));
+			
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}		
+	}
+
+	private boolean hasNoResource(EObject target) {
+		return !target.eIsProxy() && target.eResource() == null;
+	}
+	
+	private boolean isInternalReference(EObject source, EObject target) {
+		return !target.eIsProxy() && target.eResource().equals(source.eResource());
+	}
+
+	private String getLabel(EObject eObject) {
+		final EStructuralFeature feature = eObject.eClass().getEStructuralFeature("name");
+		
+		final String type = eObject.eClass().getName();
+		
+		final String name;
+		
+		if (feature == null || eObject.eGet(feature) == null) {
+			name = "<unnamed>";
+		} else {
+			name = eObject.eGet(feature).toString();
+		}
+		
+		return type + " " + name;
+	}
+	 
+}
+
+[/file]
+[/template]

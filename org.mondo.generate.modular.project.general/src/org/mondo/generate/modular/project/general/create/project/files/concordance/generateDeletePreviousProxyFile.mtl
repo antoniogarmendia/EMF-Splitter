@@ -1,0 +1,66 @@
+[comment encoding = UTF-8 /]
+[module generateDeletePreviousProxyFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+[template public generateDeletePreviousProxy(anProjectName : String)]
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/concordance/DeletePreviousProxy.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[getProperty('prefix_name')/].concordance;
+
+import java.io.IOException;
+import java.util.Iterator;
+
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.epsilon.concordance.dt.ConcordancePlugin;
+import org.eclipse.epsilon.concordance.model.CrossReference;
+import org.eclipse.epsilon.concordance.model.CrossReferenceVisitor;
+import org.eclipse.epsilon.concordance.model.IConcordanceModel;
+
+public class DeletePreviousProxy implements CrossReferenceVisitor{
+
+	private IConcordanceModel moved;
+	private String containingFeature;
+	
+	public DeletePreviousProxy(IConcordanceModel original) {
+		this.moved = original;
+		this.containingFeature = "";
+	}
+	
+	@Override
+	public void visit(CrossReference crossReference) {
+		
+		// most be a proxy
+		if(!crossReference.label.equals("proxy"))
+			return;
+		try {
+			Resource resource = crossReference.source.model.getEmfResource(false);
+			Iterator<EObject> itAllContents = crossReference.source.model.getAllContentsIterator(false);
+			while (itAllContents.hasNext()) {
+				EObject eObject = (EObject) itAllContents.next();
+				if(eObject.eIsProxy() == true) {
+					InternalEObject internalEObject = (InternalEObject) eObject;
+					if (internalEObject.eProxyURI().toPlatformString(true).equals(this.moved.getUri().toPlatformString(true))) {
+						this.containingFeature = eObject.eContainingFeature().getName();
+						EcoreUtil.remove(eObject);
+						resource.save(null);
+						// update concordance Database
+						ConcordancePlugin.getDefault().getModelChangeReporter().reportChange(crossReference.source.model);						
+						break;
+					}					
+				}				
+			}			
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}		
+	}
+	
+	public String getContainingFeature() {
+		return containingFeature;
+	}
+
+}
+[/file]
+[/template]

@@ -61,7 +61,7 @@ public class ModularProjectDecorator implements ILightweightLabelDecorator {
 																						 ->select(anClassRoleInstance : ClassRoleInstance | anClassRoleInstance.referenceInstances
 																						 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence()))]
 		[if(c.Get_ClassRoleInstance_EAttribute('icon').equalsIgnoreCase(getProperty('def_path_icon'))=false and c.Get_ClassRoleInstance_EAttribute('icon').equalsIgnoreCase(getProperty(''))=false)]
-	 	PACKAGE_[c.element.name /] = AbstractUIPlugin.imageDescriptorFromPlugin("[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/]", "[c.Get_ClassRoleInstance_EAttribute('icon')/]");
+	 	PACKAGE_[c.element.name /] = AbstractUIPlugin.imageDescriptorFromPlugin("[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/]", "[getPathIcon(c.Get_ClassRoleInstance_EAttribute('icon'))/]");
 		[else]
 			[if(c=anPatternInstance.Get_ProjectClassRoleInstance())]
 		PACKAGE_[c.element.name /] = AbstractUIPlugin.imageDescriptorFromPlugin("[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/]", "[getProperty('def_pro_icon')/]");

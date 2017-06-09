@@ -1,0 +1,22 @@
+[comment encoding = UTF-8 /]
+[module generatePackageconcordance('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns')]
+
+[import org::mondo::generate::modular::project::general::create::project::files::concordance::generateDeleteCrossReferencesFile/]
+[import org::mondo::generate::modular::project::general::create::project::files::concordance::generateDeletePreviousProxyFile /]
+[import org::mondo::generate::modular::project::general::create::project::files::concordance::generateFileUtilsFile /]
+[import org::mondo::generate::modular::project::general::create::project::files::concordance::generateModularDomainFile /]
+[import org::mondo::generate::modular::project::general::create::project::files::concordance::generateModularModelFactoryFile /]
+[import org::mondo::generate::modular::project::general::create::project::files::concordance::generateModularProxyAnalyserFile /]
+[import org::mondo::generate::modular::project::general::create::project::files::concordance::generateModularReconcilerChangeListenerFile /]
+
+[template public generatePackageconcordance(anProjectName : String)]
+
+[generateDeleteCrossReferences(anProjectName)/]
+[generateDeletePreviousProxy(anProjectName) /]
+[generateFileUtils(anProjectName)/]
+[generateModularDomain(anProjectName)/]
+[generateModularModelFactory(anProjectName)/]
+[generateModularProxyAnalyser(anProjectName)/]
+[generateModularReconcilerChangeListener(anProjectName)/]
+
+[/template]
