@@ -31,8 +31,11 @@ public class CopierReverseEngineering extends Copier{
 	        {
 	          put(eObject, copyEObject);
 	          Iterator<EAttribute> itEAttributes = eObject.eClass().getEAllAttributes().iterator();
-	          while (itEAttributes.hasNext())
-	        	  copyAttribute((EAttribute)itEAttributes.next(), eObject, copyEObject);				
+	          while (itEAttributes.hasNext()) {
+	        	  EAttribute eAttribute = itEAttributes.next();
+	        	  if (eAttribute.isChangeable() && !eAttribute.isDerived())
+	        		  copyAttribute(eAttribute, eObject, copyEObject);
+	          	}
 			}
 	        return copyEObject;
 	      } 

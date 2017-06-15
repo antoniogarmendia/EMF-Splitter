@@ -28,20 +28,38 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.common.util.URI;
 import java.io.IOException;
 
+[let genPackage : GenPackage =  getGenClassFromEClass(c.element,anEObjectGenModel).eContainer().oclAsType(GenPackage) ]
+[if (genPackage.basePackage->isEmpty() = true)]
 import [generateEClassImport(c.element)/];
+[else]
+import [genPackage.basePackage/].[generateEClassImport(c.element)/];
+[/if]
+[comment EEnum Classes/]
+[for (attr : EAttribute | c.element.eAllAttributes)]
+[if (attr.derived = false and attr.eType.eClass().name = 'EEnum')]
+[if (genPackage.basePackage->isEmpty() = false)]
+import [genPackage.basePackage/].[generateEClassImport(attr.eType)/];
+[else]
+import [generateEClassImport(attr.eType)/];
+[/if]
+[/if]
+[/for]
+[comment FactoryImpl/]
+[if (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = true) and
+	genPackage.basePackage->isEmpty() = false]
+import [genPackage.basePackage/].[generateEClassImportFactoryImpl(c.element)/];
+[elseif (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = false) and 
+	genPackage.basePackage->isEmpty() = false ]
+import [genPackage.basePackage/].[getRootPackageString(c.element)/].[anEObjectGenModel.genPackages.classPackageSuffix/].[genPackage.prefix.concat('FactoryImpl')/];
+[elseif (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = true) and 
+	genPackage.basePackage->isEmpty() = true ]
 import [generateEClassImportFactoryImpl(c.element)/];
-import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].XMI_File;
+[elseif (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = false) and 
+	genPackage.basePackage->isEmpty() = true ]
+import [getRootPackageString(c.element)/].[anEObjectGenModel.genPackages->first().classPackageSuffix/].[genPackage.prefix.concat('FactoryImpl')/];
+[/if]
 
-/**
- * This is a sample new wizard. Its role is to create a new file 
- * resource in the provided container. If the container resource
- * (a folder or a project) is selected in the workspace 
- * when the wizard is opened, it will accept it as the target
- * container. The wizard creates one file with the extension
- * "figure". If a sample multi-page editor (also available
- * as a template) is registered for the same extension, it will
- * be able to open it.
- */
+import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].XMI_File;
 
 public class [c.element.name/]CreateFolderWizard extends Wizard implements INewWizard {
 	private [c.element.name/]CreateFolderWizardPage page;
@@ -142,10 +160,11 @@ public class [c.element.name/]CreateFolderWizard extends Wizard implements INewW
 		//Get the URI 
 		URI fileURI = URI.createPlatformResourceURI(folder.getFullPath().toString().concat("/").concat(folder.getName()+".xmi"), true);
 		//Create Root
-		[c.element.name /] root_obj = [c.element.eContainer().oclAsType(EPackage).name.toUpperFirst() /]FactoryImpl.eINSTANCE.create[c.element.name /]();
-		
+		[c.element.name /] root_obj = [genPackage.prefix/]FactoryImpl.eINSTANCE.create[c.element.name /]();
+[/let]		
 		//Set the Attributes
 		[for (attr : EAttribute | c.element.eAllAttributes)]
+		[if (attr.derived = false)]
 		[if(c.Get_ClassRoleInstance_TypeFeature_EAttribute('name').name<>attr.name)]
 			[if(attr.eType.name='EString' or attr.eType.name='String' )]
 				root_obj.set[attr.name.toUpperFirst() /](attr_[attr.name /]);
@@ -154,6 +173,7 @@ public class [c.element.name/]CreateFolderWizard extends Wizard implements INewW
 			[/if]	
 		[else]
 			root_obj.set[attr.name.toUpperFirst() /](folder.getName());
+		[/if]
 		[/if]	
 		[/for]
 

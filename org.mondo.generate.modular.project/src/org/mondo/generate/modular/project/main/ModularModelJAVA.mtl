@@ -22,7 +22,13 @@ import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstanc
 import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[Get_ProjectClass(anPatternInstance).name/]ProjectFeatures;
 import org.osgi.service.prefs.BackingStoreException;
 
+[let genPackage : GenPackage =  getGenClassFromEClass(Get_ProjectClass(anPatternInstance),anEObjectGenModel).eContainer().oclAsType(GenPackage) ]
+[if (genPackage.basePackage->isEmpty() = false)]
+import [genPackage.basePackage/].[generateEClassImport(Get_ProjectClass(anPatternInstance))/];
+[else]
 import [generateEClassImport(Get_ProjectClass(anPatternInstance))/];
+[/if]
+[/let]
 
 public class ModularModel {
 	

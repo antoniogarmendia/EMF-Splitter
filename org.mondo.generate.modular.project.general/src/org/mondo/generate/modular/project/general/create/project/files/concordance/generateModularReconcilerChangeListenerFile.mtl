@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
@@ -25,6 +26,8 @@ import org.eclipse.epsilon.concordance.reporter.model.ModelChangeListener;
 
 public class ModularReconcilerChangeListener extends DefaultModelChangeListener implements ModelChangeListener {
 
+	public static final String CONTAINMENT_FEATURE_MARKER_ATTRIBUTE = "ContainmentFeature";
+	
 	public ModularReconcilerChangeListener() {
 		super();
 	}
@@ -60,26 +63,49 @@ public class ModularReconcilerChangeListener extends DefaultModelChangeListener 
 			// move file
 			DeletePreviousProxy deleteProxy = new DeletePreviousProxy(moved);
 			index.visitAllCrossReferencesWithTarget(original,deleteProxy);
-			updateProxy(moved,deleteProxy.getContainingFeature());
+			String feature = deleteProxy.getContainingFeature();
+			if (feature.equals("")) {
+				// try to find a marker
+				try {
+					IMarker['['/]] markers = moved.getResource().findMarkers(MarkerManager.DANGLING_XREF_MARKER_ID, 
+												   true, IResource.DEPTH_ZERO);
+					for (IMarker marker : markers) {
+						Object objectFeature = marker.getAttribute(CONTAINMENT_FEATURE_MARKER_ATTRIBUTE);
+						if (objectFeature instanceof String) {
+							feature = (String) objectFeature;
+							boolean update = updateProxy(moved,feature);
+							if (update == true)
+								marker.delete();
+						} else {
+							return;
+						}
+					}					
+				} catch (CoreException e) {
+					
+					e.printStackTrace();
+				}				
+			} else {		
+				boolean update = updateProxy(moved,deleteProxy.getContainingFeature());
+				if (update == false)
+					danglingProxy(moved,feature);
+			}		
 		}		
 	}
 
-	private void updateProxy(IConcordanceModel moved, String feature) {
+	private boolean updateProxy(IConcordanceModel moved, String feature) {
 		
 		URI parentURI = moved.getUri().trimSegments(1);
 		String folderName = parentURI.lastSegment();
 		parentURI = parentURI.appendSegment(folderName + ".xmi");
 		if (existFile(parentURI) == false) {
-			danglingProxy(moved);
-			return;
+			return false;
 		}
 		try {
 			Resource parentResource = moved.getEmfResource(false).getResourceSet().getResource(parentURI, true);
 			EObject rootEObject = parentResource.getContents().get(0);
 			EStructuralFeature structFeature = rootEObject.eClass().getEStructuralFeature(feature);
 			if (structFeature == null) {
-				danglingProxy(moved);
-				return;
+				return false;
 			}
 			if (structFeature.isMany() == true) {
 				@SuppressWarnings("unchecked")
@@ -100,16 +126,18 @@ public class ModularReconcilerChangeListener extends DefaultModelChangeListener 
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}	
+		return true;	
 	}
 	
-	private void danglingProxy(IConcordanceModel moved) {		
+	private void danglingProxy(IConcordanceModel moved, String feature) {		
 		
 		try {
 			
 			IMarker  marker = moved.getResource().createMarker(MarkerManager.DANGLING_XREF_MARKER_ID);
 			marker.setAttribute(IMarker.MESSAGE, "The file is outside the containment tree");
 			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+			marker.setAttribute(CONTAINMENT_FEATURE_MARKER_ATTRIBUTE, feature);
 			
 		} catch (CoreException e) {
 			

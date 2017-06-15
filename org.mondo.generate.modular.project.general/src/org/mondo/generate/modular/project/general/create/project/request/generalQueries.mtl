@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module generalQueries('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns')]
+[module generalQueries('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns','http://www.eclipse.org/emf/2002/GenModel')]
 
 
 [query public generateGeneralQueries (anEClass : EClass) : OclAny = self/]
@@ -39,9 +39,9 @@
 
 [comment Create Import String/]
 
-[query public generateEClassImport (anEClass : EClass) :
+[query public generateEClassImport (anEClass : EClassifier) :
 				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
-				'generateEClassImport(org.eclipse.emf.ecore.EClass)',Sequence{anEClass}).oclAsType(String)/]
+				'generateEClassImport(org.eclipse.emf.ecore.EClassifier)',Sequence{anEClass}).oclAsType(String)/]
 
 
 [query public generateEClassImportImpl (anEClass : EClass) :
@@ -52,3 +52,20 @@
 				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
 				'generateEClassImportFactoryImpl(org.eclipse.emf.ecore.EClass)',Sequence{anEClass}).oclAsType(String)/]
 
+[query public LoadGenModel(genModelPath : String,resource : EResource): EObject = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
+				'Load(java.lang.String,org.eclipse.emf.ecore.resource.Resource)',Sequence{genModelPath,resource}).oclAsType(EObject) /]
+
+
+[query public getGenClassFromEClass (anEClass : EClass, anEObjectGenModel : GenModel) :
+		  GenClass = getClosureGenPackages(anEObjectGenModel.genPackages->asSequence())
+							->union(anEObjectGenModel.genPackages->asSequence())
+							->collect(anGenPackage : GenPackage | anGenPackage.genClasses)->asSet()
+							->select(anGenClass : GenClass | anGenClass.ecoreClass = anEClass)
+							->asSequence()->first()					
+							
+	/]
+
+	[query public getClosureGenPackages(genPackages : Sequence(GenPackage)) : 
+		  Sequence(GenPackage) = genPackages->closure(anPackage : GenPackage | anPackage.nestedGenPackages)
+							->flatten()->asSequence()
+	/]

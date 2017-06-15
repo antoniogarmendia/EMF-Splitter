@@ -12,7 +12,7 @@
 [let c : ClassRoleInstance = anPatternInstance.Get_ProjectClassRoleInstance()]
 	[ModularNewProjectInfoJAVA(anProjectName, anPackageName, anPatternInstance,c,anEObjectGenModel) /]
 	[ModularNewProjectCreationPageJAVA(anProjectName, c) /]
-	[ProjectFeaturesJAVA(anProjectName, anPackageName, c)/]
+	[ProjectFeaturesJAVA(anProjectName, anPackageName, c,anEObjectGenModel)/]
 [/let]
 [let anEClass : EClass = anPatternInstance.Get_ProjectClass()]
 	[ModularNewProjectNatureJAVA(anProjectName,anEClass) /]

@@ -4,7 +4,10 @@
 
 [template public MultiPageEditorJAVA(anProjectName : String, anPackageName : String, anPatternInstance : PatternInstance,anEObjectGenModel : GenModel)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/editors/').concat('MultiPageEditor.java'),false, 'UTF-8')]
+[let allPackages : Sequence(GenPackage) = geteAllPackages(anEObjectGenModel)]
+[for (genPackage : GenPackage | allPackages)]
+[if (genPackage.genClasses->size() >= 1 )]
+[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/editors/').concat(genPackage.prefix).concat('ModularMultiPageEditor.java'),false, 'UTF-8')]
 package [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors;
 
 import java.util.List;
@@ -23,24 +26,32 @@ import org.mondo.modular.filterui.ext.EvaluateFilterUIContributor;
 import org.mondo.modular.filterui.ext.FilterAttribute;
 import org.mondo.modular.filterui.ext.IFilterTabItem;
 
-[if (anEObjectGenModel.genPackages->select(anPack : GenPackage | anPack.prefix.equalsIgnoreCase(anPackageName) = true)->first().basePackage->isEmpty() = false)]
-import [anEObjectGenModel.genPackages->select(anPack : GenPackage | anPack.prefix.equalsIgnoreCase(anPackageName) = true)->first().basePackage/].[anPackageName/].[anPackageName/].presentation.[anPackageName.toUpperFirst()/]Editor;
+[if (genPackage.basePackage->isEmpty() = false)]
+[if (genPackage.presentationPackageSuffix->isEmpty() = false)]
+import [basePackage/].[genPackage.prefix.toLowerCase()/].[genPackage.presentationPackageSuffix/].[genPackage.prefix/]Editor;
 [else]
-import [anPackageName/].presentation.[anPackageName.toUpperFirst()/]Editor;
+import [basePackage/].[genPackage.prefix.toLowerCase()/].presentation.[genPackage.prefix/]Editor;
+[/if]
+[else]
+[if (genPackage.presentationPackageSuffix->isEmpty() = false)]
+import [genPackage.ecorePackage.name/].[genPackage.presentationPackageSuffix/].[genPackage.prefix/]Editor;
+[else]
+import [genPackage.ecorePackage.name/].[genPackage.prefix.toLowerCase()/].presentation.[genPackage.prefix/]Editor;
+[/if]
 [/if]
 
-public class MultiPageEditor extends [anPackageName.toUpperFirst()/]Editor implements IFilterTabItem{
+public class [genPackage.prefix/]ModularMultiPageEditor extends [genPackage.prefix/]Editor implements IFilterTabItem{
 
 	@Override
 	public void createPages() {
-		// TODO Auto-generated method stub
+		
 		super.createPages();
 		
 		if (!getEditingDomain().getResourceSet().getResources().isEmpty())
 		// Create a page for the Filter view.
 		{
 			FilterAttribute anFilterAttribute = new FilterAttribute(getSite().getPage(),
-												MultiPageEditor.this, getSite().getShell().getDisplay(),
+												[genPackage.prefix/]ModularMultiPageEditor.this, getSite().getShell().getDisplay(),
 												selectionViewer,editingDomain.getResourceSet().getResources().get(0),
 												getContainer());			
 			new EvaluateFilterUIContributor().execute(Platform.getExtensionRegistry(),anFilterAttribute);			
@@ -49,20 +60,19 @@ public class MultiPageEditor extends [anPackageName.toUpperFirst()/]Editor imple
 
 	@Override
 	public int AddItemPage(Control control) {
-		// TODO Auto-generated method stub
+		
 		return addPage(control);		
 	}
 
 	@Override
 	public void SetPageItemText(int pageCount, String name) {
-		// TODO Auto-generated method stub
+		
 		setPageText(pageCount, name);
 	}
 
 	@Override
 	public IPropertySheetPage getPropertySheetPage() {
-		// TODO Auto-generated method stub
-		//return super.getPropertySheetPage();
+		
 		PropertySheetPage propertySheetPage =
 				new ExtendedPropertySheetPage(editingDomain) {					
 
@@ -77,34 +87,32 @@ public class MultiPageEditor extends [anPackageName.toUpperFirst()/]Editor imple
 					public void setActionBars(IActionBars actionBars) {
 						super.setActionBars(actionBars);
 						getActionBarContributor().shareGlobalActions(this, actionBars);
-					}
-					
-					
+					}					
 				};
 
 		propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory) {
 
 			@Override
 			protected IPropertySource createPropertySource(final Object object, final IItemPropertySource itemPropertySource) {
-				// TODO Auto-generated method stub
+				
 				IItemPropertySource wrappedSource = new IItemPropertySource() {					
 					
 					@Override
 					public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
-						// TODO Auto-generated method stub
+						
 						return itemPropertySource.getPropertyDescriptors(object);
 					}
 					
 					@Override
 					public IItemPropertyDescriptor getPropertyDescriptor(Object object, Object propertyID) {
-						// TODO Auto-generated method stub
+						
 						IItemPropertyDescriptor item = itemPropertySource.getPropertyDescriptor(object, propertyID);
 						return item;					
 					}					
 					
 					@Override
 					public Object getEditableValue(Object object) {
-						// TODO Auto-generated method stub
+						
 						return itemPropertySource.getEditableValue(object);
 					}				
 				};
@@ -114,15 +122,14 @@ public class MultiPageEditor extends [anPackageName.toUpperFirst()/]Editor imple
 			
 		});
 		
-		propertySheetPages.add(propertySheetPage);	
-		
+		propertySheetPages.add(propertySheetPage);		
 
 		return propertySheetPage;
 	}
 	
 }
-
 [/file]
-
-
+[/if]
+[/for]
+[/let]
 [/template]

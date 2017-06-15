@@ -1,18 +1,35 @@
 [comment encoding = UTF-8 /]
-[module ProjectFeaturesJAVA('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns')]
+[module ProjectFeaturesJAVA('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns','http://www.eclipse.org/emf/2002/GenModel')]
 [import org::mondo::generate::modular::project::main::requests::global_queriesModularProject /]
 
-[template public ProjectFeaturesJAVA(anProjectName : String, anPackageName : String, c : ClassRoleInstance)]
+[template public ProjectFeaturesJAVA(anProjectName : String, anPackageName : String, c : ClassRoleInstance, anEObjectGenModel : GenModel)]
 
 [file ('src/'.concat(anProjectName.toLower() + '.' + c.element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/wizard/').concat(c.element.name.toString()).concat('ProjectFeatures.java'),false, 'UTF-8')]
 package [anProjectName.toLower()/].[c.element.name.toLowerCase()/][getProperty('prefix_name')/].wizard;
+
+[let basePackage : String = anEObjectGenModel.genPackages->select(anPack : GenPackage | anPack.prefix.equalsIgnoreCase(anPackageName) = true)
+		->first().basePackage]
+[for (attr : EAttribute | c.element.eAllAttributes)]
+[if (attr.derived = false and attr.eType.eClass().name = 'EEnum')]
+[if (basePackage->isEmpty() = false)]
+import [basePackage/].[generateEClassImport(attr.eType)/];
+[else]
+import [generateEClassImport(attr.eType)/];
+[/if]
+[/if]
+[/for]
+[/let]
 
 public class [c.element.name/]ProjectFeatures {
 	
 	
 	//Attributes
 	[for (attr : EAttribute | c.element.eAllAttributes)]
+	[if (attr.eType.eClass().name = 'EEnum')]
+	private [attr.eType.name /] atr_[attr.name /];
+	[else]
 	private [attr.eType.instanceClassName /] atr_[attr.name /];
+	[/if]
 	[/for]
 	
 	[comment If the Instance Project has no name defined /]
@@ -24,11 +41,14 @@ public class [c.element.name/]ProjectFeatures {
 	//Constructor with Attributes
 	public [c.element.name/]ProjectFeatures(
 	[for (attr : EAttribute | c.element.eAllAttributes)]
-		 [attr.eType.instanceClassName /] atr_[attr.name /] [if(c.element.eAllAttributes->asSequence()->size()<>i)],[/if][/for]){
-		[for (attr : EAttribute | c.element.eAllAttributes)]
-		this.atr_[attr.name /] = atr_[attr.name /];
-		[/for]
-	
+		 [if (attr.eType.eClass().name = 'EEnum')]
+		 [attr.eType.name /] atr_[attr.name /]
+		 [else]
+		 [attr.eType.instanceClassName /] atr_[attr.name /]
+		 [/if][if(c.element.eAllAttributes->asSequence()->size()<>i)],[/if][/for]) {
+		 [for (attr : EAttribute | c.element.eAllAttributes)]
+		 this.atr_[attr.name /] = atr_[attr.name /];
+		 [/for]	
 	}											
 
 	//Constructor
@@ -42,7 +62,12 @@ public class [c.element.name/]ProjectFeatures {
 
 	//Get Methods
 	[for (attr : EAttribute | c.element.eAllAttributes)]	
-	public [attr.eType.instanceClassName  /] Get_[attr.name.toLowerCase() /]()
+	public [if (attr.eType.eClass().name = 'EEnum')]
+				[attr.eType.name /]
+		   [else]
+				[attr.eType.instanceClassName  /] 
+		   [/if]
+			Get_[attr.name /]()
 	{
 		return atr_[attr.name /];
 	}
@@ -50,9 +75,17 @@ public class [c.element.name/]ProjectFeatures {
 	
 	//Set Methods
 	[for (attr : EAttribute | c.element.eAllAttributes)]	
-	public void Set_[attr.name /]([attr.eType.instanceClassName  /] arg)
+	public void Set_[attr.name /]([if (attr.eType.eClass().name = 'EEnum')] 
+									['Integer' /]
+								  [else]
+									[attr.eType.instanceClassName  /]
+								  [/if] arg)
 	{
-		this.atr_[attr.name /] = arg;
+		[if (attr.eType.eClass().name = 'EEnum')] 
+			this.atr_[attr.name /] = [attr.eType.name.concat('.get')/](arg);
+		 [else]
+			this.atr_[attr.name /] = arg;
+		 [/if]	
 	}
 	[/for]
 

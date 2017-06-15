@@ -52,14 +52,13 @@ public class [c.element.name/]NewProjectCreationPage extends WizardPage {
 
 	public [c.element.name/]NewProjectCreationPage(String pageName, String title,
 			ImageDescriptor titleImage) {
+
 		super(pageName, title, titleImage);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void createControl(Composite parent) {
-		// TODO Auto-generated method stub
-		    
+				    
 		container = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
@@ -99,9 +98,13 @@ public class [c.element.name/]NewProjectCreationPage extends WizardPage {
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
-				// TODO Auto-generated method stub
+				
+				[if (attr.eType.eClass().name = 'EEnum')]
+				features.Set_[attr.name /](Integer.parseInt(txt_[attr.name/].getText()));
+				[else]
 				features.Set_[attr.name /]([Data_Type_Parse_With_Value(attr,'txt_'.concat(attr.name).concat('.getText()'))/]);
-				 Validate_Form();
+				[/if]
+				Validate_Form();
 			}
 		});
 

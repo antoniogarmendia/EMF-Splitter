@@ -4,22 +4,37 @@
 
 [template public MultiPageEditorContributorJAVA(anProjectName : String, anPackageName : String, anPatternInstance : PatternInstance, anEObjectGenModel : GenModel)]
 
-[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/editors/').concat('MultiPageEditorContributor.java'),false, 'UTF-8')]
+[let allPackages : Sequence(GenPackage) = geteAllPackages(anEObjectGenModel)]
+[for (genPackage : GenPackage | allPackages)]
+[if (genPackage.genClasses->size() >= 1 )]
+[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/editors/').concat(genPackage.prefix).concat('ModularMultiPageEditorContributor.java'),false, 'UTF-8')]
 package [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors;
 
-[if(anEObjectGenModel.genPackages->select(anPack : GenPackage | anPack.prefix.equalsIgnoreCase(anPackageName) = true)->first().basePackage->isEmpty() = false)]
-import [anEObjectGenModel.genPackages->select(anPack : GenPackage | anPack.prefix.equalsIgnoreCase(anPackageName) = true)->first().basePackage/].[anPackageName/].[anPackageName/].presentation.[anPackageName.toUpperFirst()/]ActionBarContributor;
+[if (genPackage.basePackage->isEmpty() = false)]
+[if (genPackage.presentationPackageSuffix->isEmpty() = false)]
+import [basePackage/].[genPackage.prefix.toLowerCase()/].[genPackage.presentationPackageSuffix/].[genPackage.prefix/]ActionBarContributor;
 [else]
-import [anPackageName/].presentation.[anPackageName.toUpperFirst()/]ActionBarContributor;
+import [basePackage/].[genPackage.prefix.toLowerCase()/].presentation.[genPackage.prefix/]ActionBarContributor;
 [/if]
+[else]
+[if (genPackage.presentationPackageSuffix->isEmpty() = false)]
+import [genPackage.ecorePackage.name/].[genPackage.presentationPackageSuffix/].[genPackage.prefix/]ActionBarContributor;
+[else]
+import [genPackage.ecorePackage.name/].[genPackage.prefix.toLowerCase()/].presentation.[genPackage.prefix/]ActionBarContributor;
+[/if]
+[/if]
+
 /**
  * Manages the installation/deinstallation of global actions for multi-page editors.
  * Responsible for the redirection of global actions to the active editor.
  * Multi-page contributor replaces the contributors for the individual editors in the multi-page editor.
  */
-public class MultiPageEditorContributor extends [anPackageName.toUpperFirst()/]ActionBarContributor {
+public class [genPackage.prefix/]ModularMultiPageEditorContributor extends [genPackage.prefix/]ActionBarContributor {
 	
 }
 [/file]
+[/if]
+[/for]
+[/let]
 
 [/template]

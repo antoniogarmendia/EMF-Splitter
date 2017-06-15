@@ -347,6 +347,8 @@ public class CreateModularProject extends CreateEclipseProjectImpl{
 	}
 	
 	public String getGenModel(){
+		if(getModelEObject() != null)
+			return getModelEObject().eResource().getURI().trimFileExtension().appendFileExtension(genmodel_ext).toFileString();
 		return nemf.GetIFile().getFullPath().toString().substring(0, nemf.GetIFile().getFullPath().toString().lastIndexOf('.')).concat("." + genmodel_ext);
 	}
 

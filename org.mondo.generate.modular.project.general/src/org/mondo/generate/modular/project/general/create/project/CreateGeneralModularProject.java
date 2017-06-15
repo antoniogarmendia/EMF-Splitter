@@ -137,6 +137,7 @@ public class CreateGeneralModularProject extends CreateEclipseProjectImpl{
 		
 		final List<String> generatorargs = new ArrayList<String>();
 		generatorargs.add(projectParentName);
+		generatorargs.add(this.getGenModel());
 		
 		GeneralModularProject generateAllFiles = null;
 		
@@ -154,6 +155,16 @@ public class CreateGeneralModularProject extends CreateEclipseProjectImpl{
 				e.printStackTrace();
 		}	
 		
+	}
+	
+	public String getGenModel() {
+		
+		if(this.eObject != null) {
+			URI patternURI = this.eObject.eResource().getURI();
+			URI genModelURI = patternURI.trimFileExtension().appendFileExtension("genmodel");
+			return genModelURI.devicePath();
+		}
+		return null;
 	}
 
 	public boolean switchSuccessNotification(boolean notify) {

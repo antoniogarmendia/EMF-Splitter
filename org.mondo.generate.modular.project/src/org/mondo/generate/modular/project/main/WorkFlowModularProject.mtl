@@ -21,7 +21,7 @@
 [template public WorkFlowModularProject(anPatternInstance : PatternInstance, anProjectName : String, anPackageName : String, genModelPath : String)]
 [comment @main /]
 
-	[let anEObjectGenModel : GenModel = LoadGenModel(genModelPath)]
+	[let anEObjectGenModel : GenModel = LoadGenModel(genModelPath,anPatternInstance.eResource())]
 	
 	[let anProjectInstance : ClassRoleInstance = anPatternInstance.Get_ProjectClassRoleInstance()]
 	

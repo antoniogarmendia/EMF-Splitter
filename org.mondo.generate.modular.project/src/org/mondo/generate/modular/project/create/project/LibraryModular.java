@@ -5,10 +5,11 @@ import java.io.IOException;
 
 import org.eclipse.acceleo.common.utils.ModelUtils;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 
 public class LibraryModular {
@@ -26,14 +27,15 @@ public class LibraryModular {
 		return value;		
 	}
 	
-	public EObject Load(String filepath){
+	// load genmodel
+	public EObject Load(String filepath, Resource res){
 		
-		ResourceSet rs = new ResourceSetImpl();
+		ResourceSet rs = res.getResourceSet();
 		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put( 
-				"genmodel", new EcoreResourceFactoryImpl());
+				"genmodel", new EcoreResourceFactoryImpl()); 
 		EObject model = null;
 		try {
-			model = ModelUtils.load(new File(filepath),rs);
+			model = ModelUtils.load(new File(filepath), rs);			
 		} catch (IOException e) {
 			
 			e.printStackTrace();
@@ -55,12 +57,12 @@ public class LibraryModular {
 		return packDeclaration;
 	}
 	
-	public String generateEClassImport(EClass anEClass){
+	public String generateEClassImport(EClassifier anEClass){
 		
 		return generateEClassGeneralImport(anEClass) + "." + anEClass.getName();
 	}
 	
-	public String generateEClassImportImpl(EClass anEClass){
+	public String generateEClassImportImpl(EClassifier anEClass){
 		
 		return generateEClassGeneralImport(anEClass) + ".impl." + anEClass.getName() + "Impl";
 	}
@@ -72,7 +74,32 @@ public class LibraryModular {
 		return generateEClassGeneralImport(anEClass) + ".impl." + factory;
 	}
 	
-	private String generateEClassGeneralImport(EClass anEClass){
+	public String generateEClassImportSuffix(EClass anEClass) {
+		
+		EPackage rootPackage = getRootPackage(anEClass);
+		return rootPackage.getName().concat("FactoryImpl");
+	}
+	
+	public String getRootPackageString(EClass eClass) {
+		return getRootPackage(eClass).getName();
+	}
+	
+	public EPackage getRootPackage(EClass anEClass) {
+		
+		EObject eContainer = anEClass.eContainer();
+		EObject ePack = null;
+		while (eContainer != null) {
+			ePack = eContainer;
+			eContainer = eContainer.eContainer();
+		}
+		if (ePack instanceof EPackage) {
+			return ((EPackage) ePack);
+		}
+		return null;
+	}
+	
+	
+	private String generateEClassGeneralImport(EClassifier anEClass){
 		
 		String result = "";		
 		EObject anEObject = anEClass;

@@ -1,8 +1,8 @@
 [comment encoding = UTF-8 /]
-[module wizardGeneralFile('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns')]
+[module wizardGeneralFile('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns','http://www.eclipse.org/emf/2002/GenModel')]
 [import org::mondo::generate::modular::project::general::create::project::request::generalQueries /]
 
-[template public generatewizardGeneralFile(anProjectName : String, anPatternInstances : PatternInstances)]
+[template public generatewizardGeneralFile(anProjectName : String, anPatternInstances : PatternInstances, anEObjectGenModel : GenModel)]
 
 [file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').
 					concat('/wizard/GeneralModularProjectWizard.java'),false, 'UTF-8')]
@@ -35,7 +35,13 @@ import [anProjectName.toLower()/].[c.element.name.toLower()/][getProperty('prefi
 import org.mondo.generate.modular.project.general.create.project.main.api.CopierReverseEngineering;
 
 [for(c : ClassRoleInstance | anPatternInstances.getClassesRoleProject())]
+[let genPackage : GenPackage =  getGenClassFromEClass(c.element,anEObjectGenModel).eContainer().oclAsType(GenPackage)]
+[if (genPackage.basePackage->isEmpty() = true)]
 import [generateEClassImport(c.element)/];
+[else]
+import [genPackage.basePackage/].[generateEClassImport(c.element)/];
+[/if]
+[/let]
 [/for]
 
 public class GeneralModularProjectWizard extends Wizard implements INewWizard {

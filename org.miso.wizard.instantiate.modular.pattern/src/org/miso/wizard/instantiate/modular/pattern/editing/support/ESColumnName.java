@@ -42,10 +42,12 @@ public class ESColumnName extends EditingSupport{
 		while (allAttributes.hasNext()) {
 			EAttribute currentAttribute = (EAttribute) allAttributes.next();
 			String eClassifier = currentAttribute.getEType().getInstanceTypeName();
-			if(eClassifier.contains("String")){
-			
-				showNames.add(currentAttribute.getName());
-				listAttributes.add(currentAttribute);				
+			if (eClassifier != null){
+				if (eClassifier.contains("String")){
+				
+					showNames.add(currentAttribute.getName());
+					listAttributes.add(currentAttribute);				
+				}
 			}
 		}
 			

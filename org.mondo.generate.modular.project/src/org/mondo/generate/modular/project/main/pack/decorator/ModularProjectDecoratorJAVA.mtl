@@ -20,11 +20,17 @@ import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstanc
 import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[anPatternInstance.Get_ProjectClass().name/]NewProjectNature;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-[ for(c : ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance()->union(anPatternInstance.Get_ProjectClassRoleInstance()->asSequence())->union(anPatternInstance.Get_ProjectClassRoleInstance()
+[for (c : ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance()->union(anPatternInstance.Get_ProjectClassRoleInstance()->asSequence())->union(anPatternInstance.Get_ProjectClassRoleInstance()
 																						 ->select(anClassRoleInstance : ClassRoleInstance | anClassRoleInstance.referenceInstances
 																						 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence()))]
+[let genPackage : GenPackage =  getGenClassFromEClass(c.element,anEObjectGenModel).eContainer().oclAsType(GenPackage) ]
+[if (genPackage.basePackage->isEmpty() = false)]
+import [genPackage.basePackage/].[generateEClassImport(c.element)/];
+[else]
 import [generateEClassImport(c.element)/];
-[ /for]
+[/if]
+[/let]
+[/for]
 
 public class ModularProjectDecorator implements ILightweightLabelDecorator {
 

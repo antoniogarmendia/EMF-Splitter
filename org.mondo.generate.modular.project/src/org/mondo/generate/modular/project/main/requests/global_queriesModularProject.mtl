@@ -2,6 +2,7 @@
 [module global_queriesModularProject('http://mondo.org/runtimePatterns',
 									 'http://mondo.org/dslPatterns',
 									 'http://mondo.dsl.org/mmPatterns/modularity',
+									  'http://www.eclipse.org/emf/2002/GenModel',
 									  'http://www.eclipse.org/emf/2002/Ecore')]
 
 
@@ -126,8 +127,8 @@
 		/]
 
 [comment Load GenModel /]
-[query public LoadGenModel(genModelPath : String): EObject = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
-				'Load(java.lang.String)',Sequence{genModelPath}).oclAsType(EObject) /]
+[query public LoadGenModel(genModelPath : String, eResource : EResource): EObject = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
+				'Load(java.lang.String,org.eclipse.emf.ecore.resource.Resource)',Sequence{genModelPath,eResource}).oclAsType(EObject) /]
 
 [query public Data_Type_Parse(attr : EAttribute) : 
 			EString = if(attr.eType.name='EShort') then
@@ -136,8 +137,11 @@
 						'Long.parseLong'
 					  		else if(attr.eType.name='EBoolean') then
 								'Boolean.parseBoolean'	
-								else			  
-									attr.eType.name.concat('.parse').concat(attr.eType.name)
+								else if(attr.eType.eClass().name = 'EEnum') then
+									attr.eType.name.concat('.get')
+									else			  
+										attr.eType.name.concat('.parse').concat(attr.eType.name)
+										endif
 									endif
 							endif
 					 endif
@@ -261,14 +265,21 @@
 
 [comment Create Import String/]
 
-[query public generateEClassImport(anEClass : EClass) :
+[query public generateEClassImport(anEClass : EClassifier) :
 				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
-				'generateEClassImport(org.eclipse.emf.ecore.EClass)',Sequence{anEClass}).oclAsType(String)/]
+				'generateEClassImport(org.eclipse.emf.ecore.EClassifier)',Sequence{anEClass}).oclAsType(String)/]
 
-
-[query public generateEClassImportImpl(anEClass : EClass) :
+[query public generateEClassImportSuffix(anEClass : EClass) :
 				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
-				'generateEClassImportImpl(org.eclipse.emf.ecore.EClass)',Sequence{anEClass}).oclAsType(String)/]
+				'generateEClassImportSuffix(org.eclipse.emf.ecore.EClass)',Sequence{anEClass}).oclAsType(String)/]
+
+[query public getRootPackageString(anEClass : EClass) :
+				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
+				'getRootPackageString(org.eclipse.emf.ecore.EClass)',Sequence{anEClass}).oclAsType(String)/]
+
+[query public generateEClassImportImpl(anEClass : EClassifier) :
+				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
+				'generateEClassImportImpl(org.eclipse.emf.ecore.EClassifier)',Sequence{anEClass}).oclAsType(String)/]
 
 [query public generateEClassImportFactoryImpl(anEClass : EClass) :
 				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
@@ -279,5 +290,24 @@
 [query public getPathIcon(anPath : String) : 
 		  String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
 				'getIconPath(java.lang.String)',Sequence{anPath}).oclAsType(String)/]
+
+[query public getGenClassFromEClass (anEClass : EClass, anEObjectGenModel : GenModel) :
+		  GenClass = getClosureGenPackages(anEObjectGenModel.genPackages->asSequence())
+							->union(anEObjectGenModel.genPackages->asSequence())
+							->collect(anGenPackage : GenPackage | anGenPackage.genClasses)->asSet()
+							->select(anGenClass : GenClass | anGenClass.ecoreClass = anEClass)
+							->asSequence()->first()					
+							
+	/]
+
+	[query public getClosureGenPackages(genPackages : Sequence(GenPackage)) : 
+		  Sequence(GenPackage) = genPackages->closure(anPackage : GenPackage | anPackage.nestedGenPackages)
+							->flatten()->asSequence()
+	/]
+
+	[query public geteAllPackages (anEObjectGenModel : GenModel) : 
+		  Sequence(GenPackage) =  getClosureGenPackages(anEObjectGenModel.genPackages->asSequence())
+								  ->union(anEObjectGenModel.genPackages->asSequence())			
+	/]
 
 
