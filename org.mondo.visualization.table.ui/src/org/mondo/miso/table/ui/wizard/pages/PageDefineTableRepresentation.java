@@ -50,8 +50,8 @@ public class PageDefineTableRepresentation extends WizardPage{
 	private TreeViewerColumn col_LinesColumns;
 	
 	public PageDefineTableRepresentation(String pageName) {
-		super(pageName);
-		// TODO Auto-generated constructor stub
+		
+		super(pageName);		
 		setTitle("Define Table Elements for MetaModel");
 		setDescription("Select the Table Representation");
 	}

@@ -27,7 +27,7 @@
 	
 	[METAINF(anProjectName,anProjectInstance) /]
 	[Activatorjava(anProjectName,anProjectInstance) /]
-	[PluginXML(anProjectName,anPatternInstance) /]
+	[PluginXML(anProjectName,anPatternInstance,anEObjectGenModel) /]
 	[Modular_DiagramJAVA(anProjectName, anPackageName, anPatternInstance,anEObjectGenModel) /]
 	[Package_Explorer_SelectionJAVA(anProjectName, anPatternInstance)/]
 	[XMI_FileJAVA(anProjectName, anPatternInstance)/]

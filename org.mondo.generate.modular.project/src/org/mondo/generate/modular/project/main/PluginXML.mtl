@@ -1,8 +1,8 @@
 [comment encoding = UTF-8 /]
-[module PluginXML('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns')]
+[module PluginXML('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns','http://www.eclipse.org/emf/2002/GenModel')]
 [import org::mondo::generate::modular::project::main::requests::global_queriesModularProject /]
 
-[template public PluginXML(anProjectName : String, anPatternInstance : PatternInstance)]
+[template public PluginXML(anProjectName : String, anPatternInstance : PatternInstance, anEObjectGenModel : GenModel)]
 
 [file ('plugin.xml',false, 'UTF-8')]
 <plugin>
@@ -72,33 +72,27 @@
          point="org.eclipse.ui.editors">
 	
 	[if(anPatternInstance.Get_FileClassRoleInstance().Get_ClassRoleInstance_EAttribute('extension')->size()>0)]
-	[let SeqExtension : Sequence(EString) = anPatternInstance.Get_FileClassRoleInstance().Get_ClassRoleInstance_EAttribute('extension')
-									->asSet()->intersection(anPatternInstance.Get_FileClassRoleInstance().Get_ClassRoleInstance_EAttribute('extension')->asSet())
-									->asSequence()]
-
-	
-	[for (ext : EString | SeqExtension)]
+	[for (c : ClassRoleInstance | anPatternInstance.Get_FileClassRoleInstance())]
+	[let genPackage : GenPackage =  getGenClassFromEClass(c.element,anEObjectGenModel).eContainer().oclAsType(GenPackage)]
 	<editor
-		name = "[ext.toUpperFirst()/]  Model Editor"
-		extensions = "[ext/]"
-		[if(anPatternInstance.Get_Extension_Icon(ext)->size() <= 0)]
+		name = "[c.Get_ClassRoleInstance_EAttribute('extension').toUpperFirst()/]  Model Editor"
+		extensions = "[c.Get_ClassRoleInstance_EAttribute('extension')/]"
+		[if(anPatternInstance.Get_Extension_Icon(c.Get_ClassRoleInstance_EAttribute('extension'))->size() <= 0)]
 		icon = "[getProperty('def_file_icon') /]"
-		[else]
-			[if (anPatternInstance.Get_Extension_Icon(ext)->first().Get_ClassRoleInstance_EAttribute('icon').toString()='null')]
+		[elseif (anPatternInstance.Get_Extension_Icon(c.Get_ClassRoleInstance_EAttribute('extension'))->first().Get_ClassRoleInstance_EAttribute('icon').toString()='null')]
 				icon = "[getProperty('def_file_icon') /]"
 		[else]
-		[let path : String = anPatternInstance.Get_Extension_Icon(ext)->first().Get_ClassRoleInstance_EAttribute('icon')]
+		[let path : String = anPatternInstance.Get_Extension_Icon(c.Get_ClassRoleInstance_EAttribute('extension'))->first().Get_ClassRoleInstance_EAttribute('icon')]
 		icon = "[getPathIcon(path)/]"
 		[/let]
-		[/if]		
 		[/if]
-		contributorClass="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors.MultiPageEditorContributor"
-		class = "[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors.MultiPageEditor"
-		id="[anProjectName/].project[Get_ProjectClass(anPatternInstance).name.toString().toLower()/].editors.FigureEditor[ext.toUpperFirst()/]"
+		contributorClass="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors.[genPackage.prefix/]ModularMultiPageEditorContributor"
+		class = "[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].editors.[genPackage.prefix/]ModularMultiPageEditor"
+		id="[anProjectName/].project[Get_ProjectClass(anPatternInstance).name.toString().toLower()/].editors.FigureEditor[c.Get_ClassRoleInstance_EAttribute('extension').toUpperFirst()/]"
 		default="true">
 	</editor>
-	[/for]
-	[/let]	
+	[/let]
+	[/for]	
 	[else]
 	<editor
 		name = "Default Model Editor"

@@ -73,7 +73,7 @@ public class LoadResourceDialogIcon extends ResourceDialog{
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
-				// TODO Auto-generated method stub
+				
 				fileURI = txURI.getText();
 			}
 		});
@@ -105,7 +105,7 @@ public class LoadResourceDialogIcon extends ResourceDialog{
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
+				
 				ImageSelection selec = new ImageSelection(getParentShell(), new FileProviderImage(), 
 						new FileImageContentProvider((IResource.FOLDER | IResource.FILE | SWT.APPLICATION_MODAL & IResource.FILE) != 0));
 				selec.setTitle("File Selection");
@@ -116,7 +116,7 @@ public class LoadResourceDialogIcon extends ResourceDialog{
 				try {
 					selec.setInput(EFS.getStore(fileURI));
 				} catch (CoreException e1) {
-					// TODO Auto-generated catch block
+					
 					e1.printStackTrace();
 				}
 				selec.setMessage("Select Image...");

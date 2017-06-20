@@ -35,44 +35,46 @@ public class CreateMenu extends ExtensionContributionFactory {
 		
 		ISelectionService serv = (ISelectionService) serviceLocator.getService(ISelectionService.class);
 		ISelection selection = serv.getSelection();
-		TreeSelection treeselection = (TreeSelection)selection;
-		Object firstelement = treeselection.getFirstElement();
-			
-		if(firstelement instanceof IProject){
-	
-			IProject pro = null;
-			if(firstelement instanceof IProject)
-				pro = (IProject)firstelement;	
-			if(firstelement instanceof IFolder)
-				pro = ((IFolder)firstelement).getProject();			
-			try {
-				IProjectNature nature = pro.getNature(GeneralProjectNature.ID);
-				if(nature==null)
-					return;
-			} catch (CoreException e) {
+		if (selection instanceof TreeSelection) {
+
+			TreeSelection treeselection = (TreeSelection)selection;
+			Object firstelement = treeselection.getFirstElement();
 				
-				e.printStackTrace();
-			}
-
-			MenuManager menu = new MenuManager();
-			menu.setMenuText("New General Modular Project");
-
-			[for(c : ClassRoleInstance | anPatternInstances.getClassesRoleProject())]
-			{
-					CommandContributionItemParameter pcommand = new CommandContributionItemParameter(serviceLocator,
-														"", "org.eclipse.ui.newWizard", CommandContributionItem.STYLE_PUSH);
-														pcommand.parameters = new HashMap<String,String>();
-							
+			if(firstelement instanceof IProject){
+		
+				IProject pro = null;
+				if(firstelement instanceof IProject)
+					pro = (IProject)firstelement;	
+				if(firstelement instanceof IFolder)
+					pro = ((IFolder)firstelement).getProject();			
+				try {
+					IProjectNature nature = pro.getNature(GeneralProjectNature.ID);
+					if(nature==null)
+						return;
+				} catch (CoreException e) {
+					
+					e.printStackTrace();
+				}
 	
-					pcommand.parameters.put("newWizardId", "[anProjectName/].[c.element.name.toLower()/].[getProperty('prefixGeneral')/].[c.element.name.toLower()/]NewPackage");
-					CommandContributionItem item = new CommandContributionItem(pcommand);
-					menu.add(item);
-			}			
-			[/for]
-
-			additions.addContributionItem(menu, null);			
-		}
-			
+				MenuManager menu = new MenuManager();
+				menu.setMenuText("New General Modular Project");
+	
+				[for(c : ClassRoleInstance | anPatternInstances.getClassesRoleProject())]
+				{
+						CommandContributionItemParameter pcommand = new CommandContributionItemParameter(serviceLocator,
+															"", "org.eclipse.ui.newWizard", CommandContributionItem.STYLE_PUSH);
+															pcommand.parameters = new HashMap<String,String>();
+								
+		
+						pcommand.parameters.put("newWizardId", "[anProjectName/].[c.element.name.toLower()/].[getProperty('prefixGeneral')/].[c.element.name.toLower()/]NewPackage");
+						CommandContributionItem item = new CommandContributionItem(pcommand);
+						menu.add(item);
+				}			
+				[/for]
+	
+				additions.addContributionItem(menu, null);			
+			}
+		}			
 	}
 
 }
