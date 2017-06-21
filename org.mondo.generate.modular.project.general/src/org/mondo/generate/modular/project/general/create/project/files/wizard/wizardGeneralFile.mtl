@@ -151,7 +151,7 @@ public class GeneralModularProjectWizard extends Wizard implements INewWizard {
 	}
 	
 	// join methods
-	private void reverseEngineering(String name, Resource resource) {
+	public static reverseEngineering(String name, Resource resource) {
 		
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(name);
 		
@@ -181,7 +181,7 @@ public class GeneralModularProjectWizard extends Wizard implements INewWizard {
 		copier.clear();		
 	}
 	
-	private void saveAll(ResourceSet reset) {
+	public static saveAll(ResourceSet reset) {
 		
 		Iterator<Resource> itAllResources = reset.getResources().iterator();
 

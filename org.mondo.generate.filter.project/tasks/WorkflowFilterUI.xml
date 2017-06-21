@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="WorkflowFilterUI" name="org.mondo.generate.filter.project">
-    <property name="ECLIPSE_HOME" value="D:/EclipseS/2.eclipse-modeling-neon-3-win32-x86_64(Current)"/>
-    <property name="ECLIPSE_WORKSPACE" value="D:/EclipseS/2.eclipse-modeling-neon-3-win32-x86_64(Current)/workspaces/1.GithubEMFSplitter"/>
+    <property name="ECLIPSE_HOME" value="D:/EclipseS2/2.eclipse-modeling-neon-3-win32-x86_64(current)"/>
+    <property name="ECLIPSE_WORKSPACE" value="D:/EclipseS2/2.eclipse-modeling-neon-3-win32-x86_64(current)/workspaces/1.EMFSplitter"/>
 
     <!-- The classpath with only the dependencies used by the project -->
     <path id="org.mondo.generate.filter.project.libraryclasspath">
