@@ -8,9 +8,20 @@
 package [anProjectName.toLower()/].[c.element.name.toLowerCase()/][getProperty('prefix_name')/].preferences;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.preference.*;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.mondo.generate.index.project.execute.EvaluateExecuteIndexedAttributeContributor;
@@ -37,6 +48,8 @@ import [anProjectName.toLower()/].[c.element.name.toLowerCase()/][getProperty('p
 public class [c.element.name/]PreferencePage
 	extends FieldEditorPreferencePage
 	implements IWorkbenchPreferencePage {
+
+	public static final String ecoreURI = "http://www.eclipse.org/emf/2002/Ecore";
 
 	public [c.element.name/]PreferencePage() {
 		super(GRID);
@@ -81,7 +94,7 @@ public class [c.element.name/]PreferencePage
 	
 	@Override
 	public boolean performOk() {
-		// TODO Auto-generated method stub
+		
 		boolean performOk =  super.performOk();
 		String current = Activator.getDefault().getPreferenceStore().getString(PreferenceOptions.FeatureEditor_CHOICE);
 		
@@ -96,7 +109,8 @@ public class [c.element.name/]PreferencePage
 			
 			if(!current.equals(PreferenceOptions.DefaultFeatureEditorDialog)){
 				List<String> listMetamodelURIs = new ArrayList<String>();
-				listMetamodelURIs.add("http://www.eclipse.org/emf/2002/Ecore");
+				listMetamodelURIs.add(ecoreURI);
+				getDependencies ("[c.element.ePackage.nsURI/]", listMetamodelURIs);
 				listMetamodelURIs.add("[c.element.ePackage.nsURI/]");
 				eval.executeInit(registry, current, [c.element.name/]NewProjectNature.ID, listMetamodelURIs);
 				//Initialize Indexed Attributes
@@ -104,6 +118,30 @@ public class [c.element.name/]PreferencePage
 			}			
 		}		
 		return performOk;
+	}
+
+	public void getDependencies (String modelURI, List<String> listMetamodelURIs) {
+		
+		ResourceSet reset = new ResourceSetImpl();
+		Resource res = reset.getResource(URI.createURI(modelURI),true);
+		
+		Map<EObject, Collection<Setting>>  mapCrossReferences = EcoreUtil.ProxyCrossReferencer.find(res);
+		for(Map.Entry<EObject, Collection<Setting>> entry : mapCrossReferences.entrySet()) {
+			EObject eObject = entry.getKey();
+			if (eObject.eIsProxy()) {
+				
+				URI eProxy = ((InternalEObject) eObject).eProxyURI();
+				if (eProxy.toString().contains(ecoreURI) == false) {
+					
+					String proxyURI = eProxy.scheme() +":"+ eProxy.devicePath();
+					if (listMetamodelURIs.indexOf(proxyURI) == -1) {
+					
+						getDependencies(proxyURI, listMetamodelURIs);
+						listMetamodelURIs.add(proxyURI);						
+					}
+				}				
+			}
+		}		
 	}
 
 }	

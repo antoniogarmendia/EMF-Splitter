@@ -57,6 +57,16 @@
             id="org.mondo.emf.splitter.popupmenuDefineConstraintPattern"
             name="Define Constraint Pattern">
       </command>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuDefineVisibilityPattern"
+            name="Define Visibility Pattern">
+      </command>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuDefineScopePattern"
+            name="Define Scope Pattern">
+      </command>
    </extension>
    <extension
          id="org.mondo.emf.splitter.popupmenuHandler"
@@ -101,6 +111,14 @@
             class="org.mondo.emf.splitter.actions.DefineConstraintsPattern"
             commandId="org.mondo.emf.splitter.popupmenuDefineConstraintPattern">
       </handler>
+      <handler
+            class="org.mondo.emf.splitter.actions.DefineVisibilityPattern"
+            commandId="org.mondo.emf.splitter.popupmenuDefineVisibilityPattern">
+      </handler>
+      <handler
+            class="org.mondo.emf.splitter.actions.DefineScopePattern"
+            commandId="org.mondo.emf.splitter.popupmenuDefineScopePattern">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -109,13 +127,96 @@
             locationURI="popup:org.eclipse.jdt.ui.PackageExplorer?after=additions">
          <menu
                label="EMF-Splitter">
-            <command
-                  commandId="org.mondo.emf.splitter.popupmenuCreateModularPluginProject"
-                  id="PopupMenu.menu.SplitterCreateModularProject"
-                  label="Create Modular Project"
-                  mnemonic="S"
-                  style="push">
-            </command>
+            <menu
+                  label="Define Pattern">
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuDefineModularPattern"
+                     id="PopupMenu.menu.DefineModularPattern"
+                     label="Define Modular Pattern"
+                     mnemonic="S"
+                     style="push">
+               </command>
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuDefineConcreteTableVisualization"
+                     id="PopupMenu.menu.SplitterCreateAllProjects"
+                     label="Define Table Representation"
+                     mnemonic="S"
+                     style="push">
+               </command>
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuDefineConstraintPattern"
+                     id="PopupMenu.menu.DefineConstraintPattern"
+                     label="Define Contraint Pattern"
+                     mnemonic="S"
+                     style="push">
+               </command>
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuDefineVisibilityPattern"
+                     id="PopupMenu.menu.DefineVisibilityPattern"
+                     label="Define Visibility Pattern"
+                     mnemonic="S"
+                     style="push">
+               </command>
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuDefineScopePattern"
+                     id="PopupMenu.menu.DefineScopePattern"
+                     label="Define Scope Pattern"
+                     mnemonic="S"
+                     style="push">
+               </command>
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuDefineConcreteVisualization"
+                     id="PopupMenu.menu.SplitterCreateAllProjects"
+                     label="Define Concrete Visualization"
+                     mnemonic="S"
+                     style="push">
+               </command>
+            </menu>
+            <menu
+                  label="Create Plugin">
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuCreateModularPluginProject"
+                     id="PopupMenu.menu.SplitterCreateModularProject"
+                     label="Create Modular Project"
+                     mnemonic="S"
+                     style="push">
+               </command>
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuCreateFilterPluginProject"
+                     id="PopupMenu.menu.SplitterCreateModularFilterProject"
+                     label="Create Filter Project"
+                     mnemonic="S"
+                     style="push">
+               </command>
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuCreateScopePluginProject"
+                     id="PopupMenu.menu.SplitterCreateModularScopeProject"
+                     label="Create Scope Project"
+                     mnemonic="S"
+                     style="push">
+               </command>
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuCreateVisibilityPluginProject"
+                     id="PopupMenu.menu.SplitterCreateModularVisbilityProject"
+                     label="Create Visibility Project"
+                     mnemonic="S"
+                     style="push">
+               </command>
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuCreateVisualPluginProject"
+                     id="PopupMenu.menu.SplitterCreateModularFilterVisualEditor Project"
+                     label="Create Visual Editor Project"
+                     mnemonic="S"
+                     style="push">
+               </command>
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuCreateAllPluginProjects"
+                     id="PopupMenu.menu.SplitterCreateAllProjects"
+                     label="Create All Projects"
+                     mnemonic="S"
+                     style="push">
+               </command>
+            </menu>
             <visibleWhen
                   checkEnabled="false">
                <with
@@ -132,69 +233,6 @@
                   </iterate>
                </with>
             </visibleWhen>
-            <command
-                  commandId="org.mondo.emf.splitter.popupmenuCreateFilterPluginProject"
-                  id="PopupMenu.menu.SplitterCreateModularFilterProject"
-                  label="Create Filter Project"
-                  mnemonic="S"
-                  style="push">
-            </command>
-            <command
-                  commandId="org.mondo.emf.splitter.popupmenuCreateVisualPluginProject"
-                  id="PopupMenu.menu.SplitterCreateModularFilterVisualEditor Project"
-                  label="Create Visual Editor Project"
-                  mnemonic="S"
-                  style="push">
-            </command>
-            <command
-                  commandId="org.mondo.emf.splitter.popupmenuCreateScopePluginProject"
-                  id="PopupMenu.menu.SplitterCreateModularScopeProject"
-                  label="Create Scope Project"
-                  mnemonic="S"
-                  style="push">
-            </command>
-            <command
-                  commandId="org.mondo.emf.splitter.popupmenuCreateVisibilityPluginProject"
-                  id="PopupMenu.menu.SplitterCreateModularVisbilityProject"
-                  label="Create Visibility Project"
-                  mnemonic="S"
-                  style="push">
-            </command>
-            <command
-                  commandId="org.mondo.emf.splitter.popupmenuCreateAllPluginProjects"
-                  id="PopupMenu.menu.SplitterCreateAllProjects"
-                  label="Create All Projects"
-                  mnemonic="S"
-                  style="push">
-            </command>
-            <command
-                  commandId="org.mondo.emf.splitter.popupmenuDefineConcreteVisualization"
-                  id="PopupMenu.menu.SplitterCreateAllProjects"
-                  label="Define Concrete Visualization"
-                  mnemonic="S"
-                  style="push">
-            </command>
-            <command
-                  commandId="org.mondo.emf.splitter.popupmenuDefineConcreteTableVisualization"
-                  id="PopupMenu.menu.SplitterCreateAllProjects"
-                  label="Define Table Representation"
-                  mnemonic="S"
-                  style="push">
-            </command>
-            <command
-                  commandId="org.mondo.emf.splitter.popupmenuDefineModularPattern"
-                  id="PopupMenu.menu.DefineModularPattern"
-                  label="Define Modular Pattern"
-                  mnemonic="S"
-                  style="push">
-            </command>
-            <command
-                  commandId="org.mondo.emf.splitter.popupmenuDefineConstraintPattern"
-                  id="PopupMenu.menu.DefineConstraintPattern"
-                  label="Define Contraint Pattern"
-                  mnemonic="S"
-                  style="push">
-            </command>
          </menu>
       </menuContribution>
    </extension>

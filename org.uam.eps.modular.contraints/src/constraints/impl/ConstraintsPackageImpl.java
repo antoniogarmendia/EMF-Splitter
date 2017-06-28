@@ -137,7 +137,7 @@ public class ConstraintsPackageImpl extends EPackageImpl implements ConstraintsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getConstraint_Statement() {
+	public EAttribute getConstraint_Name() {
 		return (EAttribute)constraintEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -146,8 +146,17 @@ public class ConstraintsPackageImpl extends EPackageImpl implements ConstraintsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getConstraint_Statement() {
+		return (EAttribute)constraintEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getConstraint_EClass() {
-		return (EReference)constraintEClass.getEStructuralFeatures().get(1);
+		return (EReference)constraintEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -183,6 +192,7 @@ public class ConstraintsPackageImpl extends EPackageImpl implements ConstraintsP
 		createEReference(metamodelConstraintEClass, METAMODEL_CONSTRAINT__CONSTRAINTS);
 
 		constraintEClass = createEClass(CONSTRAINT);
+		createEAttribute(constraintEClass, CONSTRAINT__NAME);
 		createEAttribute(constraintEClass, CONSTRAINT__STATEMENT);
 		createEReference(constraintEClass, CONSTRAINT__ECLASS);
 	}
@@ -222,6 +232,7 @@ public class ConstraintsPackageImpl extends EPackageImpl implements ConstraintsP
 		initEReference(getMetamodelConstraint_Constraints(), this.getConstraint(), null, "constraints", null, 0, -1, MetamodelConstraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(constraintEClass, Constraint.class, "Constraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getConstraint_Name(), ecorePackage.getEString(), "name", null, 0, 1, Constraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getConstraint_Statement(), ecorePackage.getEString(), "statement", null, 0, 1, Constraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getConstraint_EClass(), ecorePackage.getEClass(), null, "eClass", null, 0, 1, Constraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

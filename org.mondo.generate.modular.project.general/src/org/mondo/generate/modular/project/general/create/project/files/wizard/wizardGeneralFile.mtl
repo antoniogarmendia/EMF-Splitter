@@ -60,7 +60,8 @@ public class GeneralModularProjectWizard extends Wizard implements INewWizard {
 		this.allNatures.add(GeneralProjectNature.ID);
 		[for (c :  ClassRoleInstance | anPatternInstances.getClassesRoleProject())]
 		this.allNatures.add([c.element.name/]NewProjectNature.ID);
-		[/for]		
+		[/for]
+		this.allNatures.add("org.eclipse.epsilon.concordance.nature.ConcordanceNature");				
 	}
 
 	@Override
@@ -151,7 +152,7 @@ public class GeneralModularProjectWizard extends Wizard implements INewWizard {
 	}
 	
 	// join methods
-	public static reverseEngineering(String name, Resource resource) {
+	public static void reverseEngineering(String name, Resource resource) {
 		
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(name);
 		
@@ -181,7 +182,7 @@ public class GeneralModularProjectWizard extends Wizard implements INewWizard {
 		copier.clear();		
 	}
 	
-	public static saveAll(ResourceSet reset) {
+	public static void saveAll(ResourceSet reset) {
 		
 		Iterator<Resource> itAllResources = reset.getResources().iterator();
 

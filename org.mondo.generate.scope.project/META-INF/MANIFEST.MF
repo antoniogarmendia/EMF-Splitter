@@ -22,6 +22,7 @@ Export-Package: Scope,
  Scope.util,
  ScopeDefinition,
  ScopeDefinition.impl,
+ ScopeDefinition.util,
  org.mondo.generate.scope.project.createProject,
  org.mondo.generate.scope.project.ext,
  org.mondo.generate.scope.project.main

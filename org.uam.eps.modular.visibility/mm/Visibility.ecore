@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="visibility" nsURI="http://miso.es/visibility" nsPrefix="vis">
+  <eClassifiers xsi:type="ecore:EClass" name="MetamodelVisibility">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metaModel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visibilityRules" upperBound="-1"
+        eType="#//Visibility" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Visibility">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eClass" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" eType="#//VisibilityDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VisibilityDefinition">
+    <eLiterals name="WORKSPACE"/>
+    <eLiterals name="PROJECT" value="1"/>
+    <eLiterals name="PACKAGE" value="2"/>
+    <eLiterals name="UNIT" value="3"/>
+  </eClassifiers>
+</ecore:EPackage>

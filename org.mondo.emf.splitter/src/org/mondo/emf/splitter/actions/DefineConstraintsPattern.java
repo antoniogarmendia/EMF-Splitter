@@ -14,9 +14,10 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.uam.eps.modular.constraints.dialog.def.ConstraintDialog;
+import org.uam.eps.modular.constraints.dialog.wizard.WizardConstraint;
 
 import constraints.MetamodelConstraint;
 import splitterLibrary.EcoreEMF;
@@ -40,14 +41,14 @@ public class DefineConstraintsPattern implements IHandler{
 		IStructuredSelection selection = (TreeSelection)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 		Object firstelement = selection.getFirstElement();
 		
-		if(firstelement instanceof IResource){
+		if(firstelement instanceof IResource) {
 			
 			IResource resource = (IResource)firstelement;
 			
 			EcoreEMF nemf = SplitterLibraryFactoryImpl.eINSTANCE.createEcoreEMF();
 			nemf.setFileuri(resource.getLocationURI().toString());
 			
-			ConstraintDialog dialog = new ConstraintDialog(HandlerUtil.getActiveShell(event),nemf);
+			WizardConstraint wizard = new WizardConstraint(nemf);
 				
 			//search constraints
 			URI constraintModel = URI.createPlatformResourceURI(resource.getFullPath().toString(), true).
@@ -70,12 +71,14 @@ public class DefineConstraintsPattern implements IHandler{
 					
 					EObject rootEObject = res.getContents().get(0);
 					if (rootEObject instanceof MetamodelConstraint) {
-						dialog.setConstraints((MetamodelConstraint) rootEObject);
+						wizard.setConstraint((MetamodelConstraint) rootEObject);
 					}				
 				}
 				
-			}			
-			dialog.open();
+			}
+			
+			WizardDialog wizardDialog = new WizardDialog(HandlerUtil.getActiveShell(event), wizard);
+			wizardDialog.open();			
 		}		
 		return null;
 	}

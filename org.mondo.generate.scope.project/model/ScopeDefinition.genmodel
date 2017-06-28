@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
-    modelDirectory="/org.mondo.generate.scope.project/src" modelPluginID="org.mondo.generate.scope.project"
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.mondo.generate.scope.project/src" modelPluginID="org.mondo.generate.scope.project"
     modelName="ScopeDefinition" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
-    operationReflection="true" importOrganizing="true">
+    usedGenPackages="../../org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore" operationReflection="true"
+    importOrganizing="true">
   <foreignModel>ScopeDefinition.ecore</foreignModel>
   <genPackages prefix="ScopeDefinition" disposableProviderFactory="true" ecorePackage="ScopeDefinition.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="ScopeDefinition.ecore#//ScopeDefinitionEnum">
@@ -12,5 +13,14 @@
       <genEnumLiterals ecoreEnumLiteral="ScopeDefinition.ecore#//ScopeDefinitionEnum/rSamePackage"/>
       <genEnumLiterals ecoreEnumLiteral="ScopeDefinition.ecore#//ScopeDefinitionEnum/rSameUnit"/>
     </genEnums>
+    <genClasses ecoreClass="ScopeDefinition.ecore#//MetaModelScope">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ScopeDefinition.ecore#//MetaModelScope/metaModel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ScopeDefinition.ecore#//MetaModelScope/scopeRules"/>
+    </genClasses>
+    <genClasses ecoreClass="ScopeDefinition.ecore#//ScopeRule">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ScopeDefinition.ecore#//ScopeRule/eClass"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ScopeDefinition.ecore#//ScopeRule/scopeDefinition"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ScopeDefinition.ecore#//ScopeRule/eReference"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

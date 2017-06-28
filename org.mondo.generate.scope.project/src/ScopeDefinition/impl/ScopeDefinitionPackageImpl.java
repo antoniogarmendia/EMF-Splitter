@@ -2,13 +2,19 @@
  */
 package ScopeDefinition.impl;
 
+import ScopeDefinition.MetaModelScope;
 import ScopeDefinition.ScopeDefinitionEnum;
 import ScopeDefinition.ScopeDefinitionFactory;
 import ScopeDefinition.ScopeDefinitionPackage;
 
+import ScopeDefinition.ScopeRule;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -18,6 +24,18 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * @generated
  */
 public class ScopeDefinitionPackageImpl extends EPackageImpl implements ScopeDefinitionPackage {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass metaModelScopeEClass = null;
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass scopeRuleEClass = null;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -71,6 +89,9 @@ public class ScopeDefinitionPackageImpl extends EPackageImpl implements ScopeDef
 
 		isInited = true;
 
+		// Initialize simple dependencies
+		EcorePackage.eINSTANCE.eClass();
+
 		// Create package meta-data objects
 		theScopeDefinitionPackage.createPackageContents();
 
@@ -84,6 +105,69 @@ public class ScopeDefinitionPackageImpl extends EPackageImpl implements ScopeDef
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ScopeDefinitionPackage.eNS_URI, theScopeDefinitionPackage);
 		return theScopeDefinitionPackage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getMetaModelScope() {
+		return metaModelScopeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getMetaModelScope_MetaModel() {
+		return (EAttribute)metaModelScopeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getMetaModelScope_ScopeRules() {
+		return (EReference)metaModelScopeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getScopeRule() {
+		return scopeRuleEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScopeRule_EClass() {
+		return (EReference)scopeRuleEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScopeRule_ScopeDefinition() {
+		return (EAttribute)scopeRuleEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScopeRule_EReference() {
+		return (EReference)scopeRuleEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -122,6 +206,16 @@ public class ScopeDefinitionPackageImpl extends EPackageImpl implements ScopeDef
 		if (isCreated) return;
 		isCreated = true;
 
+		// Create classes and their features
+		metaModelScopeEClass = createEClass(META_MODEL_SCOPE);
+		createEAttribute(metaModelScopeEClass, META_MODEL_SCOPE__META_MODEL);
+		createEReference(metaModelScopeEClass, META_MODEL_SCOPE__SCOPE_RULES);
+
+		scopeRuleEClass = createEClass(SCOPE_RULE);
+		createEReference(scopeRuleEClass, SCOPE_RULE__ECLASS);
+		createEAttribute(scopeRuleEClass, SCOPE_RULE__SCOPE_DEFINITION);
+		createEReference(scopeRuleEClass, SCOPE_RULE__EREFERENCE);
+
 		// Create enums
 		scopeDefinitionEnumEEnum = createEEnum(SCOPE_DEFINITION_ENUM);
 	}
@@ -148,6 +242,25 @@ public class ScopeDefinitionPackageImpl extends EPackageImpl implements ScopeDef
 		setName(eNAME);
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
+
+		// Obtain other dependent packages
+		EcorePackage theEcorePackage = (EcorePackage)EPackage.Registry.INSTANCE.getEPackage(EcorePackage.eNS_URI);
+
+		// Create type parameters
+
+		// Set bounds for type parameters
+
+		// Add supertypes to classes
+
+		// Initialize classes, features, and operations; add parameters
+		initEClass(metaModelScopeEClass, MetaModelScope.class, "MetaModelScope", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMetaModelScope_MetaModel(), ecorePackage.getEString(), "metaModel", null, 0, 1, MetaModelScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMetaModelScope_ScopeRules(), this.getScopeRule(), null, "scopeRules", null, 0, -1, MetaModelScope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(scopeRuleEClass, ScopeRule.class, "ScopeRule", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getScopeRule_EClass(), theEcorePackage.getEClass(), null, "eClass", null, 0, 1, ScopeRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScopeRule_ScopeDefinition(), this.getScopeDefinitionEnum(), "scopeDefinition", null, 0, 1, ScopeRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScopeRule_EReference(), theEcorePackage.getEReference(), null, "eReference", null, 0, 1, ScopeRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(scopeDefinitionEnumEEnum, ScopeDefinitionEnum.class, "ScopeDefinitionEnum");

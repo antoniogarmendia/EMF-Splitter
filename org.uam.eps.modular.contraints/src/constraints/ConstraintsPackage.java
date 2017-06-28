@@ -113,13 +113,22 @@ public interface ConstraintsPackage extends EPackage {
 	int CONSTRAINT = 1;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT__NAME = 0;
+
+	/**
 	 * The feature id for the '<em><b>Statement</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONSTRAINT__STATEMENT = 0;
+	int CONSTRAINT__STATEMENT = 1;
 
 	/**
 	 * The feature id for the '<em><b>EClass</b></em>' reference.
@@ -128,7 +137,7 @@ public interface ConstraintsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONSTRAINT__ECLASS = 1;
+	int CONSTRAINT__ECLASS = 2;
 
 	/**
 	 * The number of structural features of the '<em>Constraint</em>' class.
@@ -137,7 +146,7 @@ public interface ConstraintsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONSTRAINT_FEATURE_COUNT = 2;
+	int CONSTRAINT_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Constraint</em>' class.
@@ -190,6 +199,17 @@ public interface ConstraintsPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getConstraint();
+
+	/**
+	 * Returns the meta object for the attribute '{@link constraints.Constraint#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see constraints.Constraint#getName()
+	 * @see #getConstraint()
+	 * @generated
+	 */
+	EAttribute getConstraint_Name();
 
 	/**
 	 * Returns the meta object for the attribute '{@link constraints.Constraint#getStatement <em>Statement</em>}'.
@@ -271,6 +291,14 @@ public interface ConstraintsPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CONSTRAINT = eINSTANCE.getConstraint();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONSTRAINT__NAME = eINSTANCE.getConstraint_Name();
 
 		/**
 		 * The meta object literal for the '<em><b>Statement</b></em>' attribute feature.

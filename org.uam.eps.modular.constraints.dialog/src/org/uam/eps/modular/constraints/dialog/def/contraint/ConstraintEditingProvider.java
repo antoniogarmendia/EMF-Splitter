@@ -1,15 +1,19 @@
 package org.uam.eps.modular.constraints.dialog.def.contraint;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import constraints.Constraint;
 
 public class ConstraintEditingProvider extends EditingSupport {
 
+	private DialogCellEditor dialogConstraint;
+	
 	public ConstraintEditingProvider(ColumnViewer viewer) {
 		
 		super(viewer);		
@@ -18,7 +22,34 @@ public class ConstraintEditingProvider extends EditingSupport {
 	@Override
 	protected CellEditor getCellEditor(Object element) {
 		
-		return new TextCellEditor((Composite) getViewer().getControl());
+		this.dialogConstraint = new DialogCellEditor() {
+
+			@Override
+			protected Object openDialogBox(Control cellEditorWindow) {
+				
+				cellEditorWindow.getShell().setText("Add/Update Statement");			
+				
+				if (element instanceof Constraint) {
+					
+					String statement = ((Constraint) element).getStatement();
+							
+					ConstraintDialog dialog = new ConstraintDialog(cellEditorWindow.getShell(), statement);
+						
+					if (dialog.open() == Dialog.OK) {
+						
+						return dialog.getStatement();
+					}
+				}
+				
+				return null;
+			}
+			
+			
+		};		
+		
+		
+		dialogConstraint.create((Composite) getViewer().getControl());
+		return dialogConstraint;
 	}
 
 	@Override

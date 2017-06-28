@@ -57,6 +57,8 @@ public class ScopeDefinitionFactoryImpl extends EFactoryImpl implements ScopeDef
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case ScopeDefinitionPackage.META_MODEL_SCOPE: return createMetaModelScope();
+			case ScopeDefinitionPackage.SCOPE_RULE: return createScopeRule();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -90,6 +92,26 @@ public class ScopeDefinitionFactoryImpl extends EFactoryImpl implements ScopeDef
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MetaModelScope createMetaModelScope() {
+		MetaModelScopeImpl metaModelScope = new MetaModelScopeImpl();
+		return metaModelScope;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScopeRule createScopeRule() {
+		ScopeRuleImpl scopeRule = new ScopeRuleImpl();
+		return scopeRule;
 	}
 
 	/**

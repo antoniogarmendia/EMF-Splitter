@@ -22,6 +22,24 @@ public interface ScopeDefinitionFactory extends EFactory {
 	ScopeDefinitionFactory eINSTANCE = ScopeDefinition.impl.ScopeDefinitionFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Meta Model Scope</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Meta Model Scope</em>'.
+	 * @generated
+	 */
+	MetaModelScope createMetaModelScope();
+
+	/**
+	 * Returns a new object of class '<em>Scope Rule</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Scope Rule</em>'.
+	 * @generated
+	 */
+	ScopeRule createScopeRule();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
