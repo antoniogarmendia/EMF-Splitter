@@ -264,10 +264,10 @@ public class ScopeDefinitionPackageImpl extends EPackageImpl implements ScopeDef
 
 		// Initialize enums and add enum literals
 		initEEnum(scopeDefinitionEnumEEnum, ScopeDefinitionEnum.class, "ScopeDefinitionEnum");
-		addEEnumLiteral(scopeDefinitionEnumEEnum, ScopeDefinitionEnum.RSAME_WORK_SPACE);
-		addEEnumLiteral(scopeDefinitionEnumEEnum, ScopeDefinitionEnum.RSAME_PROJECT);
-		addEEnumLiteral(scopeDefinitionEnumEEnum, ScopeDefinitionEnum.RSAME_PACKAGE);
-		addEEnumLiteral(scopeDefinitionEnumEEnum, ScopeDefinitionEnum.RSAME_UNIT);
+		addEEnumLiteral(scopeDefinitionEnumEEnum, ScopeDefinitionEnum.SAME_WORKSPACE);
+		addEEnumLiteral(scopeDefinitionEnumEEnum, ScopeDefinitionEnum.SAME_PROJECT);
+		addEEnumLiteral(scopeDefinitionEnumEEnum, ScopeDefinitionEnum.SAME_PACKAGE);
+		addEEnumLiteral(scopeDefinitionEnumEEnum, ScopeDefinitionEnum.SAME_UNIT);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -29,6 +29,7 @@ import runtimePatterns.PatternInstances;
 import runtimePatterns.ReferenceRoleInstance;
 import runtimePatterns.TypeFeatureRoleInstance;
 import runtimePatterns.impl.RuntimePatternsFactoryImpl;
+import splitterLibrary.util.DSLtaoUtils;
 
 public class GraphToModularityPattern {
 	
@@ -89,7 +90,7 @@ public class GraphToModularityPattern {
 			SubGraph subGraph = (SubGraph) itSubgraph.next();
 			Node rootNode = subGraph.getRoot();
 			//Create Modular Pattern
-			PatternInstance modularInstance = PatternModularUtils.createPatternInstance(PatternModularUtils.catModularity, this.eModularPattern);
+			PatternInstance modularInstance = DSLtaoUtils.createPatternInstance(DSLtaoUtils.catModularity, this.eModularPattern);
 								
 			//Add Project Class Role Instance
 			ClassRoleInstance rootInstance = addClassRoleInstance(rootNode, modularInstance, project);

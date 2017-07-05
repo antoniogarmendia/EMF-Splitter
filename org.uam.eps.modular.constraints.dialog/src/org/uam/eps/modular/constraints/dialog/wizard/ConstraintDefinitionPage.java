@@ -38,6 +38,8 @@ public class ConstraintDefinitionPage extends WizardPage{
 		super(pageName);
 		this.constraints = constraints;
 		this.metaModel = nemf;
+		setTitle("Define Constraints");
+		setDescription("Constraint Pattern");
 	}
 
 	@Override

@@ -46,17 +46,7 @@ public enum VisibilityDefinition implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	PACKAGE(2, "PACKAGE", "PACKAGE"),
-
-	/**
-	 * The '<em><b>UNIT</b></em>' literal object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #UNIT_VALUE
-	 * @generated
-	 * @ordered
-	 */
-	UNIT(3, "UNIT", "UNIT");
+	PACKAGE(2, "PACKAGE", "PACKAGE");
 
 	/**
 	 * The '<em><b>WORKSPACE</b></em>' literal value.
@@ -104,21 +94,6 @@ public enum VisibilityDefinition implements Enumerator {
 	public static final int PACKAGE_VALUE = 2;
 
 	/**
-	 * The '<em><b>UNIT</b></em>' literal value.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>UNIT</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @see #UNIT
-	 * @model
-	 * @generated
-	 * @ordered
-	 */
-	public static final int UNIT_VALUE = 3;
-
-	/**
 	 * An array of all the '<em><b>Definition</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -129,7 +104,6 @@ public enum VisibilityDefinition implements Enumerator {
 			WORKSPACE,
 			PROJECT,
 			PACKAGE,
-			UNIT,
 		};
 
 	/**
@@ -189,7 +163,6 @@ public enum VisibilityDefinition implements Enumerator {
 			case WORKSPACE_VALUE: return WORKSPACE;
 			case PROJECT_VALUE: return PROJECT;
 			case PACKAGE_VALUE: return PACKAGE;
-			case UNIT_VALUE: return UNIT;
 		}
 		return null;
 	}

@@ -8,10 +8,10 @@
   <foreignModel>ScopeDefinition.ecore</foreignModel>
   <genPackages prefix="ScopeDefinition" disposableProviderFactory="true" ecorePackage="ScopeDefinition.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="ScopeDefinition.ecore#//ScopeDefinitionEnum">
-      <genEnumLiterals ecoreEnumLiteral="ScopeDefinition.ecore#//ScopeDefinitionEnum/rSameWorkSpace"/>
-      <genEnumLiterals ecoreEnumLiteral="ScopeDefinition.ecore#//ScopeDefinitionEnum/rSameProject"/>
-      <genEnumLiterals ecoreEnumLiteral="ScopeDefinition.ecore#//ScopeDefinitionEnum/rSamePackage"/>
-      <genEnumLiterals ecoreEnumLiteral="ScopeDefinition.ecore#//ScopeDefinitionEnum/rSameUnit"/>
+      <genEnumLiterals ecoreEnumLiteral="ScopeDefinition.ecore#//ScopeDefinitionEnum/SAME_WORKSPACE"/>
+      <genEnumLiterals ecoreEnumLiteral="ScopeDefinition.ecore#//ScopeDefinitionEnum/SAME_PROJECT"/>
+      <genEnumLiterals ecoreEnumLiteral="ScopeDefinition.ecore#//ScopeDefinitionEnum/SAME_PACKAGE"/>
+      <genEnumLiterals ecoreEnumLiteral="ScopeDefinition.ecore#//ScopeDefinitionEnum/SAME_UNIT"/>
     </genEnums>
     <genClasses ecoreClass="ScopeDefinition.ecore#//MetaModelScope">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ScopeDefinition.ecore#//MetaModelScope/metaModel"/>

@@ -49,7 +49,7 @@ public class ScopeRuleImpl extends MinimalEObjectImpl.Container implements Scope
 	 * @generated
 	 * @ordered
 	 */
-	protected static final ScopeDefinitionEnum SCOPE_DEFINITION_EDEFAULT = ScopeDefinitionEnum.RSAME_WORK_SPACE;
+	protected static final ScopeDefinitionEnum SCOPE_DEFINITION_EDEFAULT = ScopeDefinitionEnum.SAME_WORKSPACE;
 
 	/**
 	 * The cached value of the '{@link #getScopeDefinition() <em>Scope Definition</em>}' attribute.

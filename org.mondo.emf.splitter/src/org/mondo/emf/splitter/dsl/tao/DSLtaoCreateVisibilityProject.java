@@ -11,11 +11,22 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.ui.PlatformUI;
 import org.mondo.editor.extensionpoints.IPatternImplementation;
 import org.mondo.editor.extensionpoints.ValidationInfo;
 import org.mondo.editor.graphiti.diagram.utils.ModelUtils;
+import org.mondo.editor.ui.utils.patterns.PatternApplicationUtils;
 import org.mondo.generate.visibility.project.createProject.CreateVisibilityPluginProject;
+import org.uam.eps.modular.visibility.wizard.def.VisibilityWizard;
 
 import dslPatterns.MMInterface;
 import dslPatterns.Pattern;
@@ -23,11 +34,13 @@ import runtimePatterns.PatternInstance;
 import runtimePatterns.PatternInstances;
 import splitterLibrary.EcoreEMF;
 import splitterLibrary.impl.SplitterLibraryFactoryImpl;
+import splitterLibrary.util.DSLtaoUtils;
+import visibility.MetamodelVisibility;
 
 public class DSLtaoCreateVisibilityProject implements IPatternImplementation {
 
 	public DSLtaoCreateVisibilityProject() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
@@ -47,7 +60,7 @@ public class DSLtaoCreateVisibilityProject implements IPatternImplementation {
 			try {
 					ModelUtils.saveModel(fileuri, ePack);
 			} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 				e.printStackTrace();
 			}
 		//END
@@ -77,8 +90,56 @@ public class DSLtaoCreateVisibilityProject implements IPatternImplementation {
 
 	@Override
 	public boolean applyPattern(EPackage ePack, Pattern pattern, PatternInstances patternInstances, IPath iPath) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		URI resourceURI = ePack.eResource().getURI();
+		Resource resourceMM = DSLtaoUtils.findEcoreMM(resourceURI);
+			
+		EcoreEMF nemf = SplitterLibraryFactoryImpl.eINSTANCE.createEcoreEMF();
+		nemf.setRs(resourceMM);
+		
+		VisibilityWizard wizard = new VisibilityWizard(nemf);
+		
+		// find a resource mmgraph
+		URI mmVisibilityURI = resourceURI.trimFileExtension().appendFileExtension("vis");
+		
+		boolean exist = new ExtensibleURIConverterImpl().exists(mmVisibilityURI, null);
+		
+		if (exist == true) {
+			
+			boolean result = MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					"Update/Override", 
+							"A file with visibility rules has been detected. "
+							+ "Would you like to update the pattern?");
+			
+			//Update
+			if (result == true) {
+				
+				ResourceSet reset = new ResourceSetImpl();
+				Resource res = reset.getResource(mmVisibilityURI, true);
+				
+				EObject rootEObject = res.getContents().get(0);
+				if (rootEObject instanceof MetamodelVisibility) {
+					wizard.setVisibilityRules((MetamodelVisibility) rootEObject);
+				}				
+			}			
+		}
+		
+		WizardDialog wizardDialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wizard);
+		
+		if (wizardDialog.open() == Window.OK) {
+			
+			// transform the visibility structure to the DSLtao(*.diagram)
+			PatternInstance visInstance = wizard.getVisInstance();			
+			// apply pattern to the diagram
+			PatternApplicationUtils.applyPattern(DSLtaoUtils.transformFromAppliedPatternsToMMInterfaceRelDiagram(visInstance,pattern),
+										DSLtaoUtils.getDiagramDSLtao(), pattern, patternInstances, "Visibility", false);
+			
+			System.out.println("The Visibility Structure was created!");		
+		} else {
+			System.out.println("The user cancelled the operation");
+		}
+		
+		return true;
 	}
 
 }

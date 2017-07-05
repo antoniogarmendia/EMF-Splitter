@@ -16,7 +16,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.codegen.ecore;bundle-version="2.10.1",
  com.google.guava;bundle-version="15.0.0",
  org.eclipse.jdt.ui;bundle-version="3.10.1",
- org.mondo.dsl;bundle-version="0.1.0";visibility:=reexport
+ org.mondo.dsl;bundle-version="0.1.0";visibility:=reexport,
+ org.eclipse.graphiti.ui,
+ org.eclipse.ui.workbench,
+ org.eclipse.graphiti;bundle-version="0.13.2",
+ org.mondo.editor.ui
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.emf.ecore.xmi,
  org.eclipse.emf.ecore.xmi.impl,

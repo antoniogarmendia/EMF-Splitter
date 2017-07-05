@@ -7,14 +7,14 @@
         eType="#//ScopeRule" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ScopeRule">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="eClass" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eClass" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="scopeDefinition" eType="#//ScopeDefinitionEnum"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="eReference" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eReference" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ScopeDefinitionEnum">
-    <eLiterals name="rSameWorkSpace" value="3"/>
-    <eLiterals name="rSameProject" value="2"/>
-    <eLiterals name="rSamePackage" value="1"/>
-    <eLiterals name="rSameUnit"/>
+    <eLiterals name="SAME_WORKSPACE" value="3" literal="SAME_WORKSPACE"/>
+    <eLiterals name="SAME_PROJECT" value="2" literal="SAME_PROJECT"/>
+    <eLiterals name="SAME_PACKAGE" value="1"/>
+    <eLiterals name="SAME_UNIT"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -15,6 +15,5 @@
     <eLiterals name="WORKSPACE"/>
     <eLiterals name="PROJECT" value="1"/>
     <eLiterals name="PACKAGE" value="2"/>
-    <eLiterals name="UNIT" value="3"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -67,6 +67,11 @@
             id="org.mondo.emf.splitter.popupmenuDefineScopePattern"
             name="Define Scope Pattern">
       </command>
+      <command
+            categoryId="org.mondo.emf.splitter.category"
+            id="org.mondo.emf.splitter.popupmenuDefineIndexAttributePattern"
+            name="Define Index Attribute Pattern">
+      </command>
    </extension>
    <extension
          id="org.mondo.emf.splitter.popupmenuHandler"
@@ -119,6 +124,10 @@
             class="org.mondo.emf.splitter.actions.DefineScopePattern"
             commandId="org.mondo.emf.splitter.popupmenuDefineScopePattern">
       </handler>
+      <handler
+            class="org.mondo.emf.splitter.actions.DefineIndexAttributePattern"
+            commandId="org.mondo.emf.splitter.popupmenuDefineIndexAttributePattern">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -161,6 +170,13 @@
                      commandId="org.mondo.emf.splitter.popupmenuDefineScopePattern"
                      id="PopupMenu.menu.DefineScopePattern"
                      label="Define Scope Pattern"
+                     mnemonic="S"
+                     style="push">
+               </command>
+               <command
+                     commandId="org.mondo.emf.splitter.popupmenuDefineIndexAttributePattern"
+                     id="PopupMenu.menu.DefineIndexPattern"
+                     label="Define Index Attribute Pattern"
                      mnemonic="S"
                      style="push">
                </command>
@@ -261,6 +277,10 @@
       <client
             class="org.mondo.emf.splitter.dsl.tao.DSLtaoCreateIndexAttributeProject"
             pattern="IndexAttribute">
+      </client>
+      <client
+            class="org.mondo.emf.splitter.dsl.tao.DSLtaoCreateConstraintProject"
+            pattern="Constraint">
       </client>
    </extension>
 

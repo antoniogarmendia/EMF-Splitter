@@ -19,104 +19,98 @@ import org.eclipse.emf.common.util.Enumerator;
  */
 public enum ScopeDefinitionEnum implements Enumerator {
 	/**
-	 * The '<em><b>RSame Work Space</b></em>' literal object.
+	 * The '<em><b>SAME WORKSPACE</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #RSAME_WORK_SPACE_VALUE
+	 * @see #SAME_WORKSPACE_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	RSAME_WORK_SPACE(3, "rSameWorkSpace", "rSameWorkSpace"),
-
-	/**
-	 * The '<em><b>RSame Project</b></em>' literal object.
+	SAME_WORKSPACE(3, "SAME_WORKSPACE", "SAME_WORKSPACE"), /**
+	 * The '<em><b>SAME PROJECT</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #RSAME_PROJECT_VALUE
+	 * @see #SAME_PROJECT_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	RSAME_PROJECT(2, "rSameProject", "rSameProject"),
-
-	/**
-	 * The '<em><b>RSame Package</b></em>' literal object.
+	SAME_PROJECT(2, "SAME_PROJECT", "SAME_PROJECT"), /**
+	 * The '<em><b>SAME PACKAGE</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #RSAME_PACKAGE_VALUE
+	 * @see #SAME_PACKAGE_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	RSAME_PACKAGE(1, "rSamePackage", "rSamePackage"),
-
-	/**
-	 * The '<em><b>RSame Unit</b></em>' literal object.
+	SAME_PACKAGE(1, "SAME_PACKAGE", "SAME_PACKAGE"), /**
+	 * The '<em><b>SAME UNIT</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #RSAME_UNIT_VALUE
+	 * @see #SAME_UNIT_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	RSAME_UNIT(0, "rSameUnit", "rSameUnit");
+	SAME_UNIT(0, "SAME_UNIT", "SAME_UNIT");
 
 	/**
-	 * The '<em><b>RSame Work Space</b></em>' literal value.
+	 * The '<em><b>SAME WORKSPACE</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>RSame Work Space</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>SAME WORKSPACE</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #RSAME_WORK_SPACE
-	 * @model name="rSameWorkSpace"
+	 * @see #SAME_WORKSPACE
+	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int RSAME_WORK_SPACE_VALUE = 3;
+	public static final int SAME_WORKSPACE_VALUE = 3;
 
 	/**
-	 * The '<em><b>RSame Project</b></em>' literal value.
+	 * The '<em><b>SAME PROJECT</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>RSame Project</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>SAME PROJECT</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #RSAME_PROJECT
-	 * @model name="rSameProject"
+	 * @see #SAME_PROJECT
+	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int RSAME_PROJECT_VALUE = 2;
+	public static final int SAME_PROJECT_VALUE = 2;
 
 	/**
-	 * The '<em><b>RSame Package</b></em>' literal value.
+	 * The '<em><b>SAME PACKAGE</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>RSame Package</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>SAME PACKAGE</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #RSAME_PACKAGE
-	 * @model name="rSamePackage"
+	 * @see #SAME_PACKAGE
+	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int RSAME_PACKAGE_VALUE = 1;
+	public static final int SAME_PACKAGE_VALUE = 1;
 
 	/**
-	 * The '<em><b>RSame Unit</b></em>' literal value.
+	 * The '<em><b>SAME UNIT</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>RSame Unit</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>SAME UNIT</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #RSAME_UNIT
-	 * @model name="rSameUnit"
+	 * @see #SAME_UNIT
+	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int RSAME_UNIT_VALUE = 0;
+	public static final int SAME_UNIT_VALUE = 0;
 
 	/**
 	 * An array of all the '<em><b>Enum</b></em>' enumerators.
@@ -126,10 +120,10 @@ public enum ScopeDefinitionEnum implements Enumerator {
 	 */
 	private static final ScopeDefinitionEnum[] VALUES_ARRAY =
 		new ScopeDefinitionEnum[] {
-			RSAME_WORK_SPACE,
-			RSAME_PROJECT,
-			RSAME_PACKAGE,
-			RSAME_UNIT,
+			SAME_WORKSPACE,
+			SAME_PROJECT,
+			SAME_PACKAGE,
+			SAME_UNIT,
 		};
 
 	/**
@@ -186,10 +180,10 @@ public enum ScopeDefinitionEnum implements Enumerator {
 	 */
 	public static ScopeDefinitionEnum get(int value) {
 		switch (value) {
-			case RSAME_WORK_SPACE_VALUE: return RSAME_WORK_SPACE;
-			case RSAME_PROJECT_VALUE: return RSAME_PROJECT;
-			case RSAME_PACKAGE_VALUE: return RSAME_PACKAGE;
-			case RSAME_UNIT_VALUE: return RSAME_UNIT;
+			case SAME_WORKSPACE_VALUE: return SAME_WORKSPACE;
+			case SAME_PROJECT_VALUE: return SAME_PROJECT;
+			case SAME_PACKAGE_VALUE: return SAME_PACKAGE;
+			case SAME_UNIT_VALUE: return SAME_UNIT;
 		}
 		return null;
 	}

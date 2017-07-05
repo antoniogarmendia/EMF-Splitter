@@ -11,6 +11,7 @@ import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.widgets.Composite;
+import org.uam.eps.modular.scope.wizard.def.ScopeDefinitionPage;
 
 import ScopeDefinition.ScopeRule;
 
@@ -20,10 +21,9 @@ public class ReferenceEditingProvider extends EditingSupport {
 	private ComboBoxCellEditor cellEditor;
 	private List<String> stringsOfreferences;
 	
-	public ReferenceEditingProvider(ColumnViewer viewer, EList<EReference> currentReferences) {
+	public ReferenceEditingProvider(ColumnViewer viewer) {
 		
-		super(viewer);		
-		this.currentReferences = currentReferences;		
+		super(viewer);				
 	}
 	
 	public void initGetNameOfReferences() {
@@ -39,7 +39,11 @@ public class ReferenceEditingProvider extends EditingSupport {
 	@Override
 	protected CellEditor getCellEditor(Object element) {
 		
-		initGetNameOfReferences();
+		if (element instanceof ScopeRule) {
+			this.currentReferences = ScopeDefinitionPage.getNoNContainmentReferences(((ScopeRule) element).getEClass());
+			initGetNameOfReferences();
+		}	
+		
 		this.cellEditor = new ComboBoxCellEditor((Composite) getViewer().getControl(),stringsOfreferences.toArray(new String[stringsOfreferences.size()]));		
 		return this.cellEditor;
 	}

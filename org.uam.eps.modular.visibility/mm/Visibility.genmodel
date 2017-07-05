@@ -10,7 +10,6 @@
       <genEnumLiterals ecoreEnumLiteral="Visibility.ecore#//VisibilityDefinition/WORKSPACE"/>
       <genEnumLiterals ecoreEnumLiteral="Visibility.ecore#//VisibilityDefinition/PROJECT"/>
       <genEnumLiterals ecoreEnumLiteral="Visibility.ecore#//VisibilityDefinition/PACKAGE"/>
-      <genEnumLiterals ecoreEnumLiteral="Visibility.ecore#//VisibilityDefinition/UNIT"/>
     </genEnums>
     <genClasses ecoreClass="Visibility.ecore#//MetamodelVisibility">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Visibility.ecore#//MetamodelVisibility/metaModel"/>

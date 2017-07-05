@@ -621,14 +621,14 @@ public class ModularFeatureEditorDialog extends Dialog{
 			EvaluateScopeCrossReferences eval = new EvaluateScopeCrossReferences();
 			current_scope = eval.execute(Platform.getExtensionRegistry(), (EReference)feature);		
 			if(current_scope == null)
-				current_scope = ScopeDefinitionEnum.RSAME_WORK_SPACE;
+				current_scope = ScopeDefinitionEnum.SAME_WORKSPACE;
 		}	
 		return current_scope;
 	}
 	
 	public void ScopeResourceWS() {
 		res = null;
-		current_scope = ScopeDefinitionEnum.RSAME_WORK_SPACE;
+		current_scope = ScopeDefinitionEnum.SAME_WORKSPACE;
 	};
 	
 	public void ScopeResourceProject() {
@@ -637,7 +637,7 @@ public class ModularFeatureEditorDialog extends Dialog{
 		IFile fil = current_pro.getFile(new Path(current_pro.getName() + ".xmi"));
 		ResourceSet set = new ResourceSetImpl();
 		res = set.createResource(URI.createPlatformResourceURI(fil.getFullPath().toString(), true));
-		current_scope = ScopeDefinitionEnum.RSAME_PROJECT;
+		current_scope = ScopeDefinitionEnum.SAME_PROJECT;
 	};
 
 	public void ScopeResourcePackage() {
@@ -646,7 +646,7 @@ public class ModularFeatureEditorDialog extends Dialog{
 		ipath = ipath.append(ipath.lastSegment().concat(".xmi"));
 		ResourceSet set = new ResourceSetImpl();
 		res = set.createResource(URI.createURI("platform:" + ipath.toString()));
-		current_scope = ScopeDefinitionEnum.RSAME_PACKAGE;
+		current_scope = ScopeDefinitionEnum.SAME_PACKAGE;
 	};
 
 	public void ScopeResourceUnit() {
@@ -654,7 +654,7 @@ public class ModularFeatureEditorDialog extends Dialog{
 		URI uri = eObject.eResource().getURI();
 		ResourceSet set = new ResourceSetImpl();
 		res = set.createResource(uri);
-		current_scope = ScopeDefinitionEnum.RSAME_UNIT;
+		current_scope = ScopeDefinitionEnum.SAME_UNIT;
 	};
 	
 }

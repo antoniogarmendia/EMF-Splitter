@@ -22,9 +22,11 @@ import dslHeuristicVisualization.EcoreMatrixContainment;
 import dslPatterns.Pattern;
 import dslPatterns.PatternSet;
 import runtimePatterns.PatternInstances;
+import splitterLibrary.util.DSLtaoUtils;
 
 public class WizardApplyModularPattern extends DynamicWizard{
 
+	protected ModularityPatternPage patternPage;
 	protected PageSelectClassProject pageProject;
 	protected EList<EClass> listEClasses;
 	protected EcoreMatrixContainment ecoreContainment;
@@ -65,7 +67,9 @@ public class WizardApplyModularPattern extends DynamicWizard{
 		super.addPages();
 				
 		//Select the Roots 
+		patternPage = new ModularityPatternPage("Modularity Pattern");
 		pageProject = new PageSelectClassProject("Select the Class Project",getListEClasses(),ecoreContainment);
+		addPage(patternPage);
 		addPage(pageProject);			
 	}
 	
@@ -108,9 +112,9 @@ public class WizardApplyModularPattern extends DynamicWizard{
 					
 		// obtain Modular Pattern
 		PatternSet patternModel = PatternUtils.getPatternSetModel(this.eProject);
-		Pattern modularPattern = PatternModularUtils.getModularPattern(patternModel);
-		setPatternAbsoluteUri(modularPattern.eResource());
-		modularInstance = PatternModularUtils.createPatternInstances();
+		Pattern modularPattern = DSLtaoUtils.getModularPattern(patternModel);
+		DSLtaoUtils.setPatternAbsoluteUri(this.eProject, modularPattern.eResource());
+		modularInstance = DSLtaoUtils.createPatternInstances();
 		
 		//convert graph to runtime patterns
 		GraphToModularityPattern transoPattern = new GraphToModularityPattern(modularPattern);
@@ -118,7 +122,16 @@ public class WizardApplyModularPattern extends DynamicWizard{
 		
 		// save runtime patterns
 		URI uri = this.eResource.getURI().trimFileExtension().appendFileExtension("rtpat");
-		PatternModularUtils.saveRuntimePatternModel(modularInstance, uri);
+		boolean exisRtpat = DSLtaoUtils.existRuntimePatterns(uri);
+		
+		if(exisRtpat == false) {
+			//create runtime patterns
+			PatternModularUtils.saveRuntimePatternModel(modularInstance, uri);
+		}
+		else {
+			// update runtime patterns
+			PatternModularUtils.savePatternInstanceInRtapt(uri,modularInstance.getAppliedPatterns().get(0));
+		}
 		
 		return true;
 	}	
@@ -133,18 +146,6 @@ public class WizardApplyModularPattern extends DynamicWizard{
 	
 	public PatternInstances getModularInstance() {
 		return modularInstance;
-	}
-	
-	/*
-	 * Convert relative to absolute. 
-	 * This is because DSLtao do the inverse.
-	 * @param resource
-	 * */
-	
-	private void setPatternAbsoluteUri(Resource resource){
-		
-		URI absoluteUri = URI.createPlatformResourceURI(this.eProject.getName() + "/" + resource.getURI().toString(), true);
-		resource.setURI(absoluteUri);
 	}
 	
  }

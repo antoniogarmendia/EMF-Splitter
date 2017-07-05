@@ -1,0 +1,112 @@
+package org.mondo.emf.splitter.dsl.tao;
+
+import java.util.List;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.ui.PlatformUI;
+import org.mondo.editor.extensionpoints.IPatternImplementation;
+import org.mondo.editor.extensionpoints.ValidationInfo;
+import org.mondo.editor.ui.utils.patterns.PatternApplicationUtils;
+import org.uam.eps.modular.constraints.dialog.wizard.WizardConstraint;
+
+import ScopeDefinition.MetaModelScope;
+import constraints.MetamodelConstraint;
+import dslPatterns.MMInterface;
+import dslPatterns.Pattern;
+import runtimePatterns.PatternInstance;
+import runtimePatterns.PatternInstances;
+import splitterLibrary.EcoreEMF;
+import splitterLibrary.impl.SplitterLibraryFactoryImpl;
+import splitterLibrary.util.DSLtaoUtils;
+
+public class DSLtaoCreateConstraintProject implements IPatternImplementation {
+
+	public DSLtaoCreateConstraintProject() {
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public boolean execute(EPackage ePack, PatternInstance pattern, IPath iPath) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ValidationInfo validate(EPackage ePack, PatternInstance pattern) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ENamedElement> getOptimalElements(EPackage ePack, MMInterface mminterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean applyPattern(EPackage ePack, Pattern pattern, PatternInstances patternInstances, IPath iPath) {
+		
+		URI resourceURI = ePack.eResource().getURI();
+		Resource resourceMM = DSLtaoUtils.findEcoreMM(resourceURI);
+				
+		EcoreEMF nemf = SplitterLibraryFactoryImpl.eINSTANCE.createEcoreEMF();
+		nemf.setRs(resourceMM);
+		
+		WizardConstraint wizard = new WizardConstraint(nemf);
+		
+		// find a resource mmgraph
+		URI mmConsURI = resourceURI.trimFileExtension().appendFileExtension("cons");
+		
+		boolean exist = new ExtensibleURIConverterImpl().exists(mmConsURI, null);
+		
+		if (exist == true) {
+			
+			boolean result = MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					"Update/Override", 
+							"A file with constraints has been detected. "
+							+ "Would you like to update the pattern?");
+			
+			//Update
+			if (result == true) {
+			
+				ResourceSet reset = new ResourceSetImpl();
+				Resource res = reset.getResource(mmConsURI, true);
+				
+				EObject rootEObject = res.getContents().get(0);
+				if (rootEObject instanceof MetamodelConstraint) {
+					wizard.setConstraint((MetamodelConstraint) rootEObject);
+				}				
+			}			
+		}
+		
+		WizardDialog wizardDialog = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wizard);
+		
+		if (wizardDialog.open() == Window.OK) {
+			
+			// transform the constraint structure to the DSLtao(*.diagram)
+			PatternInstance consInstance = wizard.getConsInstance();
+			// apply pattern to the diagram
+			PatternApplicationUtils.applyPattern(DSLtaoUtils.transformFromAppliedPatternsToMMInterfaceRelDiagram(consInstance,pattern),
+						DSLtaoUtils.getDiagramDSLtao(), pattern, patternInstances, "Constraint", false);
+			
+			System.out.println("The Constraint Pattern was instantiated!");	
+			
+		} else {
+			System.out.println("The user cancelled the operation");
+		}
+		
+		return true;
+	}
+
+}

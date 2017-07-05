@@ -7,7 +7,9 @@ Bundle-Activator: org.uam.eps.modular.visibility.wizard.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.uam.eps.modular.visibility,
- org.mondo.emf.splitter.library
+ org.mondo.emf.splitter.library,
+ org.eclipse.core.resources,
+ org.miso.wizard.instantiate.modular.pattern
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.uam.eps.modular.visibility.wizard.def

@@ -35,8 +35,7 @@ public class ScopeDefinitionPage extends WizardPage{
 	private MetaModelScope scopeRules;
 	private EcoreEMF metaModel;
 	private EList<EClass> listEClassesWReferences;
-	private final EList<EReference> currentReferences = new BasicEList<EReference>();
-	
+		
 	protected ScopeDefinitionPage(String pageName, MetaModelScope scopeRules, EcoreEMF metaModel) {
 		
 		super(pageName);
@@ -95,7 +94,7 @@ public class ScopeDefinitionPage extends WizardPage{
 	    eNameColumn.setEditingSupport(new EClassEditingProvider(viewer, this.listEClassesWReferences));
 	    
 	    TreeViewerColumn eScope = new TreeViewerColumn(viewer, SWT.NONE);
-	    eScope.getColumn().setWidth(100);
+	    eScope.getColumn().setWidth(150);
 	    eScope.getColumn().setText("Scope");
 	    eScope.setLabelProvider(new ScopeColumnLabelProvider());
 	    eScope.setEditingSupport(new ScopeEditingProvider(viewer));
@@ -104,7 +103,7 @@ public class ScopeDefinitionPage extends WizardPage{
 	    reference.getColumn().setWidth(200);
 	    reference.getColumn().setText("Reference");
 	    reference.setLabelProvider(new ReferenceColumnLabelProvider());
-	    reference.setEditingSupport(new ReferenceEditingProvider(viewer,currentReferences));
+	    reference.setEditingSupport(new ReferenceEditingProvider(viewer));
 	    	    
 	    Button button = new Button(container, SWT.PUSH);
         button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
@@ -119,10 +118,8 @@ public class ScopeDefinitionPage extends WizardPage{
         		Random randomGenerator = new Random();
         		EClass eClass = listEClassesWReferences.get(randomGenerator.nextInt(listEClassesWReferences.size()));
         		rule.setEClass(eClass);
-        		rule.setScopeDefinition(ScopeDefinitionEnum.RSAME_PROJECT);
+        		rule.setScopeDefinition(ScopeDefinitionEnum.SAME_WORKSPACE);
         		EList<EReference> listOfReferences = getNoNContainmentReferences(eClass);
-        		currentReferences.clear();
-        		currentReferences.addAll(listOfReferences);
         		rule.setEReference(listOfReferences.get(randomGenerator.nextInt(listOfReferences.size())));        		
         		scopeRules.getScopeRules().add(rule);        		
         		viewer.refresh();
