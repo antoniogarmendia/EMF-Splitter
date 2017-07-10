@@ -173,7 +173,7 @@ public class DSLtaoCreateModularProject implements IPatternImplementation {
 		{ 	
 			System.out.println("The Modular Structure was created!");
 			// transform modular structure to the DSLtao(*.diagram) 
-			PatternInstance modularInstance = wizard.getModularInstance().getAppliedPatterns().get(0);
+			PatternInstance modularInstance = wizard.getModularInstance();
 			modularInstance.setAttached(false);
 			transformPatternsCompatibleWithDiagram(ePack,modularInstance);
 			

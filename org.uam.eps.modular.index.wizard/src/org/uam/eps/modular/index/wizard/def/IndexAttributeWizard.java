@@ -75,7 +75,7 @@ public class IndexAttributeWizard extends Wizard{
 				PatternModularUtils.savePatternInstance(this.indexInstance, rtpatURI);
 			} else {
 				// update runtime patterns
-				PatternModularUtils.savePatternInstanceInRtapt(rtpatURI,this.indexInstance);
+				PatternModularUtils.savePatternInstanceInRtapt(rtpatURI,this.indexInstance,DSLtaoUtils.catIndex);
 			}			
 			
 		} catch (IOException e) {

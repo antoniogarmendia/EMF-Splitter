@@ -21,6 +21,7 @@ import dslHeuristicVisualization.DslHeuristicVisualizationFactory;
 import dslHeuristicVisualization.EcoreMatrixContainment;
 import dslPatterns.Pattern;
 import dslPatterns.PatternSet;
+import runtimePatterns.PatternInstance;
 import runtimePatterns.PatternInstances;
 import splitterLibrary.util.DSLtaoUtils;
 
@@ -35,6 +36,7 @@ public class WizardApplyModularPattern extends DynamicWizard{
 	private WizardDialog dialog;
 	private IProject eProject;
 	private PatternInstances modularInstance;
+	private PatternInstance modInstance;
 					
 	public WizardApplyModularPattern(Resource eResource, IProject iProject) {
 		
@@ -43,6 +45,7 @@ public class WizardApplyModularPattern extends DynamicWizard{
 		this.eProject = iProject;
 		this.eGraph =  null;
 		this.modularInstance = null;
+		this.modInstance = null;
 		
 		obtainEClassesResource();
 		
@@ -118,7 +121,8 @@ public class WizardApplyModularPattern extends DynamicWizard{
 		
 		//convert graph to runtime patterns
 		GraphToModularityPattern transoPattern = new GraphToModularityPattern(modularPattern);
-		transoPattern.tranformGraphToModularityPattern(eGraph, modularInstance);	
+		transoPattern.tranformGraphToModularityPattern(eGraph, modularInstance);
+		this.modInstance = modularInstance.getAppliedPatterns().get(0);
 		
 		// save runtime patterns
 		URI uri = this.eResource.getURI().trimFileExtension().appendFileExtension("rtpat");
@@ -130,7 +134,7 @@ public class WizardApplyModularPattern extends DynamicWizard{
 		}
 		else {
 			// update runtime patterns
-			PatternModularUtils.savePatternInstanceInRtapt(uri,modularInstance.getAppliedPatterns().get(0));
+			PatternModularUtils.savePatternInstanceInRtapt(uri,modularInstance.getAppliedPatterns().get(0),DSLtaoUtils.catModularity);
 		}
 		
 		return true;
@@ -144,8 +148,8 @@ public class WizardApplyModularPattern extends DynamicWizard{
 		this.dialog = dialog;
 	}	
 	
-	public PatternInstances getModularInstance() {
-		return modularInstance;
+	public PatternInstance getModularInstance() {
+		return this.modInstance;
 	}
 	
  }

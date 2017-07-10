@@ -77,7 +77,7 @@ public class WizardConstraint extends Wizard{
 				PatternModularUtils.savePatternInstance(consInstance, rtpatURI);
 			} else {
 				// update runtime patterns
-				PatternModularUtils.savePatternInstanceInRtapt(rtpatURI,consInstance);
+				PatternModularUtils.savePatternInstanceInRtapt(rtpatURI,consInstance,DSLtaoUtils.catConstraint);
 			}			
 			
 		} catch (IOException e) {			

@@ -49,23 +49,20 @@ import graphic_representation.DiagramElement;
 public class ESIconPalette extends EditingSupport{
 
 	public ESIconPalette(ColumnViewer viewer) {
-		super(viewer);
-		// TODO Auto-generated constructor stub
+		
+		super(viewer);		
 	}
 
 	@Override
 	protected CellEditor getCellEditor(Object element) {
-		// TODO Auto-generated method stub
-		
-				
+						
 		DialogCellEditor dialogEditor =  new DialogCellEditor() {
 			
 			private Label labelPath;
 			
 			@Override
 			protected Object openDialogBox(Control cellEditorWindow) {
-				// TODO Auto-generated method stub
-				
+								
 				LoadResourceDialog dialog = new LoadResourceDialog(cellEditorWindow.getShell(),"Select Image", SWT.NONE);
 				if(dialog.open() == Window.OK)
 				{
@@ -76,7 +73,7 @@ public class ESIconPalette extends EditingSupport{
 
 			@Override
 			protected Button createButton(Composite parent) {
-				// TODO Auto-generated method stub
+			
 				Button btn = new Button(parent, SWT.NONE);
 				btn.setText("...");
 				return btn;
@@ -84,7 +81,7 @@ public class ESIconPalette extends EditingSupport{
 
 			@Override
 			protected Control createContents(Composite cell) {
-				// TODO Auto-generated method stub
+				
 				labelPath = new Label(cell, SWT.LEFT);
 				labelPath.setFont(cell.getFont());
 				labelPath.setBackground(cell.getBackground());
@@ -97,7 +94,7 @@ public class ESIconPalette extends EditingSupport{
 
 			@Override
 			protected void updateContents(Object value) {
-				// TODO Auto-generated method stub
+				
 				if(value==null)
 					value = "";
 				super.updateContents(value);
@@ -130,7 +127,7 @@ public class ESIconPalette extends EditingSupport{
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		// TODO Auto-generated method stub
+		
 		if(element instanceof DiagramElement)
 		{
 			DiagramElement diagElement = (DiagramElement)element;
@@ -186,7 +183,7 @@ public class ESIconPalette extends EditingSupport{
 				
 				@Override
 				public void modifyText(ModifyEvent e) {
-					// TODO Auto-generated method stub
+					
 					fileURI = txURI.getText();
 				}
 			});
@@ -209,7 +206,7 @@ public class ESIconPalette extends EditingSupport{
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					// TODO Auto-generated method stub
+					
 					ImageSelection selec = new ImageSelection(getParentShell(), new FileProvider(), 
 							new FileContentProvider((IResource.FOLDER | IResource.FILE | SWT.APPLICATION_MODAL & IResource.FILE) != 0));
 					selec.setTitle("File Selection");
@@ -220,7 +217,7 @@ public class ESIconPalette extends EditingSupport{
 					try {
 						selec.setInput(EFS.getStore(fileURI));
 					} catch (CoreException e1) {
-						// TODO Auto-generated catch block
+						
 						e1.printStackTrace();
 					}
 					selec.setMessage("Select Image...");
@@ -229,7 +226,7 @@ public class ESIconPalette extends EditingSupport{
 						
 						@Override
 						public boolean select(Viewer viewer, Object parentElement, Object element) {
-							// TODO Auto-generated method stub
+							
 							LocalFile fil = (LocalFile) element;
 													
 							//Start with dot
@@ -275,8 +272,7 @@ public class ESIconPalette extends EditingSupport{
 
 			@Override
 			public Image getImage(Object element) {
-				// TODO Auto-generated method stub
-
+				
 				if (element instanceof IFileStore) {
 					IFileStore curr_fs = (IFileStore) element;
 									
@@ -327,26 +323,24 @@ public class ESIconPalette extends EditingSupport{
 			
 			@Override
 			public void dispose() {
-				// TODO Auto-generated method stub
-				
+								
 			}
 
 			@Override
 			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-				// TODO Auto-generated method stub
-				
+								
 			}
 
 			@Override
 			public Object[] getElements(Object inputElement) {
-				// TODO Auto-generated method stub
+				
 				return getChildren(inputElement);
 			}
 
 			@SuppressWarnings("restriction")
 			@Override
 			public Object[] getChildren(Object parentElement) {
-				// TODO Auto-generated method stub
+				
 				if (parentElement instanceof IFileStore) {
 					IFileStore[] children = IDEResourceInfoUtils.listFileStores(
 							(IFileStore) parentElement, fileFilter,
@@ -360,7 +354,7 @@ public class ESIconPalette extends EditingSupport{
 
 			@Override
 			public Object getParent(Object element) {
-				// TODO Auto-generated method stub
+				
 				if (element instanceof IFileStore) {
 					return ((IFileStore) element).getParent();
 				}
@@ -369,7 +363,7 @@ public class ESIconPalette extends EditingSupport{
 
 			@Override
 			public boolean hasChildren(Object element) {
-				// TODO Auto-generated method stub
+				
 				return getChildren(element).length > 0;
 			}			
 		}		

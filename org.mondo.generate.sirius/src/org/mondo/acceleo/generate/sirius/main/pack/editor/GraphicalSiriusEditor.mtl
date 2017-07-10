@@ -31,7 +31,7 @@ public class GraphicalSiriusEditor implements IEditorLauncher {
 
 	@Override
 	public void open(IPath file) {
-		// TODO Auto-generated method stub
+		
 		//Convert File URI to platform URI
 		URIConverter converter = new ExtensibleURIConverterImpl();
 		URI fileUri = URI.createFileURI(ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString() + File.separator);

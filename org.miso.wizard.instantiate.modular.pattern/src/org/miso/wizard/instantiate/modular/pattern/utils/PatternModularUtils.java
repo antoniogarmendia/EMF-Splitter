@@ -1,11 +1,13 @@
 package org.miso.wizard.instantiate.modular.pattern.utils;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import runtimePatterns.PatternInstance;
 import runtimePatterns.PatternInstances;
@@ -18,7 +20,7 @@ import splitterLibrary.util.DSLtaoUtils;
 public final class PatternModularUtils {
 	
 	
-	public static void savePatternInstanceInRtapt(URI rtpatURI, PatternInstance instance) {
+	public static void savePatternInstanceInRtapt(URI rtpatURI, PatternInstance instance, String ident) {
 		
 		ResourceSetImpl resourceSet = new ResourceSetImpl();
 		Resource res = resourceSet.getResource(rtpatURI, true);
@@ -27,6 +29,7 @@ public final class PatternModularUtils {
 		
 		if (rootEObject instanceof PatternInstances) {
 			
+			deletePatternByIdent((PatternInstances) rootEObject,ident);			
 			PatternInstances patterns = (PatternInstances) rootEObject;
 			patterns.getAppliedPatterns().add(instance);
 			try {
@@ -38,6 +41,18 @@ public final class PatternModularUtils {
 		}		
 	}
 	
+	private static void deletePatternByIdent(PatternInstances patterns, String ident) {
+		
+		Iterator<PatternInstance> itPatterns = patterns.getAppliedPatterns().iterator();
+		while (itPatterns.hasNext()) {
+			PatternInstance patternInstance = (PatternInstance) itPatterns.next();
+			if (patternInstance.getIdent().equals(ident)){
+				EcoreUtil.delete(patternInstance);
+				break;
+			}
+		}
+	}
+
 	/*
 	 * save pattern instance
 	 */	

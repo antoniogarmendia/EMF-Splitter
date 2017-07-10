@@ -90,7 +90,7 @@ public class ScopeWizard extends Wizard{
 				PatternModularUtils.savePatternInstance(scopeInstance, rtpatURI);
 			} else {
 				// update runtime patterns
-				PatternModularUtils.savePatternInstanceInRtapt(rtpatURI,scopeInstance);
+				PatternModularUtils.savePatternInstanceInRtapt(rtpatURI,scopeInstance,DSLtaoUtils.catScope);
 			}			
 		} catch (IOException e) {			
 			e.printStackTrace();

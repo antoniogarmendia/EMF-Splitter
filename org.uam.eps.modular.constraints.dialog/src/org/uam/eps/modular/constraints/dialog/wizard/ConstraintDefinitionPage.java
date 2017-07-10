@@ -1,8 +1,15 @@
 package org.uam.eps.modular.constraints.dialog.wizard;
 
+import java.io.File;
 import java.util.Random;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.wizard.WizardPage;
@@ -82,8 +89,9 @@ public class ConstraintDefinitionPage extends WizardPage{
 	    contraintColumn.getColumn().setWidth(250);
 	    contraintColumn.getColumn().setText("Constraint");
 	    contraintColumn.setLabelProvider(new ConstraintColumnLabelProvider());
-	    contraintColumn.setEditingSupport(new ConstraintEditingProvider(viewer));
 	    
+	    contraintColumn.setEditingSupport(new ConstraintEditingProvider(viewer));	    
+	
 	    Button button = new Button(container, SWT.PUSH);
         button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
                 false));

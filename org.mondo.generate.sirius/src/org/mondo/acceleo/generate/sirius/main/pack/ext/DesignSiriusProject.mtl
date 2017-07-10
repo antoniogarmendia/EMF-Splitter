@@ -57,7 +57,7 @@ public class CreateDesignSiriusProject implements ISiriusCreation {
 
 	@Override
 	public void ExecuteAfterCreateProject(String anProjectName) {
-		// TODO Auto-generated method stub
+		
 		//Create ViewPoint Specification Project
 		IProject current_pro = ResourcesPlugin.getWorkspace().getRoot().getProject(anProjectName);
 		if(current_pro.exists())
@@ -89,7 +89,7 @@ public class CreateDesignSiriusProject implements ISiriusCreation {
 					//System.out.println(line);
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 	        

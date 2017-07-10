@@ -88,7 +88,7 @@ public class VisibilityWizard extends Wizard{
 				PatternModularUtils.savePatternInstance(visInstance, rtpatURI);
 			} else {
 				// update runtime patterns
-				PatternModularUtils.savePatternInstanceInRtapt(rtpatURI,visInstance);
+				PatternModularUtils.savePatternInstanceInRtapt(rtpatURI,visInstance,DSLtaoUtils.catVisibility);
 			}			
 			
 		} catch (IOException e) {			
