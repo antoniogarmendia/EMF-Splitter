@@ -1,4 +1,4 @@
-package org.mondo.generate.index.project.createProject;
+package org.mondo.generate.constraint.project.createProject;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.acceleo.common.preference.AcceleoPreferences;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFolder;
@@ -26,62 +27,65 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.PreferenceConstants;
-import org.mondo.generate.index.project.main.WorkflowIndexProject;
+import org.mondo.generate.constraint.project.main.WorkflowConstraintProject;
 
-import splitterLibrary.EcoreEMF;
 import splitterLibrary.impl.CreateEclipseProjectImpl;
 
-public class CreateIndexAttributeProject extends CreateEclipseProjectImpl{
-
-	final private String prop_address = "/org/mondo/generate/index/project/properties/default_plugin_features.properties";
-	public String current_project_name;
-	private String add_name;
+public class CreateConstraintProject extends CreateEclipseProjectImpl{
+	
+	final private String prop_address = "/org/mondo/generate/constraint/project/properties/default_plugin_features.properties";
+	public String currentProjectName;
 	public String plug_path;
-	private EcoreEMF ecoreMM;
 	private EObject model;
+	private String consURI;
 	
-	public CreateIndexAttributeProject() {
+	public CreateConstraintProject (String anProjectName, IProgressMonitor anMonitor, String consURI) {
 		
-		super();		
-	}
-	
-	public CreateIndexAttributeProject(String anProjectName, IProgressMonitor anMonitor, EcoreEMF anEcore)
-	{
 		super();
 		Properties config = new Properties();
-		InputStream is = CreateIndexAttributeProject.class.getResourceAsStream(prop_address);
-		try {
+		InputStream is = CreateConstraintProject.class.getResourceAsStream(prop_address);
 			
+		try {
 			config.load(is);
-			this.add_name = config.getProperty("prefix_name");
+			String name = config.getProperty("prefix_name");
 			is.close();
-			this.current_project_name = anProjectName;
-			this.projectName = current_project_name.concat("." + add_name);
+			this.currentProjectName = anProjectName;
+			this.projectName = this.currentProjectName.concat("." + name);
 			//Get the location
-			this.plug_path = ResourcesPlugin.getWorkspace().getRoot().getProject(current_project_name).getLocation().toString();
+			this.plug_path = ResourcesPlugin.getWorkspace().getRoot().getProject(currentProjectName).getLocation().toString();
 			//End 
 			this.monitor = anMonitor;
 			this.isPlugin = true;
 			this.isMavenProject = false;
-			this.ecoreMM = anEcore;
+			this.model = null;
+			this.consURI = consURI;
 			
 		} catch (IOException e) {
 			
 			e.printStackTrace();
 		}		
 	}
-
+	
+	public EObject getModel() {
+		return model;
+	}
+	
+	public void setModel(EObject model) {
+		this.model = model;
+	}
+	
 	@Override
 	public void CreateProject() {
 		
 		super.CreateProject();
 		
-		final IWorkspaceRunnable create = new IWorkspaceRunnable(){
+		final IWorkspaceRunnable create = new IWorkspaceRunnable() {
 
 			@Override
 			public void run(IProgressMonitor monitor) throws CoreException {
 				
 				project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+				
 				if (!project.exists()) {
 					
 					final IJavaProject javaproc = JavaCore.create(project);
@@ -95,12 +99,14 @@ public class CreateIndexAttributeProject extends CreateEclipseProjectImpl{
 					CreateAllFoldersProject();
 					Create_Src(monitor,javaproc);
 					CreateAllPackages(javaproc);
+					copyModelCons();
 					boolean before = SwitchSuccessNotification(false);
-					Generate_Files();
+					generateFiles();
 		            SwitchSuccessNotification(before);
 					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-				}				
-			}			
+				}
+			}
+			
 		};
 		
 		try {
@@ -108,29 +114,70 @@ public class CreateIndexAttributeProject extends CreateEclipseProjectImpl{
 		} catch (CoreException e) {
 			
 			e.printStackTrace();
-		}	
-		
+		}		
 	}
 	
-	public void CreateAllFoldersProject() {
+	protected void copyModelCons() {
+		
+		File consFile = new File(consURI);
+		File newConsFile = new File(project.getLocation().append("constraints/").toString());
+			
+		try {
+			FileUtils.copyFileToDirectory(consFile, newConsFile);
+			
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}	
+	}
+
+	protected void generateFiles() {
+		
+		//Get Workspace Path
+		String current_plug_path = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
+		File targetFolder = new File(current_plug_path + '/' + project.getName() + "/");
+		
+		final List<String> generatorargs = new ArrayList<String>();
+		generatorargs.add(this.currentProjectName);	
+		generatorargs.add(new File(consURI).getName());
+		
+		try {
+			WorkflowConstraintProject generateAllFiles = new WorkflowConstraintProject(getModel(), targetFolder, generatorargs);
+			generateAllFiles.doGenerate(BasicMonitor.toMonitor(monitor));
+			
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}	
+	}
+
+	protected void CreateAllPackages(IJavaProject javaproc) {
+		
+		CreateJavaPackages(javaproc, "");				
+	}
+
+	protected void Create_Src(IProgressMonitor monitor, IJavaProject javaproc) {
+		
+		EList<IClasspathEntry> classpathEntries = new BasicEList<IClasspathEntry>();
+		final IFolder src = project.getFolder("src");
+		final IClasspathEntry srcClasspathEntry = JavaCore.newSourceEntry(src.getFullPath());
+		
+		classpathEntries.add(srcClasspathEntry);
+		
+		classpathEntries.addAll(Arrays.asList(PreferenceConstants.getDefaultJRELibrary()));
+		classpathEntries.add(JavaCore.newContainerEntry(new Path("org.eclipse.pde.core.requiredPlugins")));
+		
+		Create_Src_Classpath(javaproc,monitor,classpathEntries);		
+	}
+
+	protected void CreateAllFoldersProject() {
 		
 		CreateFolder("src");
-		CreateFolder("META-INF");		
+		CreateFolder("META-INF");
+		CreateFolder("constraints");
 	}
-	
-	public void CreateAllPackages(IJavaProject anJavaProject){
-		
-		CreateJavaPackages(anJavaProject, "");
-		CreateJavaPackages(anJavaProject,".definition");		
-	}
-	
-	public EList<String> AddPluginNature()
-	{
-		EList<String> natures = new BasicEList<String>();
-		return natures;
-	}
-	
-	public void Required_Builder_Project(IProjectDescription desc){
+
+	protected void Required_Builder_Project(IProjectDescription desc) {
 		
 		List<ICommand> builders = new ArrayList<>();
 		
@@ -153,25 +200,17 @@ public class CreateIndexAttributeProject extends CreateEclipseProjectImpl{
             builders.add(mvn_schema);
         }
         
-        desc.setBuildSpec(builders.toArray(new ICommand[builders.size()]));
+        desc.setBuildSpec(builders.toArray(new ICommand[builders.size()]));		
 	}
-	
-	public void Create_Src(IProgressMonitor monitor,IJavaProject anJavaProject){
-		
-		EList<IClasspathEntry> classpathEntries = new BasicEList<IClasspathEntry>();
-		final IFolder src = project.getFolder("src");
-		final IClasspathEntry srcClasspathEntry = JavaCore.newSourceEntry(src.getFullPath());
-		
-		classpathEntries.add(srcClasspathEntry);
-		
-		classpathEntries.addAll(Arrays.asList(PreferenceConstants.getDefaultJRELibrary()));
-		classpathEntries.add(JavaCore.newContainerEntry(new Path("org.eclipse.pde.core.requiredPlugins")));
-		
-		Create_Src_Classpath(anJavaProject,monitor,classpathEntries);		
+
+	public EList<String> AddPluginNature()
+	{
+		EList<String> natures = new BasicEList<String>();
+		return natures;
 	}
 	
 	private boolean SwitchSuccessNotification(boolean notify) {
-				
+		
 		boolean successNotifications = AcceleoPreferences.areSuccessNotificationsEnabled();
 		if(successNotifications != notify)
 		{
@@ -181,32 +220,5 @@ public class CreateIndexAttributeProject extends CreateEclipseProjectImpl{
 		return successNotifications;
 	}
 	
-	public EObject getModel() {
-		return model;
-	}
 
-	public void setModel(EObject model) {
-		this.model = model;
-	}	
-	
-	private void Generate_Files() {
-		
-		//Call Acceleo Templates
-		//Get Workspace Path
-		String current_plug_path = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
-		File targetFolder = new File(current_plug_path + '/' + project.getName() + "/");
-		final List<String> generatorargs = new ArrayList<String>();
-		generatorargs.add(current_project_name);
-		WorkflowIndexProject scopeFiles;
-		try {
-			scopeFiles = new WorkflowIndexProject(model, targetFolder, generatorargs);
-			scopeFiles.doGenerate(BasicMonitor.toMonitor(monitor));	
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
-			
-		//End		
-	}
-	
 }

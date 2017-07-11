@@ -1,0 +1,103 @@
+[comment encoding = UTF-8 /]
+[module eolExecuteFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generateeolExecuteFile(anProjectName : String, constraintName : String)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/menu/').concat('ExecuteEOLMenu.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].menu;
+
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.IHandler;
+import org.eclipse.core.commands.IHandlerListener;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.HandlerUtil;
+
+import [anProjectName/].[getProperty('prefix_name')/].dialog.ConstraintDialog;
+
+public class ExecuteEOLMenu implements IHandler {
+
+	@Override
+	public void addHandlerListener(IHandlerListener handlerListener) {		
+
+	}
+
+	@Override
+	public void dispose() {		
+
+	}
+
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		
+			
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if(window!=null) {
+		
+			ISelectionService selectionservice = (ISelectionService)window.getSelectionService();
+			ISelection selection = selectionservice.getSelection();
+			TreeSelection treeselection = (TreeSelection)selection;
+			Object firstelement = treeselection.getFirstElement();
+			if(firstelement instanceof IResource){
+		
+				String modelURI = null;
+				if (firstelement instanceof IContainer) 
+					modelURI = ((IContainer) firstelement).getLocation().append(((IContainer) firstelement).getName()).addFileExtension("xmi").toString();
+				else if (firstelement instanceof IFile)
+					modelURI = ((IFile) firstelement).getLocation().toString();
+				
+				java.net.URL locationClass = ExecuteEOLMenu.class.getProtectionDomain().getCodeSource().getLocation();
+				IPath classPath = new Path(locationClass.getPath());
+				String projectName = classPath.lastSegment();
+				URI consURI = URI.createPlatformPluginURI(projectName + "/constraints/[constraintName/]",true);	
+				ResourceSet reset = new ResourceSetImpl();
+				Resource res = reset.getResource(consURI, true);
+					
+				ConstraintDialog dialog = new ConstraintDialog(HandlerUtil.getActiveShell(event),res,modelURI);
+				
+				if(dialog.open() == Dialog.OK) {
+					//Execute EOL expressions
+					System.out.println("Execute");
+				}
+			}
+		}
+
+		return null;	
+	}
+
+	@Override
+	public boolean isEnabled() {
+		
+		return true;
+	}
+
+	@Override
+	public boolean isHandled() {
+		
+		return true;
+	}
+
+	@Override
+	public void removeHandlerListener(IHandlerListener handlerListener) {
+		
+	}
+
+}
+
+[/file]
+[/template]

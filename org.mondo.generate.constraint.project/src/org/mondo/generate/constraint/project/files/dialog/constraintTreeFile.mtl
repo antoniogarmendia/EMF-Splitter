@@ -1,0 +1,42 @@
+[comment encoding = UTF-8 /]
+[module constraintTreeFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generateConstraintTreeFile(anProjectName : String)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/dialog/').concat('ConstraintTreeContentProvider.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].dialog;
+
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+
+public class ConstraintTreeContentProvider implements ITreeContentProvider {
+
+	@Override
+	public Object['['/]] getElements(Object inputElement) {
+		
+		return ArrayContentProvider.getInstance().getElements(inputElement);
+	}
+
+	@Override
+	public Object['['/]] getChildren(Object parentElement) {
+		
+		return null;
+	}
+
+	@Override
+	public Object getParent(Object element) {
+		
+		return null;
+	}
+
+	@Override
+	public boolean hasChildren(Object element) {
+		
+		return false;
+	}
+}
+
+[/file]
+
+[/template]

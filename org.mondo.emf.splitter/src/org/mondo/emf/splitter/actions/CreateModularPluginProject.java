@@ -21,14 +21,12 @@ import splitterLibrary.impl.SplitterLibraryFactoryImpl;
 public class CreateModularPluginProject implements IHandler {
 
 	@Override
-	public void addHandlerListener(IHandlerListener handlerListener) {
-		// TODO Auto-generated method stub
+	public void addHandlerListener(IHandlerListener handlerListener) {		
 
 	}
 
 	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
+	public void dispose() {	
 
 	}
 

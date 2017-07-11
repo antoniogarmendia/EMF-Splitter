@@ -140,13 +140,22 @@ public interface ConstraintsPackage extends EPackage {
 	int CONSTRAINT__ECLASS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Result</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT__RESULT = 3;
+
+	/**
 	 * The number of structural features of the '<em>Constraint</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONSTRAINT_FEATURE_COUNT = 3;
+	int CONSTRAINT_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Constraint</em>' class.
@@ -234,6 +243,17 @@ public interface ConstraintsPackage extends EPackage {
 	EReference getConstraint_EClass();
 
 	/**
+	 * Returns the meta object for the attribute '{@link constraints.Constraint#getResult <em>Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Result</em>'.
+	 * @see constraints.Constraint#getResult()
+	 * @see #getConstraint()
+	 * @generated
+	 */
+	EAttribute getConstraint_Result();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -315,6 +335,14 @@ public interface ConstraintsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONSTRAINT__ECLASS = eINSTANCE.getConstraint_EClass();
+
+		/**
+		 * The meta object literal for the '<em><b>Result</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONSTRAINT__RESULT = eINSTANCE.getConstraint_Result();
 
 	}
 

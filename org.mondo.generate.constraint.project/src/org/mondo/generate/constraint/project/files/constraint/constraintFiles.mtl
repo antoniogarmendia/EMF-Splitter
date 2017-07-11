@@ -1,0 +1,20 @@
+[comment encoding = UTF-8 /]
+[module constraintFiles('http://mondo.org/runtimePatterns')]
+[import org::mondo::generate::constraint::project::request::queries /]
+
+[template public generateconstraintFiles(aPatternInstance : PatternInstance)]
+
+[for(c : ClassRoleInstance | aPatternInstance.classInstances)]
+
+[let name : String = c.getName()]
+[let statement : String = c.getStatement()]
+
+[file ('constraints/'+ name + '.eol',false, 'UTF-8')]
+[statement/]
+[/file]
+[/let]
+[/let]
+
+[/for]
+
+[/template]

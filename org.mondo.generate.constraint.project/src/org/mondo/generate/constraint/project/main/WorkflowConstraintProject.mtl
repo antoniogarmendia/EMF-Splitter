@@ -1,0 +1,29 @@
+[comment encoding = UTF-8 /]
+[module WorkflowConstraintProject('http://mondo.org/runtimePatterns')/]
+[import org::mondo::generate::constraint::project::files::activatorFile /]
+[import org::mondo::generate::constraint::project::files::manifestFile /]
+[import org::mondo::generate::constraint::project::files::pluginFile /]
+[import org::mondo::generate::constraint::project::files::constraint::constraintFiles /]
+[import org::mondo::generate::constraint::project::files::menu::eolExecuteFile /]
+[import org::mondo::generate::constraint::project::files::dialog::constraintDialogFile /]
+[import org::mondo::generate::constraint::project::files::dialog::constraintTreeFile /]
+[import org::mondo::generate::constraint::project::files::expression::expressionColumnFile /]
+
+[template public WorkflowConstraintProject(anPatternInstance : PatternInstance, anProjectName : String, constraintName : String)]
+[comment @main /]	
+	
+[generateActivatorFile(anProjectName)/]
+[generateManifestFile(anProjectName, anPatternInstance)/]	
+[generatePluginFile(anProjectName)/]
+
+[generateconstraintFiles(anPatternInstance)/]
+
+[generateeolExecuteFile(anProjectName, constraintName)/]
+
+[generateconstraintDialogFile(anProjectName) /]
+
+[generateConstraintTreeFile(anProjectName)/]
+
+[generateExpressionColumnFile(anProjectName)/]
+	
+[/template]

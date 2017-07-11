@@ -1,0 +1,19 @@
+[comment encoding = UTF-8 /]
+[module queries('http://mondo.org/runtimePatterns')]
+
+
+
+[query public getName (aClassRoleInstance : ClassRoleInstance) : String = 
+		aClassRoleInstance.featureInstances->select(feat : FeatureRoleInstance | feat.oclIsKindOf(InstanceFeatureRoleInstance))->
+			select(featInstance : FeatureRoleInstance | featInstance.oclAsType(InstanceFeatureRoleInstance).role.ref->asSequence()->
+				first().name.equalsIgnoreCase('constraintName'))->asSequence()->first().oclAsType(InstanceFeatureRoleInstance).value			
+	/]
+
+[query public getStatement (aClassRoleInstance : ClassRoleInstance) : String = 
+	aClassRoleInstance.featureInstances->select(feat : FeatureRoleInstance | feat.oclIsKindOf(InstanceFeatureRoleInstance))->
+			select(featInstance : FeatureRoleInstance | featInstance.oclAsType(InstanceFeatureRoleInstance).role.ref->asSequence()->
+				first().name.equalsIgnoreCase('statement'))->asSequence()->first().oclAsType(InstanceFeatureRoleInstance).value
+
+/]
+
+

@@ -1,0 +1,47 @@
+[comment encoding = UTF-8 /]
+[module pluginFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generatePluginFile(anProjectName : String)]
+
+[file ('plugin.xml',false, 'UTF-8')]
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer?after=group.new">
+         <menu
+               id="[anProjectName/].[getProperty('prefix_name')/].menu"
+               label="Validate Project"
+               mnemonic="L">
+            <command
+                  commandId="[anProjectName/].[getProperty('prefix_name')/].command.validate.project"
+                  id="[anProjectName/].execute"
+                  label="Execute EOL exp"
+                  mnemonic="L"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="[anProjectName/].[getProperty('prefix_name')/].command.validate.project"
+            name="Execute EOL Expression">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="[anProjectName/].[getProperty('prefix_name')/].menu.ExecuteEOLMenu"
+            commandId="[anProjectName/].[getProperty('prefix_name')/].command.validate.project">
+      </handler>
+   </extension>
+</plugin>
+[/file]
+[/template]

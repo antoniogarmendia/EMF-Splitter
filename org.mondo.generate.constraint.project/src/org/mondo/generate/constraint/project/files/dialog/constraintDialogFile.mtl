@@ -1,0 +1,177 @@
+[comment encoding = UTF-8 /]
+[module constraintDialogFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generateconstraintDialogFile(anProjectName : String)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/dialog/').concat('ConstraintDialog.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].dialog;
+
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TreeItem;
+import [anProjectName/].[getProperty('prefix_name')/].expression.NameExpressionColumnLabelProvider;
+
+import constraints.Constraint;
+import constraints.MetamodelConstraint;
+
+public class ConstraintDialog extends Dialog{
+
+	private Resource resConstraint;	
+    private String modelURI;
+	
+	public ConstraintDialog(Shell parent, Resource res, String modelURI) {
+		
+		super(parent);		
+		this.resConstraint = res;
+		this.modelURI = modelURI;	
+	}
+	
+	@Override
+	protected Control createDialogArea(Composite parent) {
+		
+		Composite contents =  (Composite) super.createDialogArea(parent); 
+		
+		GridData containerData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		containerData.widthHint = 400;
+		containerData.heightHint = 250;
+		containerData.minimumHeight = 250;
+		contents.setLayoutData(containerData);
+		
+		GridLayout containerLayout = new GridLayout();
+	    containerLayout.numColumns = 1;
+	    contents.setLayout(containerLayout);
+		
+	    TreeViewer viewer = new TreeViewer(contents, SWT.FULL_SELECTION | SWT.CHECK);		
+	    viewer.setContentProvider(new ConstraintTreeContentProvider());
+	    viewer.getTree().setHeaderVisible(true);
+	    viewer.getTree().setLinesVisible(true);	
+	    
+	    GridData treedata = new GridData(SWT.FILL, SWT.FILL, true, true);
+	    viewer.getTree().setLayoutData(treedata);
+	    viewer.getTree().setLayout(new FillLayout());
+	    
+	    TreeViewerColumn eNameColumn = new TreeViewerColumn(viewer, SWT.NONE);	    
+	    eNameColumn.getColumn().setWidth(150);
+	    eNameColumn.getColumn().setText("EOL Expression Name");
+	    eNameColumn.setLabelProvider(new NameExpressionColumnLabelProvider());
+	        	    	    
+	    Composite contentsButton = new Composite(contents, SWT.NONE);
+	    		
+		GridLayout contentsButtonLayout = new GridLayout();
+		contentsButtonLayout.numColumns = 3;
+		contentsButton.setLayout(contentsButtonLayout);	    
+	    
+	    Button buttonSelectAll = new Button(contentsButton, SWT.PUSH);
+	    buttonSelectAll.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
+                false));
+	    buttonSelectAll.setText("Select All Constraints");
+	    
+	    buttonSelectAll.addSelectionListener(new SelectionAdapter() {
+	    	
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		
+	    		checkedAllItemsWith(viewer, true);	
+	    		viewer.refresh();
+	    	}
+	    	
+		});   
+	    
+	    Button buttonUnSelectAll = new Button(contentsButton, SWT.PUSH);
+	    buttonUnSelectAll.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
+                false));	    
+	    buttonUnSelectAll.setText("Unselect All Constraints");
+	    
+	    buttonUnSelectAll.addSelectionListener(new SelectionAdapter() {
+	    	
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		
+	    		checkedAllItemsWith(viewer, false);
+	    		viewer.refresh();
+	    	}
+	    	
+		});     
+	    
+        Button buttonValidateAll = new Button(contentsButton, SWT.PUSH);
+        buttonValidateAll.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
+                false));
+        buttonValidateAll.setText("Validate");   
+                
+        buttonValidateAll.addSelectionListener(new SelectionAdapter() {
+        	
+        	@Override
+        	public void widgetSelected(SelectionEvent e) {
+        		
+        		EList<Constraint> listOfConstraint = getCheckedConstraint(viewer);
+        		String exampleModel = "wtsample/wtsample.xmi";
+        		
+        		try {
+					new EolStandAlone().execute();
+				} catch (Exception e1) {
+					
+					e1.printStackTrace();
+				}        		
+        	}        	
+		});
+	    
+	    viewer.setInput(getConstraints());
+	    
+		return contents;
+	}	
+	
+	private EList<Constraint> getCheckedConstraint(TreeViewer viewer) {
+		
+		EList<Constraint> listOfConstraint = new BasicEList<Constraint>();
+		TreeItem['['/]] items = viewer.getTree().getItems();
+		for (int i = 0; i < items.length; i++) {
+			
+			TreeItem item = items['['/]i];
+			if (item.getChecked() == true) {
+				
+				listOfConstraint.add((Constraint) item.getData());
+			} 
+			
+		}		
+		return listOfConstraint;
+	}
+
+	private EList<Constraint> getConstraints() {
+		
+		EObject rootEObject = resConstraint.getContents().get(0);
+		if (rootEObject instanceof MetamodelConstraint) {
+			return ((MetamodelConstraint) rootEObject).getConstraints();
+		}		
+		return null;
+	}
+	
+	private void checkedAllItemsWith(TreeViewer viewer,boolean checked) {
+		
+		TreeItem['['/]] items = viewer.getTree().getItems();  
+		for (int i = 0; i < items.length; i++) {
+			TreeItem item = items['['/]i];
+			item.setChecked(checked);			
+		}		
+	}	
+
+}
+
+[/file]
+
+[/template]

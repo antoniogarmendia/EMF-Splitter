@@ -41,7 +41,7 @@ public class DSLtaoCreateIndexAttributeProject implements IPatternImplementation
 
 	@Override
 	public boolean execute(EPackage ePack, PatternInstance pattern, IPath iPath) {
-		// TODO Auto-generated method stub
+		
 		IResource res = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(iPath);
 		IProject current_pro = res.getProject();
 		EcoreEMF nemf = SplitterLibraryFactoryImpl.eINSTANCE.createEcoreEMF();

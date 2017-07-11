@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link constraints.impl.ConstraintImpl#getName <em>Name</em>}</li>
  *   <li>{@link constraints.impl.ConstraintImpl#getStatement <em>Statement</em>}</li>
  *   <li>{@link constraints.impl.ConstraintImpl#getEClass <em>EClass</em>}</li>
+ *   <li>{@link constraints.impl.ConstraintImpl#getResult <em>Result</em>}</li>
  * </ul>
  *
  * @generated
@@ -78,6 +79,26 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 	 * @ordered
 	 */
 	protected EClass eClass;
+
+	/**
+	 * The default value of the '{@link #getResult() <em>Result</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getResult()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String RESULT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getResult() <em>Result</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getResult()
+	 * @generated
+	 * @ordered
+	 */
+	protected String result = RESULT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -183,6 +204,27 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getResult() {
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setResult(String newResult) {
+		String oldResult = result;
+		result = newResult;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ConstraintsPackage.CONSTRAINT__RESULT, oldResult, result));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -193,6 +235,8 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 			case ConstraintsPackage.CONSTRAINT__ECLASS:
 				if (resolve) return getEClass();
 				return basicGetEClass();
+			case ConstraintsPackage.CONSTRAINT__RESULT:
+				return getResult();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -213,6 +257,9 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 				return;
 			case ConstraintsPackage.CONSTRAINT__ECLASS:
 				setEClass((EClass)newValue);
+				return;
+			case ConstraintsPackage.CONSTRAINT__RESULT:
+				setResult((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -235,6 +282,9 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 			case ConstraintsPackage.CONSTRAINT__ECLASS:
 				setEClass((EClass)null);
 				return;
+			case ConstraintsPackage.CONSTRAINT__RESULT:
+				setResult(RESULT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -253,6 +303,8 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 				return STATEMENT_EDEFAULT == null ? statement != null : !STATEMENT_EDEFAULT.equals(statement);
 			case ConstraintsPackage.CONSTRAINT__ECLASS:
 				return eClass != null;
+			case ConstraintsPackage.CONSTRAINT__RESULT:
+				return RESULT_EDEFAULT == null ? result != null : !RESULT_EDEFAULT.equals(result);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -271,6 +323,8 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 		result.append(name);
 		result.append(", statement: ");
 		result.append(statement);
+		result.append(", result: ");
+		result.append(result);
 		result.append(')');
 		return result.toString();
 	}

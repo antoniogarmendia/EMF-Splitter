@@ -2,7 +2,11 @@ package org.mondo.emf.splitter.dsl.tao;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
@@ -18,9 +22,9 @@ import org.eclipse.ui.PlatformUI;
 import org.mondo.editor.extensionpoints.IPatternImplementation;
 import org.mondo.editor.extensionpoints.ValidationInfo;
 import org.mondo.editor.ui.utils.patterns.PatternApplicationUtils;
+import org.mondo.generate.constraint.project.createProject.CreateConstraintProject;
 import org.uam.eps.modular.constraints.dialog.wizard.WizardConstraint;
 
-import ScopeDefinition.MetaModelScope;
 import constraints.MetamodelConstraint;
 import dslPatterns.MMInterface;
 import dslPatterns.Pattern;
@@ -33,24 +37,35 @@ import splitterLibrary.util.DSLtaoUtils;
 public class DSLtaoCreateConstraintProject implements IPatternImplementation {
 
 	public DSLtaoCreateConstraintProject() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public boolean execute(EPackage ePack, PatternInstance pattern, IPath iPath) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		IResource res = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(iPath);
+		IProject currentProject = res.getProject();
+		
+		// file uri of the constraint model
+		String consURI = res.getLocation().removeFileExtension().addFileExtension("cons").toString();
+				
+		CreateConstraintProject createConstraint = new CreateConstraintProject(currentProject.getName(), new NullProgressMonitor(), consURI);
+		createConstraint.setModel(pattern);
+		createConstraint.CreateProject();		
+		
+		System.out.println("Create Constraint Project");
+		return true;
 	}
 
 	@Override
 	public ValidationInfo validate(EPackage ePack, PatternInstance pattern) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<ENamedElement> getOptimalElements(EPackage ePack, MMInterface mminterface) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link constraints.Constraint#getName <em>Name</em>}</li>
  *   <li>{@link constraints.Constraint#getStatement <em>Statement</em>}</li>
  *   <li>{@link constraints.Constraint#getEClass <em>EClass</em>}</li>
+ *   <li>{@link constraints.Constraint#getResult <em>Result</em>}</li>
  * </ul>
  *
  * @see constraints.ConstraintsPackage#getConstraint()
@@ -101,5 +102,31 @@ public interface Constraint extends EObject {
 	 * @generated
 	 */
 	void setEClass(EClass value);
+
+	/**
+	 * Returns the value of the '<em><b>Result</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Result</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Result</em>' attribute.
+	 * @see #setResult(String)
+	 * @see constraints.ConstraintsPackage#getConstraint_Result()
+	 * @model
+	 * @generated
+	 */
+	String getResult();
+
+	/**
+	 * Sets the value of the '{@link constraints.Constraint#getResult <em>Result</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Result</em>' attribute.
+	 * @see #getResult()
+	 * @generated
+	 */
+	void setResult(String value);
 
 } // Constraint

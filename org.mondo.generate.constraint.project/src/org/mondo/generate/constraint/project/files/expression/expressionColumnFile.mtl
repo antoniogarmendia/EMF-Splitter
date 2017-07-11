@@ -1,0 +1,31 @@
+[comment encoding = UTF-8 /]
+[module expressionColumnFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generateExpressionColumnFile(anProjectName : String)]
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+
+import constraints.Constraint;
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/expression/').concat('NameExpressionColumnLabelProvider.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].expression;
+
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+
+import constraints.Constraint;
+
+public class NameExpressionColumnLabelProvider extends ColumnLabelProvider {
+	
+	@Override
+	public String getText(Object element) {
+		
+		if (element instanceof Constraint)
+			return ((Constraint) element).getName();
+		return super.getText(element);
+	}
+
+}
+
+[/file]
+
+[/template]
