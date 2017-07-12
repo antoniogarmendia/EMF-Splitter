@@ -38,8 +38,9 @@ public class CreateConstraintProject extends CreateEclipseProjectImpl{
 	public String plug_path;
 	private EObject model;
 	private String consURI;
+	private String pathEcore;
 	
-	public CreateConstraintProject (String anProjectName, IProgressMonitor anMonitor, String consURI) {
+	public CreateConstraintProject (String anProjectName, IProgressMonitor anMonitor, String consURI, String pathEcore) {
 		
 		super();
 		Properties config = new Properties();
@@ -59,6 +60,7 @@ public class CreateConstraintProject extends CreateEclipseProjectImpl{
 			this.isMavenProject = false;
 			this.model = null;
 			this.consURI = consURI;
+			this.pathEcore = pathEcore;
 			
 		} catch (IOException e) {
 			
@@ -140,6 +142,7 @@ public class CreateConstraintProject extends CreateEclipseProjectImpl{
 		final List<String> generatorargs = new ArrayList<String>();
 		generatorargs.add(this.currentProjectName);	
 		generatorargs.add(new File(consURI).getName());
+		generatorargs.add(this.pathEcore);
 		
 		try {
 			WorkflowConstraintProject generateAllFiles = new WorkflowConstraintProject(getModel(), targetFolder, generatorargs);

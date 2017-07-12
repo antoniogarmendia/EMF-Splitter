@@ -1,0 +1,34 @@
+[comment encoding = UTF-8 /]
+[module resultColumnFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generateResultColumnFile(anProjectName : String)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/result/').concat('ResultColumnLabelProvider.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].result;
+
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+
+import constraints.Constraint;
+
+public class ResultColumnLabelProvider extends ColumnLabelProvider {
+
+	@Override
+	public String getText(Object element) {
+		
+		if (element instanceof Constraint) {
+			Constraint cons = (Constraint) element;
+			if(cons.getResult() != null)
+				return cons.getResult();
+			else
+				return "";
+		}
+		return super.getText(element);		
+	}
+
+}
+
+
+[/file]
+
+[/template]

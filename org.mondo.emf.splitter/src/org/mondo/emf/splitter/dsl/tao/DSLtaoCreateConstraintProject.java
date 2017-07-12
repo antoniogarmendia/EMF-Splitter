@@ -1,5 +1,6 @@
 package org.mondo.emf.splitter.dsl.tao;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -15,12 +16,14 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
 import org.mondo.editor.extensionpoints.IPatternImplementation;
 import org.mondo.editor.extensionpoints.ValidationInfo;
+import org.mondo.editor.graphiti.diagram.utils.ModelUtils;
 import org.mondo.editor.ui.utils.patterns.PatternApplicationUtils;
 import org.mondo.generate.constraint.project.createProject.CreateConstraintProject;
 import org.uam.eps.modular.constraints.dialog.wizard.WizardConstraint;
@@ -45,11 +48,27 @@ public class DSLtaoCreateConstraintProject implements IPatternImplementation {
 		
 		IResource res = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(iPath);
 		IProject currentProject = res.getProject();
+		//File uri of the ecore Meta-Model
+		IPath ecorePath = iPath.removeFileExtension().addFileExtension("ecore");
+		//If *.ecore doesn't exist Create it!!
+		IResource resEcore = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(ecorePath);
+		String pathEcore = resEcore.getFullPath().toString().substring(1,resEcore.getFullPath().toString().length());
+		if(!resEcore.exists())
+			try {
+				  Copier copier = new Copier();
+				  EObject result = copier.copy(ePack);
+				  copier.copyReferences();			  
+				  ModelUtils.saveModel(resEcore.getLocationURI().toString(), result);
+		} catch (IOException e) {
+						
+					e.printStackTrace();
+		}
+		//END		
 		
 		// file uri of the constraint model
 		String consURI = res.getLocation().removeFileExtension().addFileExtension("cons").toString();
 				
-		CreateConstraintProject createConstraint = new CreateConstraintProject(currentProject.getName(), new NullProgressMonitor(), consURI);
+		CreateConstraintProject createConstraint = new CreateConstraintProject(currentProject.getName(), new NullProgressMonitor(), consURI,pathEcore);
 		createConstraint.setModel(pattern);
 		createConstraint.CreateProject();		
 		

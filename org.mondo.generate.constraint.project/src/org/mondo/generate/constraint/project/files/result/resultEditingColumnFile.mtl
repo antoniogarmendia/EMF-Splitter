@@ -1,0 +1,74 @@
+[comment encoding = UTF-8 /]
+[module resultEditingColumnFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generateResultEditingColumnFile(anProjectName : String)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/result/').concat('ResultEditingProvider.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].result;
+
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.DialogCellEditor;
+import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+
+import constraints.Constraint;
+
+public class ResultEditingProvider extends EditingSupport{
+	
+	private DialogCellEditor dialogConstraint;
+	
+	public ResultEditingProvider(ColumnViewer viewer) {		
+		
+		super(viewer);		
+	}
+
+	@Override
+	protected CellEditor getCellEditor(Object element) {
+		
+		this.dialogConstraint = new DialogCellEditor((Composite) getViewer().getControl(),SWT.READ_ONLY) {
+			
+			@Override
+			protected Object openDialogBox(Control cellEditorWindow) {
+				
+				if (element instanceof Constraint) {
+					
+					String result = ((Constraint) element).getResult();
+					ResultDialog dialog = new ResultDialog(cellEditorWindow.getShell(), result);
+					dialog.open();
+				}
+				return null;
+			}
+			
+		};
+		return this.dialogConstraint;
+	}
+
+	@Override
+	protected boolean canEdit(Object element) {
+		
+		return true;
+	}
+
+	@Override
+	protected Object getValue(Object element) {
+
+		if (element instanceof Constraint)
+			return ((Constraint) element).getResult();
+		
+		return null;
+	}
+
+	@Override
+	protected void setValue(Object element, Object value) {
+
+		// Cannot change the result
+	}
+
+}
+
+[/file]
+[/template]

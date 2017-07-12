@@ -9,11 +9,13 @@ import org.eclipse.epsilon.common.parse.problem.ParseProblem;
 import org.eclipse.epsilon.common.util.StringProperties;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.epsilon.eol.IEolModule;
+import org.eclipse.epsilon.eol.dt.ExtensionPointToolNativeTypeDelegate;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.IModel;
 import org.eclipse.epsilon.eol.models.IRelativePathResolver;
+import org.eclipse.epsilon.eol.types.IToolNativeTypeDelegate;
 
 public abstract class EpsilonStandAlone {
 	
@@ -58,6 +60,11 @@ public abstract class EpsilonStandAlone {
 			module.getContext().getFrameStack().put(parameter);
 		}
 		
+		// use tools contributed via extensions in a standalone Java
+		module.getContext().getNativeTypeDelegates().
+			add(new ExtensionPointToolNativeTypeDelegate());
+		
+			
 		preProcess();
 		result = execute(module);
 		postProcess();
@@ -88,6 +95,10 @@ public abstract class EpsilonStandAlone {
 				storeOnDisposal + "");
 		emfModel.load(properties, (IRelativePathResolver) null);
 		return emfModel;
+	}
+	
+	public Object getResult() {
+		return result;
 	}
 	
 	public abstract URI getMMURI();

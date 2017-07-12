@@ -3,9 +3,6 @@
 
 
 [template public generateExpressionColumnFile(anProjectName : String)]
-import org.eclipse.jface.viewers.ColumnLabelProvider;
-
-import constraints.Constraint;
 
 [file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/expression/').concat('NameExpressionColumnLabelProvider.java'),false, 'UTF-8')]
 package [anProjectName/].[getProperty('prefix_name')/].expression;

@@ -8,8 +8,11 @@
 [import org::mondo::generate::constraint::project::files::dialog::constraintDialogFile /]
 [import org::mondo::generate::constraint::project::files::dialog::constraintTreeFile /]
 [import org::mondo::generate::constraint::project::files::expression::expressionColumnFile /]
+[import org::mondo::generate::constraint::project::files::result::resultColumnFile/]
+[import org::mondo::generate::constraint::project::files::result::resultEditingColumnFile /]
+[import org::mondo::generate::constraint::project::files::result::resultDialog/]
 
-[template public WorkflowConstraintProject(anPatternInstance : PatternInstance, anProjectName : String, constraintName : String)]
+[template public WorkflowConstraintProject(anPatternInstance : PatternInstance, anProjectName : String, constraintName : String, pathEcore : String)]
 [comment @main /]	
 	
 [generateActivatorFile(anProjectName)/]
@@ -20,10 +23,15 @@
 
 [generateeolExecuteFile(anProjectName, constraintName)/]
 
-[generateconstraintDialogFile(anProjectName) /]
+[generateconstraintDialogFile(anProjectName,pathEcore) /]
 
 [generateConstraintTreeFile(anProjectName)/]
 
 [generateExpressionColumnFile(anProjectName)/]
+
+[generateResultColumnFile(anProjectName)/]
+[generateResultEditingColumnFile(anProjectName)/]
+[generateResultDialog(anProjectName)/]
+
 	
 [/template]

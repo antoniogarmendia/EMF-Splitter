@@ -1,0 +1,61 @@
+[comment encoding = UTF-8 /]
+[module resultDialog('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generateResultDialog(anProjectName : String)]
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/result/').concat('ResultDialog.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].result;
+
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
+
+public class ResultDialog extends Dialog{
+	
+	private String result;
+	
+	protected ResultDialog(Shell parentShell, String result) {
+		
+		super(parentShell);		
+		this.result = result;
+	}
+	
+	@Override
+	protected Control createDialogArea(Composite parent) {
+		
+		Composite container = (Composite) super.createDialogArea(parent);
+		
+		Label constraintLabel = new Label(container, SWT.NONE);
+		constraintLabel.setText("Result");
+		
+		Text resultText = new Text(container, SWT.MULTI | SWT.BORDER | SWT.READ_ONLY);
+		
+		GridData dataContent = new GridData(GridData.FILL_BOTH);
+		dataContent.verticalAlignment = SWT.CENTER;
+		dataContent.grabExcessHorizontalSpace = true;
+		dataContent.grabExcessVerticalSpace = true;
+		dataContent.heightHint = 300;	
+		dataContent.widthHint = 500;
+		resultText.setLayoutData(dataContent);
+		
+		resultText.setText(this.result);		
+		
+		return container;
+	}
+	
+	@Override
+	public Shell getShell() {
+		Shell shell = super.getShell();
+		shell.setText("Result of the Query");
+		return shell;
+	}	
+}
+
+[/file]
+
+[/template]

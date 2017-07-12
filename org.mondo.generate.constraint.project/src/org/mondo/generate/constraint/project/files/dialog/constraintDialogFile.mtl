@@ -2,11 +2,16 @@
 [module constraintDialogFile('http://www.eclipse.org/emf/2002/Ecore')]
 
 
-[template public generateconstraintDialogFile(anProjectName : String)]
+[template public generateconstraintDialogFile(anProjectName : String, pathEcore : String)]
 
 [file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/dialog/').concat('ConstraintDialog.java'),false, 'UTF-8')]
 package [anProjectName/].[getProperty('prefix_name')/].dialog;
 
+import java.net.URI;
+import java.util.Iterator;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -26,6 +31,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TreeItem;
 import [anProjectName/].[getProperty('prefix_name')/].expression.NameExpressionColumnLabelProvider;
+import [anProjectName/].[getProperty('prefix_name')/].result.ResultColumnLabelProvider;
+import [anProjectName/].[getProperty('prefix_name')/].result.ResultEditingProvider;
+import org.uam.eps.modular.constraints.dialog.def.eol.EolStandAlone;
 
 import constraints.Constraint;
 import constraints.MetamodelConstraint;
@@ -70,7 +78,13 @@ public class ConstraintDialog extends Dialog{
 	    eNameColumn.getColumn().setWidth(150);
 	    eNameColumn.getColumn().setText("EOL Expression Name");
 	    eNameColumn.setLabelProvider(new NameExpressionColumnLabelProvider());
-	        	    	    
+	    
+		TreeViewerColumn eResultColumn = new TreeViewerColumn(viewer, SWT.NONE);
+	    eResultColumn.getColumn().setWidth(150);
+	    eResultColumn.getColumn().setText("Result");
+	    eResultColumn.setLabelProvider(new ResultColumnLabelProvider());
+		eResultColumn.setEditingSupport(new ResultEditingProvider(viewer));
+		    	    	    
 	    Composite contentsButton = new Composite(contents, SWT.NONE);
 	    		
 		GridLayout contentsButtonLayout = new GridLayout();
@@ -119,15 +133,35 @@ public class ConstraintDialog extends Dialog{
         	@Override
         	public void widgetSelected(SelectionEvent e) {
         		
-        		EList<Constraint> listOfConstraint = getCheckedConstraint(viewer);
-        		String exampleModel = "wtsample/wtsample.xmi";
-        		
         		try {
-					new EolStandAlone().execute();
+        			// metamodel uri
+        			String projectMMString = ConstraintDialog.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString();
+        			IPath pathMM = new Path(projectMMString);
+        			pathMM = pathMM.removeLastSegments(1).append("[pathEcore/]");
+        			URI mmURI = URI.create(pathMM.toString());
+        			
+        			// global uri where are the models
+        			String currentEolString = ConstraintDialog.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString().
+							concat("constraints/");        			
+        			
+					Iterator<Constraint> itOfConstraints = getCheckedConstraint(viewer).iterator();
+					while (itOfConstraints.hasNext()) {
+						
+						Constraint constraint = (Constraint) itOfConstraints.next();
+						String eolModuleString = currentEolString.concat(constraint.getName() + ".eol");
+						URI eolModule = URI.create(eolModuleString);
+						URI modelUri = URI.create("file:/" + modelURI);
+						
+						EolStandAlone executeEolModule = new EolStandAlone(mmURI, eolModule,modelUri);
+						executeEolModule.execute();						
+						constraint.setResult(executeEolModule.getResult().toString());
+						viewer.update(constraint, null);
+					}	 					
+					
 				} catch (Exception e1) {
 					
 					e1.printStackTrace();
-				}        		
+				}       		
         	}        	
 		});
 	    
