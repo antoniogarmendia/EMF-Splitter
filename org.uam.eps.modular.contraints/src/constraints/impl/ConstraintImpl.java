@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link constraints.impl.ConstraintImpl#getName <em>Name</em>}</li>
  *   <li>{@link constraints.impl.ConstraintImpl#getStatement <em>Statement</em>}</li>
+ *   <li>{@link constraints.impl.ConstraintImpl#getErrorMessage <em>Error Message</em>}</li>
  *   <li>{@link constraints.impl.ConstraintImpl#getEClass <em>EClass</em>}</li>
  *   <li>{@link constraints.impl.ConstraintImpl#getResult <em>Result</em>}</li>
  * </ul>
@@ -69,6 +70,26 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 	 * @ordered
 	 */
 	protected String statement = STATEMENT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getErrorMessage()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ERROR_MESSAGE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getErrorMessage()
+	 * @generated
+	 * @ordered
+	 */
+	protected String errorMessage = ERROR_MESSAGE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getEClass() <em>EClass</em>}' reference.
@@ -166,6 +187,27 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setErrorMessage(String newErrorMessage) {
+		String oldErrorMessage = errorMessage;
+		errorMessage = newErrorMessage;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ConstraintsPackage.CONSTRAINT__ERROR_MESSAGE, oldErrorMessage, errorMessage));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getEClass() {
 		if (eClass != null && eClass.eIsProxy()) {
 			InternalEObject oldEClass = (InternalEObject)eClass;
@@ -232,6 +274,8 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 				return getName();
 			case ConstraintsPackage.CONSTRAINT__STATEMENT:
 				return getStatement();
+			case ConstraintsPackage.CONSTRAINT__ERROR_MESSAGE:
+				return getErrorMessage();
 			case ConstraintsPackage.CONSTRAINT__ECLASS:
 				if (resolve) return getEClass();
 				return basicGetEClass();
@@ -254,6 +298,9 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 				return;
 			case ConstraintsPackage.CONSTRAINT__STATEMENT:
 				setStatement((String)newValue);
+				return;
+			case ConstraintsPackage.CONSTRAINT__ERROR_MESSAGE:
+				setErrorMessage((String)newValue);
 				return;
 			case ConstraintsPackage.CONSTRAINT__ECLASS:
 				setEClass((EClass)newValue);
@@ -279,6 +326,9 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 			case ConstraintsPackage.CONSTRAINT__STATEMENT:
 				setStatement(STATEMENT_EDEFAULT);
 				return;
+			case ConstraintsPackage.CONSTRAINT__ERROR_MESSAGE:
+				setErrorMessage(ERROR_MESSAGE_EDEFAULT);
+				return;
 			case ConstraintsPackage.CONSTRAINT__ECLASS:
 				setEClass((EClass)null);
 				return;
@@ -301,6 +351,8 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case ConstraintsPackage.CONSTRAINT__STATEMENT:
 				return STATEMENT_EDEFAULT == null ? statement != null : !STATEMENT_EDEFAULT.equals(statement);
+			case ConstraintsPackage.CONSTRAINT__ERROR_MESSAGE:
+				return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
 			case ConstraintsPackage.CONSTRAINT__ECLASS:
 				return eClass != null;
 			case ConstraintsPackage.CONSTRAINT__RESULT:
@@ -323,6 +375,8 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 		result.append(name);
 		result.append(", statement: ");
 		result.append(statement);
+		result.append(", errorMessage: ");
+		result.append(errorMessage);
 		result.append(", result: ");
 		result.append(result);
 		result.append(')');

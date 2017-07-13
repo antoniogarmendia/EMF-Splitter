@@ -11,6 +11,8 @@
 [import org::mondo::generate::constraint::project::files::result::resultColumnFile/]
 [import org::mondo::generate::constraint::project::files::result::resultEditingColumnFile /]
 [import org::mondo::generate::constraint::project::files::result::resultDialog/]
+[import org::mondo::generate::constraint::project::files::dialog::constraintMarkerManager /]
+[import org::mondo::generate::constraint::project::files::dialog::constraintResourceMarkerFile /]
 
 [template public WorkflowConstraintProject(anPatternInstance : PatternInstance, anProjectName : String, constraintName : String, pathEcore : String)]
 [comment @main /]	
@@ -24,14 +26,15 @@
 [generateeolExecuteFile(anProjectName, constraintName)/]
 
 [generateconstraintDialogFile(anProjectName,pathEcore) /]
-
-[generateConstraintTreeFile(anProjectName)/]
-
 [generateExpressionColumnFile(anProjectName)/]
 
 [generateResultColumnFile(anProjectName)/]
 [generateResultEditingColumnFile(anProjectName)/]
-[generateResultDialog(anProjectName)/]
 
+[comment Dialog Package/]
+[generateResultDialog(anProjectName)/]
+[generateConstraintTreeFile(anProjectName)/]
+[generateConstraintMarkerManager(anProjectName)/]
+[generateConstraintResourceMarkerFile(anProjectName)/]
 	
 [/template]

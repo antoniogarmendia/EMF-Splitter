@@ -54,6 +54,12 @@ public class EClassEditingProvider extends EditingSupport {
 	@Override
 	protected boolean canEdit(Object element) {
 		
+		if (element instanceof Constraint) {
+			
+			EClass eClass = ((Constraint) element).getEClass();
+			if (eClass == null)
+				return false;			
+		}	
 		return true;
 	}
 
@@ -61,7 +67,11 @@ public class EClassEditingProvider extends EditingSupport {
 	protected Object getValue(Object element) {
 		
 		if (element instanceof Constraint) {
-			return ((Constraint) element).getEClass().getName();
+			EClass eClass =  ((Constraint) element).getEClass();
+			if (eClass != null)
+				return eClass.getName();
+			else
+				return "";
 		}
 		
 		return null;

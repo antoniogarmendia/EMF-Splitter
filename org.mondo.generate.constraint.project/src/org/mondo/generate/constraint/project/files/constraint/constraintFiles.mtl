@@ -8,10 +8,31 @@
 
 [let name : String = c.getName()]
 [let statement : String = c.getStatement()]
+[let message : String = c.getMessage()]
 
-[file ('constraints/'+ name + '.eol',false, 'UTF-8')]
-[statement/]
+[file ('constraints/'+ c.getName() + '.eol',false, 'UTF-8')]
+var result = Sequence{};
+var emfTool : new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+var ecoreUtil = emfTool.ecoreUtil;
+for (element in [c.element.name/].all.asSet()) {
+	var check = element.constraint();
+	if (check == false) {
+		result.add(Sequence{ecoreUtil.getURI(element).toString(),element.messasge()});		
+	}				
+}
+
+return result;
+
+operation StateMachine constraint() : Boolean {
+	return [c.getStatement()/]
+}
+
+operation StateMachine messasge() : String {
+	return [c.getMessage()/]	
+}
 [/file]
+
+[/let]
 [/let]
 [/let]
 

@@ -1,8 +1,6 @@
 [comment encoding = UTF-8 /]
 [module queries('http://mondo.org/runtimePatterns')]
 
-
-
 [query public getName (aClassRoleInstance : ClassRoleInstance) : String = 
 		aClassRoleInstance.featureInstances->select(feat : FeatureRoleInstance | feat.oclIsKindOf(InstanceFeatureRoleInstance))->
 			select(featInstance : FeatureRoleInstance | featInstance.oclAsType(InstanceFeatureRoleInstance).role.ref->asSequence()->
@@ -13,6 +11,13 @@
 	aClassRoleInstance.featureInstances->select(feat : FeatureRoleInstance | feat.oclIsKindOf(InstanceFeatureRoleInstance))->
 			select(featInstance : FeatureRoleInstance | featInstance.oclAsType(InstanceFeatureRoleInstance).role.ref->asSequence()->
 				first().name.equalsIgnoreCase('statement'))->asSequence()->first().oclAsType(InstanceFeatureRoleInstance).value
+
+/]
+
+[query public getMessage (aClassRoleInstance : ClassRoleInstance) : String = 
+	aClassRoleInstance.featureInstances->select(feat : FeatureRoleInstance | feat.oclIsKindOf(InstanceFeatureRoleInstance))->
+			select(featInstance : FeatureRoleInstance | featInstance.oclAsType(InstanceFeatureRoleInstance).role.ref->asSequence()->
+				first().name.equalsIgnoreCase('errorMessage'))->asSequence()->first().oclAsType(InstanceFeatureRoleInstance).value
 
 /]
 

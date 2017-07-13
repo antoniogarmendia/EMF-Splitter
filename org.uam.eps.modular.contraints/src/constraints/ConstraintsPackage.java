@@ -131,13 +131,22 @@ public interface ConstraintsPackage extends EPackage {
 	int CONSTRAINT__STATEMENT = 1;
 
 	/**
+	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT__ERROR_MESSAGE = 2;
+
+	/**
 	 * The feature id for the '<em><b>EClass</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONSTRAINT__ECLASS = 2;
+	int CONSTRAINT__ECLASS = 3;
 
 	/**
 	 * The feature id for the '<em><b>Result</b></em>' attribute.
@@ -146,7 +155,7 @@ public interface ConstraintsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONSTRAINT__RESULT = 3;
+	int CONSTRAINT__RESULT = 4;
 
 	/**
 	 * The number of structural features of the '<em>Constraint</em>' class.
@@ -155,7 +164,7 @@ public interface ConstraintsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONSTRAINT_FEATURE_COUNT = 4;
+	int CONSTRAINT_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>Constraint</em>' class.
@@ -230,6 +239,17 @@ public interface ConstraintsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getConstraint_Statement();
+
+	/**
+	 * Returns the meta object for the attribute '{@link constraints.Constraint#getErrorMessage <em>Error Message</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Error Message</em>'.
+	 * @see constraints.Constraint#getErrorMessage()
+	 * @see #getConstraint()
+	 * @generated
+	 */
+	EAttribute getConstraint_ErrorMessage();
 
 	/**
 	 * Returns the meta object for the reference '{@link constraints.Constraint#getEClass <em>EClass</em>}'.
@@ -327,6 +347,14 @@ public interface ConstraintsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONSTRAINT__STATEMENT = eINSTANCE.getConstraint_Statement();
+
+		/**
+		 * The meta object literal for the '<em><b>Error Message</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONSTRAINT__ERROR_MESSAGE = eINSTANCE.getConstraint_ErrorMessage();
 
 		/**
 		 * The meta object literal for the '<em><b>EClass</b></em>' reference feature.

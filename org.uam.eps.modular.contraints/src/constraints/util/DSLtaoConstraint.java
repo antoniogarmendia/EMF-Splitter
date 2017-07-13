@@ -53,12 +53,13 @@ public class DSLtaoConstraint {
 			
 			FeatureInterface constraintName = DSLtaoUtils.getFeatureTypeByName(mainConsPattern, "constraintName");
 			FeatureInterface statement = DSLtaoUtils.getFeatureTypeByName(mainConsPattern, "statement");
+			FeatureInterface errorMessage = DSLtaoUtils.getFeatureTypeByName(mainConsPattern, "errorMessage");
 					
 			Iterator<Constraint> itScopeRules = metaModelConstraint.getConstraints().iterator();
 			while (itScopeRules.hasNext()) {
 				
 				Constraint constraint = (Constraint) itScopeRules.next();
-				addConstraintClassInstance(consClass,constraint,consInstances,constraintName,statement);				
+				addConstraintClassInstance(consClass,constraint,consInstances,constraintName,statement,errorMessage);				
 			}
 		}	
 		
@@ -66,7 +67,7 @@ public class DSLtaoConstraint {
 	}
 
 	private void addConstraintClassInstance(ClassInterface consClass, Constraint constraint, PatternInstance consInstances, 
-			FeatureInterface constraintName, FeatureInterface statement) {
+			FeatureInterface constraintName, FeatureInterface statement, FeatureInterface errorMessage) {
 		
 		// create class role instance 
 		ClassRoleInstance classInstance = RuntimePatternsFactoryImpl.eINSTANCE.createClassRoleInstance();
@@ -86,6 +87,14 @@ public class DSLtaoConstraint {
 		featStatement.setValue(constraint.getStatement());
 		
 		classInstance.getFeatureInstances().add(featStatement);
+		
+		// add error message
+		InstanceFeatureRoleInstance featMessage = RuntimePatternsFactoryImpl.eINSTANCE.createInstanceFeatureRoleInstance();
+		featMessage.setRole(errorMessage);
+		featMessage.setValue(constraint.getErrorMessage());
+		
+		classInstance.getFeatureInstances().add(featMessage);
+		
 		
 		consInstances.getClassInstances().add(classInstance);	
 	}

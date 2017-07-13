@@ -1,15 +1,8 @@
 package org.uam.eps.modular.constraints.dialog.wizard;
 
-import java.io.File;
 import java.util.Random;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.wizard.WizardPage;
@@ -27,6 +20,10 @@ import org.uam.eps.modular.constraints.dialog.def.contraint.ConstraintColumnLabe
 import org.uam.eps.modular.constraints.dialog.def.contraint.ConstraintEditingProvider;
 import org.uam.eps.modular.constraints.dialog.def.eclass.EClassColumnLabelProvider;
 import org.uam.eps.modular.constraints.dialog.def.eclass.EClassEditingProvider;
+import org.uam.eps.modular.constraints.dialog.def.local.LocalColumnLabelProvider;
+import org.uam.eps.modular.constraints.dialog.def.local.LocalEditingProvider;
+import org.uam.eps.modular.constraints.dialog.def.message.MessageColumnLabelProvider;
+import org.uam.eps.modular.constraints.dialog.def.message.MessageEditingProvider;
 import org.uam.eps.modular.constraints.dialog.def.name.NameColumnLabelProvider;
 import org.uam.eps.modular.constraints.dialog.def.name.NameEditingProvider;
 
@@ -74,24 +71,35 @@ public class ConstraintDefinitionPage extends WizardPage{
 	    viewer.getTree().setLayout(new FillLayout());
 	    	 
 	    TreeViewerColumn eNameColumn = new TreeViewerColumn(viewer, SWT.NONE);	    
-	    eNameColumn.getColumn().setWidth(150);
+	    eNameColumn.getColumn().setWidth(120);
 	    eNameColumn.getColumn().setText("Name");
 	    eNameColumn.setLabelProvider(new NameColumnLabelProvider());
 	    eNameColumn.setEditingSupport(new NameEditingProvider(viewer));
 	    
+	    TreeViewerColumn eGlobalColumn = new TreeViewerColumn(viewer, SWT.NONE);
+	    eGlobalColumn.getColumn().setWidth(50);
+	    eGlobalColumn.getColumn().setText("Local");
+	    eGlobalColumn.setLabelProvider(new LocalColumnLabelProvider());
+	    eGlobalColumn.setEditingSupport(new LocalEditingProvider(viewer,metaModel.getList_classes()));
+	    	    
 	    TreeViewerColumn eClassColumn = new TreeViewerColumn(viewer, SWT.NONE);
-	    eClassColumn.getColumn().setWidth(150);
+	    eClassColumn.getColumn().setWidth(90);
 	    eClassColumn.getColumn().setText("EClass");
 	    eClassColumn.setLabelProvider(new EClassColumnLabelProvider());
 	    eClassColumn.setEditingSupport(new EClassEditingProvider(viewer,metaModel.getList_classes()));
 	    
 	    TreeViewerColumn contraintColumn = new TreeViewerColumn(viewer, SWT.NONE);
-	    contraintColumn.getColumn().setWidth(250);
+	    contraintColumn.getColumn().setWidth(150);
 	    contraintColumn.getColumn().setText("Constraint");
-	    contraintColumn.setLabelProvider(new ConstraintColumnLabelProvider());
+	    contraintColumn.setLabelProvider(new ConstraintColumnLabelProvider());	    
+	    contraintColumn.setEditingSupport(new ConstraintEditingProvider(viewer));
+	    	    	
+	    TreeViewerColumn messageColumn = new TreeViewerColumn(viewer, SWT.NONE);
+	    messageColumn.getColumn().setWidth(150);
+	    messageColumn.getColumn().setText("Error Message");
+	    messageColumn.setLabelProvider(new MessageColumnLabelProvider());
+	    messageColumn.setEditingSupport(new MessageEditingProvider(viewer));
 	    
-	    contraintColumn.setEditingSupport(new ConstraintEditingProvider(viewer));	    
-	
 	    Button button = new Button(container, SWT.PUSH);
         button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
                 false));

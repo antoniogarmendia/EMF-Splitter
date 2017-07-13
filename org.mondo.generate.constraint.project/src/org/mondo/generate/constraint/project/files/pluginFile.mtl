@@ -42,6 +42,17 @@
             commandId="[anProjectName/].[getProperty('prefix_name')/].command.validate.project">
       </handler>
    </extension>
+   <extension
+         id="failedConstraint"
+         name="Constraint Failed"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+   </extension>
 </plugin>
 [/file]
 [/template]

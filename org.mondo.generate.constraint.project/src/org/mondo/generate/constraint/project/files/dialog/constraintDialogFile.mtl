@@ -7,15 +7,24 @@
 [file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/dialog/').concat('ConstraintDialog.java'),false, 'UTF-8')]
 package [anProjectName/].[getProperty('prefix_name')/].dialog;
 
+import java.io.File;
 import java.net.URI;
 import java.util.Iterator;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.epsilon.eol.types.EolSequence;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
@@ -41,13 +50,15 @@ import constraints.MetamodelConstraint;
 public class ConstraintDialog extends Dialog{
 
 	private Resource resConstraint;	
+	private IContainer container;
     private String modelURI;
 	
-	public ConstraintDialog(Shell parent, Resource res, String modelURI) {
+	public ConstraintDialog(Shell parent, Resource res, String modelURI, IContainer container) {
 		
 		super(parent);		
 		this.resConstraint = res;
-		this.modelURI = modelURI;	
+		this.modelURI = modelURI;
+		this.container = container;	
 	}
 	
 	@Override
@@ -80,7 +91,7 @@ public class ConstraintDialog extends Dialog{
 	    eNameColumn.setLabelProvider(new NameExpressionColumnLabelProvider());
 	    
 		TreeViewerColumn eResultColumn = new TreeViewerColumn(viewer, SWT.NONE);
-	    eResultColumn.getColumn().setWidth(150);
+	    eResultColumn.getColumn().setWidth(200);
 	    eResultColumn.getColumn().setText("Result");
 	    eResultColumn.setLabelProvider(new ResultColumnLabelProvider());
 		eResultColumn.setEditingSupport(new ResultEditingProvider(viewer));
@@ -154,7 +165,7 @@ public class ConstraintDialog extends Dialog{
 						
 						EolStandAlone executeEolModule = new EolStandAlone(mmURI, eolModule,modelUri);
 						executeEolModule.execute();						
-						constraint.setResult(executeEolModule.getResult().toString());
+						constraint.setResult(showResult(executeEolModule.getResult(),constraint.getName()));
 						viewer.update(constraint, null);
 					}	 					
 					
@@ -169,6 +180,61 @@ public class ConstraintDialog extends Dialog{
 	    
 		return contents;
 	}	
+
+	private String showResult(Object result, String constraintName) { // works with EOLSequence
+		
+		if (result instanceof EolSequence<?>) {
+			EolSequence<?> sequence = (EolSequence<?>) result;
+			deleteMarker(constraintName);
+			if (sequence.size() == 0) 
+				return "Successful";
+			else {
+				Iterator<?> itContents = sequence.iterator();
+				while (itContents.hasNext()) {
+					Object tupleObject = (Object) itContents.next();
+					if (tupleObject instanceof EolSequence<?>) {
+						EolSequence<?> tuple = (EolSequence<?>) tupleObject;
+						String uriObject = (String) tuple.get(0);
+						String str = uriObject.substring(0, uriObject.lastIndexOf('#'));
+						String eObjectUri = uriObject.substring(uriObject.lastIndexOf('#'), uriObject.length());
+						String errorMessage = (String) tuple.get(1);
+						File file = new File(URI.create(str));
+						IFile resource = getIFileFromFile(file);
+						ConstraintResourceMarker resourceMarker = new ConstraintResourceMarker(resource, eObjectUri, constraintName,errorMessage);
+						new ConstraintMarkerManager(resourceMarker).addErrorMarker();						
+					}
+				}				
+				return "Unsuccessful (See Problems View)";
+			}
+		}
+		
+		return "The result is not an EOLSequence";
+	}
+
+	private void deleteMarker(String constraintName) {
+		
+		try {
+			IMarker['['/]] constraintMarkers = container.findMarkers(ConstraintMarkerManager.FAILED_CONSTRAINT_MARKER_ID, true, IResource.DEPTH_INFINITE);
+			for (int i = 0; i < constraintMarkers.length; i++) {
+				IMarker currentMarker = constraintMarkers['['/]i];
+				String currentConstraintName = (String) currentMarker.getAttribute(ConstraintMarkerManager.CONSTRAINT_NAME);
+				if (currentConstraintName.equals(constraintName))
+					currentMarker.delete();
+			}			
+		} catch (CoreException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
+
+	private IFile getIFileFromFile(File file) {
+			
+			IWorkspace workspace= ResourcesPlugin.getWorkspace();
+			IPath location= Path.fromOSString(file.getAbsolutePath());
+			IFile newFile = workspace.getRoot().getFileForLocation(location);
+			return newFile;
+	}
 	
 	private EList<Constraint> getCheckedConstraint(TreeViewer viewer) {
 		

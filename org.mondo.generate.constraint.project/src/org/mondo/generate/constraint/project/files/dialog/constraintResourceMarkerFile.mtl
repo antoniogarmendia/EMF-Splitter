@@ -1,0 +1,53 @@
+[comment encoding = UTF-8 /]
+[module constraintResourceMarkerFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generateConstraintResourceMarkerFile(anProjectName : String)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/dialog/').concat('ConstraintResourceMarker.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].dialog;
+
+import org.eclipse.core.resources.IResource;
+
+public class ConstraintResourceMarker {
+	
+	private IResource resource;
+	private String uriEObject;
+	private String constraintName;
+	private String errorMessage;
+	
+	public ConstraintResourceMarker(IResource resource, String uriEObject, String constraintName, String errorMessage) {
+		super();
+		this.resource = resource;
+		this.uriEObject = uriEObject;
+		this.constraintName = constraintName;
+		this.errorMessage = errorMessage;
+	}
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+	public IResource getResource() {
+		return resource;
+	}
+	public void setResource(IResource resource) {
+		this.resource = resource;
+	}
+	public String getUriEObject() {
+		return uriEObject;
+	}
+	public void setUriEObject(String uriEObject) {
+		this.uriEObject = uriEObject;
+	}
+	public String getConstraintName() {
+		return constraintName;
+	}
+	public void setConstraintName(String constraintName) {
+		this.constraintName = constraintName;
+	}
+}
+
+[/file]
+[/template]

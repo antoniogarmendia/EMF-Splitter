@@ -1,0 +1,54 @@
+[comment encoding = UTF-8 /]
+[module constraintMarkerManager('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generateConstraintMarkerManager(anProjectName : String)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/dialog/').concat('ConstraintMarkerManager.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].dialog;
+
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
+
+public class ConstraintMarkerManager {
+	
+	public static final String FAILED_CONSTRAINT_MARKER_ID = "org.miso.wind.turbine.cs.constraint.failedConstraint";
+	public static final String CONSTRAINT_NAME = "constraint_name";
+			
+	private final ConstraintResourceMarker resourceMarker;
+	
+	
+	public ConstraintMarkerManager(ConstraintResourceMarker resourceMarker) {
+		
+		this.resourceMarker = resourceMarker;		
+	}
+	
+	public void addErrorMarker() {
+		
+		if (this.resourceMarker.getResource().exists() == true) {
+			
+			try {
+				addErrorMarker(1);
+				
+			} catch (CoreException e) {
+				
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private IMarker addErrorMarker(int line) throws CoreException {
+		
+		final IMarker marker = this.resourceMarker.getResource().createMarker(FAILED_CONSTRAINT_MARKER_ID);
+		marker.setAttribute(CONSTRAINT_NAME, this.resourceMarker.getConstraintName());
+		marker.setAttribute(IMarker.MESSAGE, this.resourceMarker.getErrorMessage());
+		marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+		marker.setAttribute(IMarker.LINE_NUMBER, line);
+		return marker;
+	}
+
+}
+
+
+[/file]
+[/template]

@@ -13,7 +13,9 @@
     <genClasses ecoreClass="Constraints.ecore#//Constraint">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Constraints.ecore#//Constraint/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Constraints.ecore#//Constraint/statement"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Constraints.ecore#//Constraint/errorMessage"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Constraints.ecore#//Constraint/eClass"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Constraints.ecore#//Constraint/result"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
