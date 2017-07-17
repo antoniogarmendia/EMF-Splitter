@@ -33,12 +33,13 @@ import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstanc
 																						 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence()))]
 [let genPackage : GenPackage =  getGenClassFromEClass(c.element,anEObjectGenModel).eContainer().oclAsType(GenPackage) ]
 [if (genPackage.basePackage->isEmpty() = false)]
-import [genPackage.basePackage/].[generateEClassImport(c.element)/];
+import [genPackage.basePackage/].[generateEClassImportBasePackage(c.element)/];
 [else]
 import [generateEClassImport(c.element)/];
 [/if]
 [/let]
 [/for]
+
 public class CreateMenu extends ExtensionContributionFactory {
 
 	public CreateMenu() {	

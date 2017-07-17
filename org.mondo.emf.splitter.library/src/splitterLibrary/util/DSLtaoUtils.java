@@ -313,7 +313,7 @@ public class DSLtaoUtils {
 								(feat.getRole(), value, order, modularityMM);	
 						mmFeatureRole.setParent(parentClassRoleInstance);
 						if(feat.getRole().getRef().get(0).getName().contains("icon"))
-							parentClassRoleInstance.getChildren().add(mmFeatureRole);
+								parentClassRoleInstance.getChildren().add(mmFeatureRole);
 						modularityMM.add(mmFeatureRole);
 					}
 				}

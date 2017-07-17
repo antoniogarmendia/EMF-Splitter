@@ -19,8 +19,15 @@ import org.eclipse.epsilon.common.parse.problem.ParseProblem;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.Bullet;
+import org.eclipse.swt.custom.LineStyleEvent;
+import org.eclipse.swt.custom.LineStyleListener;
+import org.eclipse.swt.custom.ST;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.GlyphMetrics;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -29,13 +36,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.uam.eps.modular.constraints.dialog.def.eol.EolStandAlone;
 
 public class ConstraintDialog extends Dialog{
 	
 	private String statement;
-	private Text constraintText;
+	private StyledText constraintText;
 	
 	
 	protected ConstraintDialog(Shell parentShell, String statement) {
@@ -51,7 +57,7 @@ public class ConstraintDialog extends Dialog{
 				
 		Label constraintLabel = new Label(container, SWT.NONE);
 		constraintLabel.setText("Statement");			
-		constraintText = new Text(container, SWT.MULTI | SWT.BORDER);
+		constraintText = new StyledText(container, SWT.MULTI | SWT.BORDER);
 		
 		GridData dataContent = new GridData(GridData.FILL_BOTH);
 		dataContent.verticalAlignment = SWT.CENTER;
@@ -161,9 +167,29 @@ public class ConstraintDialog extends Dialog{
 			}			
 		});
 		
+		showLineNumbers();
 		return container;
 	}
 	
+	private void showLineNumbers() {
+		
+		this.constraintText.addLineStyleListener(new LineStyleListener()
+		{
+		    public void lineGetStyle(LineStyleEvent e)
+		    {
+		        //Set the line number
+		        e.bulletIndex = constraintText.getLineAtOffset(e.lineOffset);
+
+		        //Set the style, 12 pixles wide for each digit
+		        StyleRange style = new StyleRange();
+		        style.metrics = new GlyphMetrics(0, 0, Integer.toString(constraintText.getLineCount()+1).length()*12);
+
+		        //Create and set the bullet
+		        e.bullet = new Bullet(ST.BULLET_NUMBER,style);
+		    }
+		});
+	}
+
 	@Override
 	protected void okPressed() {
 		

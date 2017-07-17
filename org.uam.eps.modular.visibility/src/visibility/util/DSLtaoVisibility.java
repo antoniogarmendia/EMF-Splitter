@@ -54,6 +54,7 @@ public class DSLtaoVisibility {
 			FeatureInterface eolExpWS = DSLtaoUtils.getFeatureTypeByName(mainVisPattern, "eolExpressionWS");
 			FeatureInterface eolExpPro = DSLtaoUtils.getFeatureTypeByName(mainVisPattern, "eolExpressionProject");
 			FeatureInterface eolExpPack = DSLtaoUtils.getFeatureTypeByName(mainVisPattern, "eolExpressionPackage");
+			FeatureInterface eolExpUnit = DSLtaoUtils.getFeatureTypeByName(mainVisPattern, "eolExpressionUnit");
 			
 			Iterator<Visibility> itScopeRules = metaModelVisibility.getVisibilityRules().iterator();
 			while (itScopeRules.hasNext()) {
@@ -69,6 +70,9 @@ public class DSLtaoVisibility {
 						break;
 					case PACKAGE:
 						addScopeClassInstance(visibility, visInstances, visClass, visibility.getExpression(), eolExpPack);
+						break;
+					case UNIT:
+						addScopeClassInstance(visibility, visInstances, visClass, visibility.getExpression(), eolExpUnit);
 						break;
 					default:
 						break;						

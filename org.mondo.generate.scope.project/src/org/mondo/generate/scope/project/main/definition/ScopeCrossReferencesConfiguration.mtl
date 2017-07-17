@@ -19,12 +19,12 @@ import [currentPackage.toUpperFirst()/].impl.[currentPackage/]FactoryImpl;
 public class ScopeCrossReferencesConfiguration implements IScopeCrossReferences {
 
 	public ScopeCrossReferencesConfiguration() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public ScopeDefinitionEnum getScopebyReference(EReference ref) {
-		// TODO Auto-generated method stub
+		
 		
 
 [for(currentInstance : ClassRoleInstance |anPatternInstances.PatternInstanceScope().classInstances)]
@@ -35,7 +35,7 @@ public class ScopeCrossReferencesConfiguration implements IScopeCrossReferences 
 [/for]
 [/for]		
 		
-		return ScopeDefinitionEnum.RSAME_WORK_SPACE;
+		return ScopeDefinitionEnum.SAME_WORKSPACE;
 	}
 
 }

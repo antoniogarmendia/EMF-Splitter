@@ -13,13 +13,16 @@
 										/]
 
 [query public getEnumScopeDefinition(role : String) : String = if(role.equalsIgnoreCase('eolExpressionWS')) then
-																	'RSAME_WORK_SPACE'
+																	'SAME_WORKSPACE'
 																else if(role.equalsIgnoreCase('eolExpressionProject')) then
-																	'RSAME_PROJECT'		
+																	'SAME_PROJECT'		
 																else if(role.equalsIgnoreCase('eolExpressionPackage')) then
-																	'RSAME_PACKAGE'
+																	'SAME_PACKAGE'
+																else if(role.equalsIgnoreCase('eolExpressionUnit')) then
+																	'SAME_UNIT'
 																else	
 																	'ERROR'
+																		  endif
 																		endif
 																	endif
 																endif

@@ -178,11 +178,17 @@ public class DSLtaoCreateModularProject implements IPatternImplementation {
 			modularInstance.setAttached(false);
 			transformPatternsCompatibleWithDiagram(ePack,modularInstance);
 			
-			// apply pattern to the diagram
-			PatternApplicationUtils.applyPattern(transformFromAppliedPatternsToMMInterfaceRelDiagram(modularInstance,pattern),
-					getDiagramDSLtao(), pattern, patternInstances, "Modularity", false);
-			
-			System.out.println("Modular Structure Applied to the Diagram");
+			/*
+			 * if the meta-model has packages inside packages it gave me an error
+			 * that's why I check first the meta-model 
+			 * */
+			if (checkMM(resourceMM) == true) {			
+				// apply pattern to the diagram
+				PatternApplicationUtils.applyPattern(transformFromAppliedPatternsToMMInterfaceRelDiagram(modularInstance,pattern),
+						getDiagramDSLtao(), pattern, patternInstances, "Modularity", false);
+				
+				System.out.println("Modular Structure Applied to the Diagram");
+			}
 		}
 		else
 		{
@@ -192,6 +198,23 @@ public class DSLtaoCreateModularProject implements IPatternImplementation {
 		return true;
 	}
 	
+	private boolean checkMM(Resource resourceMM) {
+		
+		int size = resourceMM.getContents().size();
+		if (size != 1)
+			return false;
+		
+		EObject rootEObject = resourceMM.getContents().get(0);
+		if (rootEObject instanceof EPackage) {
+			
+			EPackage pack = (EPackage) rootEObject;
+			if (pack.getESubpackages().size() > 1)
+				return false;			
+		}		
+		
+		return true;
+	}
+
 	private void transformPatternsCompatibleWithDiagram(EPackage ePack, PatternInstance modularInstance) {
 		
 		EList<EClass> listEClasses = obtainEClasses(ePack);		

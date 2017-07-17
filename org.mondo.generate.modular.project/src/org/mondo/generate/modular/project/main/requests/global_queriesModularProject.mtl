@@ -265,6 +265,10 @@
 
 [comment Create Import String/]
 
+[query public generateEClassImportBasePackage(anEClass : EClassifier) :
+				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
+				'generateEClassImportBasePackage(org.eclipse.emf.ecore.EClassifier)',Sequence{anEClass}).oclAsType(String)/]
+
 [query public generateEClassImport(anEClass : EClassifier) :
 				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
 				'generateEClassImport(org.eclipse.emf.ecore.EClassifier)',Sequence{anEClass}).oclAsType(String)/]

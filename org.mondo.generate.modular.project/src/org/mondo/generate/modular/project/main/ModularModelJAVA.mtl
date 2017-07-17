@@ -24,7 +24,7 @@ import org.osgi.service.prefs.BackingStoreException;
 
 [let genPackage : GenPackage =  getGenClassFromEClass(Get_ProjectClass(anPatternInstance),anEObjectGenModel).eContainer().oclAsType(GenPackage) ]
 [if (genPackage.basePackage->isEmpty() = false)]
-import [genPackage.basePackage/].[generateEClassImport(Get_ProjectClass(anPatternInstance))/];
+import [genPackage.basePackage/].[generateEClassImportBasePackage(Get_ProjectClass(anPatternInstance))/];
 [else]
 import [generateEClassImport(Get_ProjectClass(anPatternInstance))/];
 [/if]

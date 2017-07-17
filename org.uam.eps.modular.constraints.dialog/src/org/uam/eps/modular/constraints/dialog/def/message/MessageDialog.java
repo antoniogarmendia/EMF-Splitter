@@ -19,8 +19,15 @@ import org.eclipse.epsilon.common.parse.problem.ParseProblem;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.Bullet;
+import org.eclipse.swt.custom.LineStyleEvent;
+import org.eclipse.swt.custom.LineStyleListener;
+import org.eclipse.swt.custom.ST;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.GlyphMetrics;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -35,7 +42,7 @@ import org.uam.eps.modular.constraints.dialog.def.eol.EolStandAlone;
 public class MessageDialog extends Dialog{
 	
 	private String errorMessage;
-	private Text messageText;
+	private StyledText messageText;
 	
 	
 	protected MessageDialog(Shell parentShell, String errorMessage) {
@@ -51,7 +58,7 @@ public class MessageDialog extends Dialog{
 				
 		Label constraintLabel = new Label(container, SWT.NONE);
 		constraintLabel.setText("Statement");			
-		messageText = new Text(container, SWT.MULTI | SWT.BORDER);
+		messageText = new StyledText(container, SWT.MULTI | SWT.BORDER);
 		
 		GridData dataContent = new GridData(GridData.FILL_BOTH);
 		dataContent.verticalAlignment = SWT.CENTER;
@@ -162,7 +169,27 @@ public class MessageDialog extends Dialog{
 			}			
 		});
 		
+		showLineNumbers();
 		return container;
+	}
+	
+	private void showLineNumbers() {
+		
+		this.messageText.addLineStyleListener(new LineStyleListener()
+		{
+		    public void lineGetStyle(LineStyleEvent e)
+		    {
+		        //Set the line number
+		        e.bulletIndex = messageText.getLineAtOffset(e.lineOffset);
+
+		        //Set the style, 12 pixles wide for each digit
+		        StyleRange style = new StyleRange();
+		        style.metrics = new GlyphMetrics(0, 0, Integer.toString(messageText.getLineCount()+1).length()*12);
+
+		        //Create and set the bullet
+		        e.bullet = new Bullet(ST.BULLET_NUMBER,style);
+		    }
+		});
 	}
 	
 	@Override

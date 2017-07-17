@@ -37,7 +37,7 @@ import org.eclipse.emf.edapt.internal.common.URIUtils;
 [if (genPackage.basePackage->isEmpty() = true)]
 import [generateEClassImport(c.element)/];
 [else]
-import [genPackage.basePackage/].[generateEClassImport(c.element)/];
+import [genPackage.basePackage/].[generateEClassImportBasePackage(c.element)/];
 [/if]
 [comment EEnum Classes/]
 [for (attr : EAttribute | c.element.eAllAttributes)]
@@ -70,7 +70,7 @@ import [getRootPackageString(c.element)/].[anEObjectGenModel.genPackages->first(
 import [genPackage.basePackage/].[generateEClassImportFactoryImpl(d.element)/];
 [elseif (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = false) and 
 	genPackage.basePackage->isEmpty() = false ]
-import [genPackage.basePackage/].[getRootPackageString(d.element)/].[anEObjectGenModel.genPackages.classPackageSuffix/].[d.element.name.concat('Impl')/];
+import [genPackage.basePackage/].[d.element.eContainer().oclAsType(EPackage).name/].impl.[d.element.name.concat('Impl')/];
 [elseif (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = true) and 
 	genPackage.basePackage->isEmpty() = true ]
 import [generateEClassImportFactoryImpl(d.element)/];
@@ -86,7 +86,7 @@ import [getRootPackageString(d.element)/].[anEObjectGenModel.genPackages->first(
 import [genPackage.basePackage/].[generateEClassImportFactoryImpl(d.element)/];
 [elseif (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = false) and 
 	genPackage.basePackage->isEmpty() = false ]
-import [genPackage.basePackage/].[getRootPackageString(d.element)/].[anEObjectGenModel.genPackages.classPackageSuffix/].[d.element.name.concat('Impl')/];
+import [genPackage.basePackage/].[d.element.eContainer().oclAsType(EPackage).name/].impl.[d.element.name.concat('Impl')/];
 [elseif (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = true) and 
 	genPackage.basePackage->isEmpty() = true ]
 import [generateEClassImportFactoryImpl(d.element)/];
@@ -383,11 +383,17 @@ public class [c.element.name/]NewProjectInfo {
 						itContents.prune();
 					}
 					else{
+						if (parentURI == null) {
+							addToProjectRoot(folderResource,eObject,copierModular);
+							itContents.prune();
+						}
+						else {
 						/*
 						 * Objects that belonging to a package   
 						 */
-						addToPackage(parentURI,eObject,folderResource,copierModular);
-						itContents.prune();
+							addToPackage(parentURI,eObject,folderResource,copierModular);
+							itContents.prune();
+						}
 					}
 				}
 				
@@ -399,6 +405,12 @@ public class [c.element.name/]NewProjectInfo {
 		}
 		
 		return folderResource;
+	}
+	
+	private void addToProjectRoot(Resource folderResource, EObject eObject, CopierReverseEngineering copierModular) {
+		
+		EObject result = copierModular.copy(eObject);
+		folderResource.getContents().add(result);
 	}
 
 	public void saveAllResources(ResourceSet resourceSet) {

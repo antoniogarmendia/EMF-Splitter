@@ -20,12 +20,10 @@ import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstanc
 import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[anPatternInstance.Get_ProjectClass().name/]NewProjectNature;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-[for (c : ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance()->union(anPatternInstance.Get_ProjectClassRoleInstance()->asSequence())->union(anPatternInstance.Get_ProjectClassRoleInstance()
-																						 ->select(anClassRoleInstance : ClassRoleInstance | anClassRoleInstance.referenceInstances
-																						 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence()))]
+[for (c : ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance())]
 [let genPackage : GenPackage =  getGenClassFromEClass(c.element,anEObjectGenModel).eContainer().oclAsType(GenPackage) ]
 [if (genPackage.basePackage->isEmpty() = false)]
-import [genPackage.basePackage/].[generateEClassImport(c.element)/];
+import [genPackage.basePackage/].[generateEClassImportBasePackage(c.element)/];
 [else]
 import [generateEClassImport(c.element)/];
 [/if]
@@ -55,17 +53,11 @@ public class ModularProjectDecorator implements ILightweightLabelDecorator {
 	
 	}
 	
-	[ for(c : ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance()->union(anPatternInstance.Get_ProjectClassRoleInstance()->asSequence())
-																						 ->union(anPatternInstance.Get_ProjectClassRoleInstance()
-																						 ->select(anClassRoleInstance : ClassRoleInstance | anClassRoleInstance.referenceInstances
-																						 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence()))]
+	[for(c : ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance())]
 	private static final ImageDescriptor PACKAGE_[c.element.name /];  
 	[/for]  
 	static {  
-	 [ for(c : ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance()->union(anPatternInstance.Get_ProjectClassRoleInstance()->asSequence())
-																						->union(anPatternInstance.Get_ProjectClassRoleInstance()
-																						 ->select(anClassRoleInstance : ClassRoleInstance | anClassRoleInstance.referenceInstances
-																						 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence()))]
+	 [ for(c : ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance())]
 		[if(c.Get_ClassRoleInstance_EAttribute('icon').equalsIgnoreCase(getProperty('def_path_icon'))=false and c.Get_ClassRoleInstance_EAttribute('icon').equalsIgnoreCase(getProperty(''))=false)]
 	 	PACKAGE_[c.element.name /] = AbstractUIPlugin.imageDescriptorFromPlugin("[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/]", "[getPathIcon(c.Get_ClassRoleInstance_EAttribute('icon'))/]");
 		[else]
@@ -73,7 +65,7 @@ public class ModularProjectDecorator implements ILightweightLabelDecorator {
 		PACKAGE_[c.element.name /] = AbstractUIPlugin.imageDescriptorFromPlugin("[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/]", "[getProperty('def_pro_icon')/]");
 			[else]
 		PACKAGE_[c.element.name /] = AbstractUIPlugin.imageDescriptorFromPlugin("[anProjectName/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/]", "[getProperty('def_folder_icon')/]");
-			[/if]
+			[/if] 
 		[/if]
 	 [/for]	   
 	}  	
@@ -93,13 +85,18 @@ public class ModularProjectDecorator implements ILightweightLabelDecorator {
 					if(file.exists()){
 						XMI_File file_xmi = new XMI_File(URI.createFileURI(file.getFullPath().toString()));
 						EObject root = file_xmi.Get_Root();
-						[ for(c : ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance()->union(anPatternInstance.Get_ProjectClassRoleInstance()->asSequence())
-																						 ->union(anPatternInstance.Get_ProjectClassRoleInstance()
-																						 ->select(anClassRoleInstance : ClassRoleInstance | anClassRoleInstance.referenceInstances
-																						 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence()))] 
-						if(root instanceof [c.element.name/])
-							decoration.addOverlay(PACKAGE_[ c.element.name /], IDecoration.BOTTOM_LEFT);
+						[let anFolderInstances : Sequence(ClassRoleInstance) = anPatternInstance.Get_FolderClassRoleInstance()]
+						[if (anFolderInstances->size() >= 1)]
+						if(root instanceof [anFolderInstances->first().element.name/])
+							decoration.addOverlay(PACKAGE_[ anFolderInstances->first().element.name /], IDecoration.BOTTOM_LEFT);
+						[/if]
+						[if (anPatternInstance.Get_FolderClassRoleInstance()->size() <> 1 and anPatternInstance.Get_FolderClassRoleInstance()->size() <> 0)]
+						[for(c : ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance()->excluding(anPatternInstance.Get_FolderClassRoleInstance()->first()))]						
+						else if(root instanceof [c.element.name/])
+							decoration.addOverlay(PACKAGE_[ c.element.name /], IDecoration.BOTTOM_LEFT);	
 						[/for]
+						[/if]
+						[/let]						
 					}						
 				}
 				

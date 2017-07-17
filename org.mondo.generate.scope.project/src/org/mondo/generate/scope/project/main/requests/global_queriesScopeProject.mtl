@@ -13,13 +13,13 @@
 										/]
 
 [query public getEnumScopeDefinition(role : String) : String = if(role.equalsIgnoreCase('rSameWorkSpace')) then
-																	'RSAME_WORK_SPACE'
+																	'SAME_WORKSPACE'
 																else if(role.equalsIgnoreCase('rSameProject')) then
-																	'RSAME_PROJECT'		
+																	'SAME_PROJECT'		
 																else if(role.equalsIgnoreCase('rSamePackage')) then
-																	'RSAME_PACKAGE'
+																	'SAME_PACKAGE'
 																else	
-																	'RSAME_UNIT'
+																	'SAME_UNIT'
 																		endif
 																	endif
 																endif

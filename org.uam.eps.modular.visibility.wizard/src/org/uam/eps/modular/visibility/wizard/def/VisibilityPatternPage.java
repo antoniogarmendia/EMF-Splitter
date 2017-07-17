@@ -32,7 +32,7 @@ public class VisibilityPatternPage extends WizardPage {
 		labelImage.setImage(imageVisibilityPattern);
 		GridData gridImage = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridImage.widthHint = 200;
-		gridImage.heightHint = 250;
+		gridImage.heightHint = 270;
 		labelImage.setLayoutData(gridImage);		
 		
 		setControl(container);

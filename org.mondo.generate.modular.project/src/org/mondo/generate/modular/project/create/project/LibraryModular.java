@@ -57,11 +57,38 @@ public class LibraryModular {
 		return packDeclaration;
 	}
 	
-	public String generateEClassImport(EClassifier anEClass){
+	public String generateEClassImport(EClassifier anEClass) {
 		
 		return generateEClassGeneralImport(anEClass) + "." + anEClass.getName();
 	}
 	
+	public String generateEClassImportBasePackage(EClassifier anEClass) {
+		
+		return generateEClassImpBasePackage(anEClass) + "." + anEClass.getName();
+	}
+	
+	private String generateEClassImpBasePackage(EClassifier anEClass) {
+		
+		String result = "";		
+		EObject anEObject = anEClass;
+		
+		while(anEObject.eContainer().eContainer()!=null){
+			
+			EObject currentEObject = anEObject.eContainer();
+			if(currentEObject instanceof EPackage){
+				EPackage anEPackage = (EPackage)currentEObject;
+				if(result.equals(""))
+					result = anEPackage.getName();
+				else
+					result = anEPackage.getName() + "." + result;				
+			}
+			
+			anEObject = currentEObject;			
+		}
+		
+		return result;	
+	}
+
 	public String generateEClassImportImpl(EClassifier anEClass){
 		
 		return generateEClassGeneralImport(anEClass) + ".impl." + anEClass.getName() + "Impl";

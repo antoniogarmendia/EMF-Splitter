@@ -262,6 +262,7 @@ public class VisibilityPackageImpl extends EPackageImpl implements VisibilityPac
 		addEEnumLiteral(visibilityDefinitionEEnum, VisibilityDefinition.WORKSPACE);
 		addEEnumLiteral(visibilityDefinitionEEnum, VisibilityDefinition.PROJECT);
 		addEEnumLiteral(visibilityDefinitionEEnum, VisibilityDefinition.PACKAGE);
+		addEEnumLiteral(visibilityDefinitionEEnum, VisibilityDefinition.UNIT);
 
 		// Create resource
 		createResource(eNS_URI);

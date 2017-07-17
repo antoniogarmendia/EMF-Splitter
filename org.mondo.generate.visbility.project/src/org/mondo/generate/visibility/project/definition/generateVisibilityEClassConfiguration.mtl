@@ -19,12 +19,12 @@ import [currentPackage.toUpperFirst()/].impl.[currentPackage/]FactoryImpl;
 public class VisibilityEClassConfiguration implements IVisibilityClass {
 
 	public VisibilityEClassConfiguration() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public ScopeDefinitionEnum getVisibilitybyEClass(EClass eClass) {
-		// TODO Auto-generated method stub
+		
 [for(currentInstance : ClassRoleInstance | anPatternInstances.PatternInstanceScope().classInstances)]
 	[for (currentFeatureRoleInstance : InstanceFeatureRoleInstance | currentInstance.featureInstances->selectByKind(InstanceFeatureRoleInstance))]
 	//[currentInstance.element.name.toUpperFirst()/]	
@@ -35,7 +35,7 @@ public class VisibilityEClassConfiguration implements IVisibilityClass {
 [/for]
 [/for]		
 		
-		return ScopeDefinitionEnum.RSAME_WORK_SPACE;
+		return ScopeDefinitionEnum.SAME_WORKSPACE;
 	}
 
 	@Override

@@ -32,7 +32,7 @@ import java.io.IOException;
 [if (genPackage.basePackage->isEmpty() = true)]
 import [generateEClassImport(c.element)/];
 [else]
-import [genPackage.basePackage/].[generateEClassImport(c.element)/];
+import [genPackage.basePackage/].[generateEClassImportBasePackage(c.element)/];
 [/if]
 [comment EEnum Classes/]
 [for (attr : EAttribute | c.element.eAllAttributes)]
@@ -50,7 +50,7 @@ import [generateEClassImport(attr.eType)/];
 import [genPackage.basePackage/].[generateEClassImportFactoryImpl(c.element)/];
 [elseif (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = false) and 
 	genPackage.basePackage->isEmpty() = false ]
-import [genPackage.basePackage/].[getRootPackageString(c.element)/].[anEObjectGenModel.genPackages.classPackageSuffix/].[genPackage.prefix.concat('FactoryImpl')/];
+import [genPackage.basePackage/].[c.element.eContainer().oclAsType(EPackage).name/].impl.[genPackage.prefix.concat('FactoryImpl')/];
 [elseif (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = true) and 
 	genPackage.basePackage->isEmpty() = true ]
 import [generateEClassImportFactoryImpl(c.element)/];

@@ -4,6 +4,10 @@
 
 [query public generateGeneralQueries (anEClass : EClass) : OclAny = self/]
 
+[query public generateEClassImportBasePackage(anEClass : EClassifier) :
+				String = invoke('org.mondo.generate.modular.project.create.project.LibraryModular', 
+				'generateEClassImportBasePackage(org.eclipse.emf.ecore.EClassifier)',Sequence{anEClass}).oclAsType(String)/]
+
 [query public getModularPatterns (anPatternInstances : PatternInstances) : Sequence(PatternInstance) = 
 	anPatternInstances.appliedPatterns->select(pattern : PatternInstance | pattern.pattern.name.equalsIgnoreCase('Modularity'))
 		->asSequence()

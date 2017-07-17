@@ -23,11 +23,11 @@ for (element in [c.element.name/].all.asSet()) {
 
 return result;
 
-operation StateMachine constraint() : Boolean {
+operation [c.element.name/] constraint() : Boolean {
 	return [c.getStatement()/]
 }
 
-operation StateMachine messasge() : String {
+operation [c.element.name/] messasge() : String {
 	return [c.getMessage()/]	
 }
 [/file]
