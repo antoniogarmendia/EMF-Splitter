@@ -7,13 +7,17 @@
 [file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/dialog/').concat('ConstraintDialog.java'),false, 'UTF-8')]
 package [anProjectName/].[getProperty('prefix_name')/].dialog;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -159,13 +163,33 @@ public class ConstraintDialog extends Dialog{
 					while (itOfConstraints.hasNext()) {
 						
 						Constraint constraint = (Constraint) itOfConstraints.next();
-						String eolModuleString = currentEolString.concat(constraint.getName() + ".eol");
-						URI eolModule = URI.create(eolModuleString);
-						URI modelUri = URI.create("file:/" + modelURI);
+						URI eolModule = null;
+						File tempFile = null;
+						URI modelUri = null;
+						if (constraint.getEClass() == null) {
+							// create the temp file
+							tempFile = createTempEolFile(constraint.getName(),constraint.getStatement());
+							//end 
+							eolModule = tempFile.toURI();
+							modelUri = URI.create(container.getProject().getLocationURI().toString().
+									concat("/" + container.getProject().getName() + ".xmi"));
+						} else {					
+							
+							String eolModuleString = currentEolString.concat(constraint.getName() + ".eol");
+							eolModule = URI.create(eolModuleString);
+							modelUri = URI.create("file:/" + modelURI);
+						}						
 						
 						EolStandAlone executeEolModule = new EolStandAlone(mmURI, eolModule,modelUri);
-						executeEolModule.execute();						
-						constraint.setResult(showResult(executeEolModule.getResult(),constraint.getName()));
+						executeEolModule.execute();
+						if (constraint.getEClass() == null) {
+							tempFile.delete();
+							constraint.setResult(showResultGlobal(executeEolModule.getResult(), constraint, 
+									mmURI, modelUri, container.getProject()));
+							}
+						else
+							constraint.setResult(showResult(executeEolModule.getResult(),constraint.getName()));												
+						
 						viewer.update(constraint, null);
 					}	 					
 					
@@ -180,12 +204,43 @@ public class ConstraintDialog extends Dialog{
 	    
 		return contents;
 	}	
+	
+	private String showResultGlobal(Object result, Constraint constraint, URI mmURI, URI modelUri, IProject iProject) throws Exception {		
+		
+		if (result instanceof Boolean) {
+			deleteMarker(iProject, constraint.getName());
+			Boolean bResult = (Boolean) result;
+			if (bResult == true)
+				return "Successful";
+			else {
+				File temp = createTempEolFile(constraint.getName() + "errorMessage" , constraint.getErrorMessage());
+				EolStandAlone executeEolModule = new EolStandAlone(mmURI, temp.toURI(),modelUri);
+				executeEolModule.execute();
+				ConstraintResourceMarker resourceMarker = new ConstraintResourceMarker(iProject, 
+						null, constraint.getName(),executeEolModule.getResult().toString());
+				new ConstraintMarkerManager(resourceMarker).addErrorMarker();
+				temp.delete();
+			}			
+		}
+		
+		return "Unsuccessful (See Problems View)";
+	}
+	
+	private File createTempEolFile(String name, String statement) throws IOException {
+		
+		File tempFile = File.createTempFile(name, ".eol");
+		BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
+		bw.write("return " + statement);
+		bw.close();
+		
+		return tempFile;		
+	}
 
 	private String showResult(Object result, String constraintName) { // works with EOLSequence
 		
 		if (result instanceof EolSequence<?>) {
 			EolSequence<?> sequence = (EolSequence<?>) result;
-			deleteMarker(constraintName);
+			deleteMarker(this.container,constraintName);
 			if (sequence.size() == 0) 
 				return "Successful";
 			else {
@@ -198,8 +253,14 @@ public class ConstraintDialog extends Dialog{
 						String str = uriObject.substring(0, uriObject.lastIndexOf('#'));
 						String eObjectUri = uriObject.substring(uriObject.lastIndexOf('#'), uriObject.length());
 						String errorMessage = (String) tuple.get(1);
-						File file = new File(URI.create(str));
-						IFile resource = getIFileFromFile(file);
+						org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createURI(str);
+						IFile resource = null;
+						resource = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true)));
+						if (!resource.exists()) {
+						
+							File file = new File(URI.create(str));
+							resource = getIFileFromFile(file);
+						}						
 						ConstraintResourceMarker resourceMarker = new ConstraintResourceMarker(resource, eObjectUri, constraintName,errorMessage);
 						new ConstraintMarkerManager(resourceMarker).addErrorMarker();						
 					}
@@ -211,10 +272,10 @@ public class ConstraintDialog extends Dialog{
 		return "The result is not an EOLSequence";
 	}
 
-	private void deleteMarker(String constraintName) {
+	private void deleteMarker(IContainer iContainer, String constraintName) {
 		
 		try {
-			IMarker['['/]] constraintMarkers = container.findMarkers(ConstraintMarkerManager.FAILED_CONSTRAINT_MARKER_ID, true, IResource.DEPTH_INFINITE);
+			IMarker['['/]] constraintMarkers = iContainer.findMarkers(ConstraintMarkerManager.FAILED_CONSTRAINT_MARKER_ID, true, IResource.DEPTH_INFINITE);
 			for (int i = 0; i < constraintMarkers.length; i++) {
 				IMarker currentMarker = constraintMarkers['['/]i];
 				String currentConstraintName = (String) currentMarker.getAttribute(ConstraintMarkerManager.CONSTRAINT_NAME);

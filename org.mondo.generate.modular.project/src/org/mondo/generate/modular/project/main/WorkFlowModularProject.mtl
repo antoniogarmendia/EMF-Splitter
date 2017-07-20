@@ -17,6 +17,7 @@
 [import org::mondo::generate::modular::project::main::CreateMenuJava /]
 [import org::mondo::generate::modular::project::main::pack::preferences::generatePackpreferences /]
 [import org::mondo::generate::modular::project::main::OpenWith /]
+[import org::mondo::generate::modular::project::main::initFile /]
 
 [template public WorkFlowModularProject(anPatternInstance : PatternInstance, anProjectName : String, anPackageName : String, genModelPath : String)]
 [comment @main /]
@@ -27,6 +28,7 @@
 	
 	[METAINF(anProjectName,anProjectInstance) /]
 	[Activatorjava(anProjectName,anProjectInstance) /]
+    [generateinitFile(anProjectName, anPatternInstance, anPackageName, anEObjectGenModel)/]
 	[PluginXML(anProjectName,anPatternInstance,anEObjectGenModel) /]
 	[Modular_DiagramJAVA(anProjectName, anPackageName, anPatternInstance,anEObjectGenModel) /]
 	[Package_Explorer_SelectionJAVA(anProjectName, anPatternInstance)/]

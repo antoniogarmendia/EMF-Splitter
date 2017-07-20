@@ -298,6 +298,13 @@
           class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].preferences.[Get_ProjectClass(anPatternInstance).name/]PreferenceInitializer">
     </initializer>
  </extension>	
+ <!-- INITIALIZER ON START UP-->
+ <extension
+       point="org.eclipse.ui.startup">
+    <startup
+          class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].Init">
+    </startup>
+ </extension> 
 </plugin> 	
 [/file]
 [/template]

@@ -55,11 +55,12 @@ public class DSLtaoConstraint {
 			FeatureInterface statement = DSLtaoUtils.getFeatureTypeByName(mainConsPattern, "statement");
 			FeatureInterface errorMessage = DSLtaoUtils.getFeatureTypeByName(mainConsPattern, "errorMessage");
 					
-			Iterator<Constraint> itScopeRules = metaModelConstraint.getConstraints().iterator();
-			while (itScopeRules.hasNext()) {
+			Iterator<Constraint> itConstraintRules = metaModelConstraint.getConstraints().iterator();
+			while (itConstraintRules.hasNext()) {
 				
-				Constraint constraint = (Constraint) itScopeRules.next();
-				addConstraintClassInstance(consClass,constraint,consInstances,constraintName,statement,errorMessage);				
+				Constraint constraint = (Constraint) itConstraintRules.next();
+				if (constraint.getEClass() != null)				
+					addConstraintClassInstance(consClass,constraint,consInstances,constraintName,statement,errorMessage);				
 			}
 		}	
 		

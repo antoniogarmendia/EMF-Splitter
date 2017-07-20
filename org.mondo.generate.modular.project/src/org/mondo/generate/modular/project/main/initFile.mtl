@@ -1,0 +1,78 @@
+[comment encoding = UTF-8 /]
+[module initFile('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns','http://www.eclipse.org/emf/2002/GenModel')]
+[import org::mondo::generate::modular::project::main::requests::global_queriesModularProject /]
+
+[template public generateinitFile(anProjectName : String, anPatternInstance : PatternInstance, anPackageName: String, anEObjectGenModel : GenModel)]
+[file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/Init.java'),false, 'UTF-8')]
+package [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/];
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.ui.IStartup;
+import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].Activator;
+import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].preferences.PreferenceOptions;
+import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[Get_ProjectClass(anPatternInstance).name.toString() /]NewProjectNature;
+import org.mondo.generate.index.project.execute.EvaluateExecuteIndexedAttributeContributor;
+import org.mondo.modular.references.ext.EvaluateCrossReferencesContributor;
+
+public class Init implements IStartup {
+
+	@Override
+	public void earlyStartup() {
+		
+		String IdExtension = Activator.getDefault().getPreferenceStore().getString(PreferenceOptions.FeatureEditor_CHOICE);
+		if(!IdExtension.equals("[Get_ProjectClass(anPatternInstance).name/]CrossReferences")) {
+			
+			IExtensionRegistry registry = Platform.getExtensionRegistry();
+			EvaluateCrossReferencesContributor eval = new EvaluateCrossReferencesContributor();
+			List<String> listMetamodelURIs = new ArrayList<String>();
+			listMetamodelURIs.add("http://www.eclipse.org/emf/2002/Ecore");
+			getDependencies ("http://mondo.org/WT", listMetamodelURIs);
+			listMetamodelURIs.add("http://mondo.org/WT");
+			eval.executeInit(registry, IdExtension, WTComponentsNewProjectNature.ID, listMetamodelURIs);
+			//Initialize Indexed Attributes
+			new EvaluateExecuteIndexedAttributeContributor().ExecIndexAttribute(registry);
+		}		
+	}
+	
+	public void getDependencies (String modelURI, List<String> listMetamodelURIs) {
+		
+		ResourceSet reset = new ResourceSetImpl();
+		Resource res = reset.getResource(URI.createURI(modelURI),true);
+		
+		Map<EObject, Collection<Setting>>  mapCrossReferences = EcoreUtil.ProxyCrossReferencer.find(res);
+		for(Map.Entry<EObject, Collection<Setting>> entry : mapCrossReferences.entrySet()) {
+			EObject eObject = entry.getKey();
+			if (eObject.eIsProxy()) {
+				
+				URI eProxy = ((InternalEObject) eObject).eProxyURI();
+				if (eProxy.toString().contains("http://www.eclipse.org/emf/2002/Ecore") == false) {
+					
+					String proxyURI = eProxy.scheme() +":"+ eProxy.devicePath();
+					if (listMetamodelURIs.indexOf(proxyURI) == -1) {
+					
+						getDependencies(proxyURI, listMetamodelURIs);
+						listMetamodelURIs.add(proxyURI);						
+					}
+				}				
+			}
+		}		
+	}
+
+}
+
+[/file]
+[/template]

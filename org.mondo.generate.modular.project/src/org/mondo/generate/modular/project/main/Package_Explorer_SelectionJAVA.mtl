@@ -11,14 +11,14 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
@@ -31,11 +31,13 @@ public class Package_Explorer_Selection extends ViewerFilter {
 		
 		IViewPart view_proper = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("org.eclipse.jdt.ui.PackageExplorer");
 		
-		view_proper.getViewSite().getWorkbenchWindow().getSelectionService().addSelectionListener(new ISelectionListener() {
+		view_proper.getViewSite().getSelectionProvider().addSelectionChangedListener(new ISelectionChangedListener() {
 			
 			@Override
-			public void selectionChanged(IWorkbenchPart part, ISelection selection) {	
-
+			public void selectionChanged(SelectionChangedEvent event) {
+				
+				ISelection selection = event.getSelection();
+				
 				if(selection instanceof TreeSelection){
 					
 					TreeSelection element = (TreeSelection)selection;
@@ -46,12 +48,10 @@ public class Package_Explorer_Selection extends ViewerFilter {
 						IProject project = ((IResource) object).getProject();
 						if(AllElementsPropertySource.isProject(project))
 							addElementsPropertySource();							
-					}	
-				}		
-				
+					} 				
+				}					
 			}
-		});	
-		
+		});		
 	}
 
 	private void addElementsPropertySource() {

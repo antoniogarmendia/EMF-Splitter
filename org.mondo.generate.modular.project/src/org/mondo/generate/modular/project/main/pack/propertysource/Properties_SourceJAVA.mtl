@@ -48,7 +48,7 @@ public class [c.element.name.toString() /]ItemPropertiesSource implements IPrope
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		// TODO Auto-generated method stub
+		
 		[for(anEAttribute : EAttribute | c.element.eAllAttributes)]
 		[if(i<>1)]
 		else
