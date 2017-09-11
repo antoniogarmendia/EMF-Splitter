@@ -3,12 +3,14 @@
 package constraints.impl;
 
 import constraints.Constraint;
+import constraints.ConstraintDefinition;
 import constraints.ConstraintsFactory;
 import constraints.ConstraintsPackage;
 import constraints.MetamodelConstraint;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -34,6 +36,13 @@ public class ConstraintsPackageImpl extends EPackageImpl implements ConstraintsP
 	 * @generated
 	 */
 	private EClass constraintEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum constraintDefinitionEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -182,6 +191,24 @@ public class ConstraintsPackageImpl extends EPackageImpl implements ConstraintsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getConstraint_Definition() {
+		return (EAttribute)constraintEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getConstraintDefinition() {
+		return constraintDefinitionEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ConstraintsFactory getConstraintsFactory() {
 		return (ConstraintsFactory)getEFactoryInstance();
 	}
@@ -215,6 +242,10 @@ public class ConstraintsPackageImpl extends EPackageImpl implements ConstraintsP
 		createEAttribute(constraintEClass, CONSTRAINT__ERROR_MESSAGE);
 		createEReference(constraintEClass, CONSTRAINT__ECLASS);
 		createEAttribute(constraintEClass, CONSTRAINT__RESULT);
+		createEAttribute(constraintEClass, CONSTRAINT__DEFINITION);
+
+		// Create enums
+		constraintDefinitionEEnum = createEEnum(CONSTRAINT_DEFINITION);
 	}
 
 	/**
@@ -257,6 +288,14 @@ public class ConstraintsPackageImpl extends EPackageImpl implements ConstraintsP
 		initEAttribute(getConstraint_ErrorMessage(), ecorePackage.getEString(), "errorMessage", null, 0, 1, Constraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getConstraint_EClass(), ecorePackage.getEClass(), null, "eClass", null, 0, 1, Constraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getConstraint_Result(), ecorePackage.getEString(), "result", null, 0, 1, Constraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConstraint_Definition(), this.getConstraintDefinition(), "definition", "GLOBAL", 0, 1, Constraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(constraintDefinitionEEnum, ConstraintDefinition.class, "ConstraintDefinition");
+		addEEnumLiteral(constraintDefinitionEEnum, ConstraintDefinition.GLOBAL);
+		addEEnumLiteral(constraintDefinitionEEnum, ConstraintDefinition.SAME_ROOT_PACKAGE);
+		addEEnumLiteral(constraintDefinitionEEnum, ConstraintDefinition.SAME_PACKAGE);
+		addEEnumLiteral(constraintDefinitionEEnum, ConstraintDefinition.UNIT);
 
 		// Create resource
 		createResource(eNS_URI);

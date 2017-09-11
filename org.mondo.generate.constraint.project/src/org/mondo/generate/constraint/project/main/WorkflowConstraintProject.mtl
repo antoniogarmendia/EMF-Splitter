@@ -13,6 +13,7 @@
 [import org::mondo::generate::constraint::project::files::result::resultDialog/]
 [import org::mondo::generate::constraint::project::files::dialog::constraintMarkerManager /]
 [import org::mondo::generate::constraint::project::files::dialog::constraintResourceMarkerFile /]
+[import org::mondo::generate::constraint::project::files::builder::constraintIncrementalProjectBuilderFile /]
 
 [template public WorkflowConstraintProject(anPatternInstance : PatternInstance, anProjectName : String, constraintName : String, pathEcore : String)]
 [comment @main /]	
@@ -36,5 +37,9 @@
 [generateConstraintTreeFile(anProjectName)/]
 [generateConstraintMarkerManager(anProjectName)/]
 [generateConstraintResourceMarkerFile(anProjectName)/]
+
+[comment Builder /]
+[generateConstraintIncrementalProjectBuilderFile(anProjectName, pathEcore)/]
+
 	
 [/template]

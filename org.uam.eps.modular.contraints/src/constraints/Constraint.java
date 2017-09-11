@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link constraints.Constraint#getErrorMessage <em>Error Message</em>}</li>
  *   <li>{@link constraints.Constraint#getEClass <em>EClass</em>}</li>
  *   <li>{@link constraints.Constraint#getResult <em>Result</em>}</li>
+ *   <li>{@link constraints.Constraint#getDefinition <em>Definition</em>}</li>
  * </ul>
  *
  * @see constraints.ConstraintsPackage#getConstraint()
@@ -155,5 +156,35 @@ public interface Constraint extends EObject {
 	 * @generated
 	 */
 	void setResult(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Definition</b></em>' attribute.
+	 * The default value is <code>"GLOBAL"</code>.
+	 * The literals are from the enumeration {@link constraints.ConstraintDefinition}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Definition</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Definition</em>' attribute.
+	 * @see constraints.ConstraintDefinition
+	 * @see #setDefinition(ConstraintDefinition)
+	 * @see constraints.ConstraintsPackage#getConstraint_Definition()
+	 * @model default="GLOBAL"
+	 * @generated
+	 */
+	ConstraintDefinition getDefinition();
+
+	/**
+	 * Sets the value of the '{@link constraints.Constraint#getDefinition <em>Definition</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Definition</em>' attribute.
+	 * @see constraints.ConstraintDefinition
+	 * @see #getDefinition()
+	 * @generated
+	 */
+	void setDefinition(ConstraintDefinition value);
 
 } // Constraint

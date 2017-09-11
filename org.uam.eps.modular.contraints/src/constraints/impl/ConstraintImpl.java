@@ -3,6 +3,7 @@
 package constraints.impl;
 
 import constraints.Constraint;
+import constraints.ConstraintDefinition;
 import constraints.ConstraintsPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -26,6 +27,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link constraints.impl.ConstraintImpl#getErrorMessage <em>Error Message</em>}</li>
  *   <li>{@link constraints.impl.ConstraintImpl#getEClass <em>EClass</em>}</li>
  *   <li>{@link constraints.impl.ConstraintImpl#getResult <em>Result</em>}</li>
+ *   <li>{@link constraints.impl.ConstraintImpl#getDefinition <em>Definition</em>}</li>
  * </ul>
  *
  * @generated
@@ -120,6 +122,26 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 	 * @ordered
 	 */
 	protected String result = RESULT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDefinition() <em>Definition</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefinition()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final ConstraintDefinition DEFINITION_EDEFAULT = ConstraintDefinition.GLOBAL;
+
+	/**
+	 * The cached value of the '{@link #getDefinition() <em>Definition</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefinition()
+	 * @generated
+	 * @ordered
+	 */
+	protected ConstraintDefinition definition = DEFINITION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -267,6 +289,27 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ConstraintDefinition getDefinition() {
+		return definition;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDefinition(ConstraintDefinition newDefinition) {
+		ConstraintDefinition oldDefinition = definition;
+		definition = newDefinition == null ? DEFINITION_EDEFAULT : newDefinition;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ConstraintsPackage.CONSTRAINT__DEFINITION, oldDefinition, definition));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -281,6 +324,8 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 				return basicGetEClass();
 			case ConstraintsPackage.CONSTRAINT__RESULT:
 				return getResult();
+			case ConstraintsPackage.CONSTRAINT__DEFINITION:
+				return getDefinition();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -307,6 +352,9 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 				return;
 			case ConstraintsPackage.CONSTRAINT__RESULT:
 				setResult((String)newValue);
+				return;
+			case ConstraintsPackage.CONSTRAINT__DEFINITION:
+				setDefinition((ConstraintDefinition)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -335,6 +383,9 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 			case ConstraintsPackage.CONSTRAINT__RESULT:
 				setResult(RESULT_EDEFAULT);
 				return;
+			case ConstraintsPackage.CONSTRAINT__DEFINITION:
+				setDefinition(DEFINITION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -357,6 +408,8 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 				return eClass != null;
 			case ConstraintsPackage.CONSTRAINT__RESULT:
 				return RESULT_EDEFAULT == null ? result != null : !RESULT_EDEFAULT.equals(result);
+			case ConstraintsPackage.CONSTRAINT__DEFINITION:
+				return definition != DEFINITION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -379,6 +432,8 @@ public class ConstraintImpl extends MinimalEObjectImpl.Container implements Cons
 		result.append(errorMessage);
 		result.append(", result: ");
 		result.append(result);
+		result.append(", definition: ");
+		result.append(definition);
 		result.append(')');
 		return result.toString();
 	}

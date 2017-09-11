@@ -18,6 +18,7 @@
 [import org::mondo::generate::modular::project::main::pack::preferences::generatePackpreferences /]
 [import org::mondo::generate::modular::project::main::OpenWith /]
 [import org::mondo::generate::modular::project::main::initFile /]
+[import org::mondo::generate::modular::project::main::schemaFile /]
 
 [template public WorkFlowModularProject(anPatternInstance : PatternInstance, anProjectName : String, anPackageName : String, genModelPath : String)]
 [comment @main /]
@@ -34,7 +35,8 @@
 	[Package_Explorer_SelectionJAVA(anProjectName, anPatternInstance)/]
 	[XMI_FileJAVA(anProjectName, anPatternInstance)/]
     [CreateMenuJava(anProjectName, anPatternInstance,anPackageName,anEObjectGenModel) /]
-	[generateOpenWith(anProjectName,anProjectInstance)/]    
+	[generateOpenWith(anProjectName,anProjectInstance)/]  
+	[generateSchemaFile(anProjectName, anPatternInstance, anEObjectGenModel)/]  
 
 	[comment Package actions /]
 	[generatePackageactions(anProjectName,anPackageName, anPatternInstance)/]

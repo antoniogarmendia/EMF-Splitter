@@ -6,6 +6,8 @@
 [import org::mondo::generate::modular::project::main::pack::wizard::ModularNewProjectWizardJAVA /]
 [import org::mondo::generate::modular::project::main::pack::wizard::ModularNewProjectCreationPageJAVA /]
 [import org::mondo::generate::modular::project::main::pack::wizard::ModularNewProjectInfoJAVA /]
+[import org::mondo::generate::modular::project::main::pack::wizard::evaluateModularBuilderFile /]
+[import org::mondo::generate::modular::project::main::pack::wizard::modularIncrementalProjectBuilderFile /]
 
 [template public generatePackagewizard(anProjectName : String, anPackageName : String, anPatternInstance : PatternInstance, anEObjectGenModel: GenModel)]
 
@@ -13,6 +15,8 @@
 	[ModularNewProjectInfoJAVA(anProjectName, anPackageName, anPatternInstance,c,anEObjectGenModel) /]
 	[ModularNewProjectCreationPageJAVA(anProjectName, c) /]
 	[ProjectFeaturesJAVA(anProjectName, anPackageName, c,anEObjectGenModel)/]
+	[generateEvaluateModularBuilder(anProjectName, anPackageName, anPatternInstance, c, anEObjectGenModel)/]
+	[generateModularIncrementalProjectBuilder(anProjectName, anPackageName, anPatternInstance, c, anEObjectGenModel)/]
 [/let]
 [let anEClass : EClass = anPatternInstance.Get_ProjectClass()]
 	[ModularNewProjectNatureJAVA(anProjectName,anEClass) /]

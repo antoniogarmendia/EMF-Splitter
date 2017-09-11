@@ -31,7 +31,9 @@ Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,
  org.mondo.generate.scope.project;bundle-version="1.0.0",
  org.mondo.generate.visibility.project;bundle-version="1.0.0",
  org.mondo.generate.index.project;bundle-version="1.0.0",
- org.eclipse.emf.edapt.common;bundle-version="1.2.1"
+ org.eclipse.emf.edapt.common;bundle-version="1.2.1",
+ org.eclipse.e4.core.di.annotations;bundle-version="1.5.0",
+ org.mondo.generate.modular.project;bundle-version="1.0.0"
 Export-Package: [anProjectName/].[anProjectInstance.element.name.toLowerCase()/][getProperty('prefix_name')/].wizard,
  [anProjectName/].[anProjectInstance.element.name.toLowerCase()/][getProperty('prefix_name')/]
 [/file]

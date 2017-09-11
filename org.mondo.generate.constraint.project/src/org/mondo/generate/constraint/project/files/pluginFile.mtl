@@ -53,6 +53,11 @@
             type="org.eclipse.core.resources.problemmarker">
       </super>
    </extension>
+   <extension
+         point="org.miso.wind.turbine.cs.modular.wtcomponents.WTComponentsModularBuilders">
+      <client
+            class="[anProjectName/].[getProperty('prefix_name')/].builder.ConstraintIncrementalProjectBuilder"></client>
+   </extension> 	
 </plugin>
 [/file]
 [/template]

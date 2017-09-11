@@ -6,6 +6,12 @@
     operationReflection="true" importOrganizing="true">
   <foreignModel>Constraints.ecore</foreignModel>
   <genPackages prefix="Constraints" disposableProviderFactory="true" ecorePackage="Constraints.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Constraints.ecore#//ConstraintDefinition">
+      <genEnumLiterals ecoreEnumLiteral="Constraints.ecore#//ConstraintDefinition/GLOBAL"/>
+      <genEnumLiterals ecoreEnumLiteral="Constraints.ecore#//ConstraintDefinition/SAME_ROOT_PACKAGE"/>
+      <genEnumLiterals ecoreEnumLiteral="Constraints.ecore#//ConstraintDefinition/SAME_PACKAGE"/>
+      <genEnumLiterals ecoreEnumLiteral="Constraints.ecore#//ConstraintDefinition/UNIT"/>
+    </genEnums>
     <genClasses ecoreClass="Constraints.ecore#//MetamodelConstraint">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Constraints.ecore#//MetamodelConstraint/metamodel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Constraints.ecore#//MetamodelConstraint/constraints"/>
@@ -16,6 +22,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Constraints.ecore#//Constraint/errorMessage"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Constraints.ecore#//Constraint/eClass"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Constraints.ecore#//Constraint/result"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Constraints.ecore#//Constraint/definition"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

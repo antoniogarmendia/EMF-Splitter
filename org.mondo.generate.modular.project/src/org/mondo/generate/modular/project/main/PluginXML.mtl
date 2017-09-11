@@ -6,6 +6,7 @@
 
 [file ('plugin.xml',false, 'UTF-8')]
 <plugin>
+   <extension-point id="[Get_ProjectClass(anPatternInstance).name/]ModularBuilders" name="[anProjectName/].builders" schema="schema/[Get_ProjectClass(anPatternInstance).name/]ModularBuilders.exsd"/>	
    <extension
          point="org.eclipse.ui.newWizards">
 	  <!-- PROJECT CATEGORY -->
@@ -135,6 +136,21 @@
         	 <run class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[Get_ProjectClass(anPatternInstance).name.toString() /]NewProjectNature">
          </run>
       </runtime>
+		<builder
+               id="[anProjectName.toLower()/].[getProperty('prefix_name')/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].ModularIncrementalProjectBuilder">
+         </builder>
+   </extension>
+   <extension
+         id="ModularIncrementalProjectBuilder"
+         name="Modular Incremental Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            callOnEmptyDelta="false"
+            hasNature="true"
+            isConfigurable="false">
+         <run
+               class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.ModularIncrementalProjectBuilder">
+         </run></builder>
    </extension>
    <extension
          point="org.eclipse.ui.ide.projectNatureImages">

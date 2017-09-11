@@ -16,12 +16,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.uam.eps.modular.constraints.dialog.def.ConstraintAllActionDialog;
 import org.uam.eps.modular.constraints.dialog.def.ConstraintTreeContentProvider;
+import org.uam.eps.modular.constraints.dialog.def.constraint.definition.ConstraintDefinitionColumnLabelProvider;
+import org.uam.eps.modular.constraints.dialog.def.constraint.definition.ConstraintDefinitionEditingProvider;
 import org.uam.eps.modular.constraints.dialog.def.contraint.ConstraintColumnLabelProvider;
 import org.uam.eps.modular.constraints.dialog.def.contraint.ConstraintEditingProvider;
 import org.uam.eps.modular.constraints.dialog.def.eclass.EClassColumnLabelProvider;
 import org.uam.eps.modular.constraints.dialog.def.eclass.EClassEditingProvider;
-import org.uam.eps.modular.constraints.dialog.def.local.LocalColumnLabelProvider;
-import org.uam.eps.modular.constraints.dialog.def.local.LocalEditingProvider;
 import org.uam.eps.modular.constraints.dialog.def.message.MessageColumnLabelProvider;
 import org.uam.eps.modular.constraints.dialog.def.message.MessageEditingProvider;
 import org.uam.eps.modular.constraints.dialog.def.name.NameColumnLabelProvider;
@@ -77,10 +77,10 @@ public class ConstraintDefinitionPage extends WizardPage{
 	    eNameColumn.setEditingSupport(new NameEditingProvider(viewer));
 	    
 	    TreeViewerColumn eGlobalColumn = new TreeViewerColumn(viewer, SWT.NONE);
-	    eGlobalColumn.getColumn().setWidth(50);
-	    eGlobalColumn.getColumn().setText("Local");
-	    eGlobalColumn.setLabelProvider(new LocalColumnLabelProvider());
-	    eGlobalColumn.setEditingSupport(new LocalEditingProvider(viewer,metaModel.getList_classes()));
+	    eGlobalColumn.getColumn().setWidth(100);
+	    eGlobalColumn.getColumn().setText("Constraint Definition");
+	    eGlobalColumn.setLabelProvider(new ConstraintDefinitionColumnLabelProvider());
+	    eGlobalColumn.setEditingSupport(new ConstraintDefinitionEditingProvider(viewer));
 	    	    
 	    TreeViewerColumn eClassColumn = new TreeViewerColumn(viewer, SWT.NONE);
 	    eClassColumn.getColumn().setWidth(90);

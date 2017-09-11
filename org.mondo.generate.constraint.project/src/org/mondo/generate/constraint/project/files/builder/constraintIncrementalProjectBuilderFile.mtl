@@ -1,0 +1,52 @@
+[comment encoding = UTF-8 /]
+[module constraintIncrementalProjectBuilderFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generateConstraintIncrementalProjectBuilderFile(anProjectName : String, pathEcore : String)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/builder/').concat('ConstraintIncrementalProjectBuilder.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].builder;
+
+import java.util.Map;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.mondo.generate.modular.project.ext.IModularBuilder;
+
+public class ConstraintIncrementalProjectBuilder implements IModularBuilder {
+
+	@Override
+	public IProject['['/]] build(int kind, Map<String, String> args, IncrementalProjectBuilder builder, IProgressMonitor monitor) {
+		
+		System.out.println("Custom Constraint Builder triggered");
+		
+		switch (kind) {
+		
+		case IncrementalProjectBuilder.FULL_BUILD:
+			fullBuild(monitor);
+			break;
+		
+		case IncrementalProjectBuilder.INCREMENTAL_BUILD:
+			
+			break;	
+			
+		case IncrementalProjectBuilder.AUTO_BUILD:
+			
+			break;			
+		default:
+			break;
+		}		
+		return null;
+	}
+
+	private void fullBuild(IProgressMonitor monitor) {
+		
+		
+		
+	}	
+
+}
+
+[/file]
+[/template]

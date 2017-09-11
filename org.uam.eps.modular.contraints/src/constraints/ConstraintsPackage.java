@@ -4,6 +4,7 @@ package constraints;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -158,13 +159,22 @@ public interface ConstraintsPackage extends EPackage {
 	int CONSTRAINT__RESULT = 4;
 
 	/**
+	 * The feature id for the '<em><b>Definition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRAINT__DEFINITION = 5;
+
+	/**
 	 * The number of structural features of the '<em>Constraint</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONSTRAINT_FEATURE_COUNT = 5;
+	int CONSTRAINT_FEATURE_COUNT = 6;
 
 	/**
 	 * The number of operations of the '<em>Constraint</em>' class.
@@ -174,6 +184,17 @@ public interface ConstraintsPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONSTRAINT_OPERATION_COUNT = 0;
+
+
+	/**
+	 * The meta object id for the '{@link constraints.ConstraintDefinition <em>Constraint Definition</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see constraints.ConstraintDefinition
+	 * @see constraints.impl.ConstraintsPackageImpl#getConstraintDefinition()
+	 * @generated
+	 */
+	int CONSTRAINT_DEFINITION = 2;
 
 
 	/**
@@ -274,6 +295,27 @@ public interface ConstraintsPackage extends EPackage {
 	EAttribute getConstraint_Result();
 
 	/**
+	 * Returns the meta object for the attribute '{@link constraints.Constraint#getDefinition <em>Definition</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Definition</em>'.
+	 * @see constraints.Constraint#getDefinition()
+	 * @see #getConstraint()
+	 * @generated
+	 */
+	EAttribute getConstraint_Definition();
+
+	/**
+	 * Returns the meta object for enum '{@link constraints.ConstraintDefinition <em>Constraint Definition</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Constraint Definition</em>'.
+	 * @see constraints.ConstraintDefinition
+	 * @generated
+	 */
+	EEnum getConstraintDefinition();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -371,6 +413,24 @@ public interface ConstraintsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONSTRAINT__RESULT = eINSTANCE.getConstraint_Result();
+
+		/**
+		 * The meta object literal for the '<em><b>Definition</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONSTRAINT__DEFINITION = eINSTANCE.getConstraint_Definition();
+
+		/**
+		 * The meta object literal for the '{@link constraints.ConstraintDefinition <em>Constraint Definition</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see constraints.ConstraintDefinition
+		 * @see constraints.impl.ConstraintsPackageImpl#getConstraintDefinition()
+		 * @generated
+		 */
+		EEnum CONSTRAINT_DEFINITION = eINSTANCE.getConstraintDefinition();
 
 	}
 
