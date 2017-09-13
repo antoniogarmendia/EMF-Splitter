@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module queries('http://mondo.org/runtimePatterns')]
+[module queries('http://mondo.org/runtimePatterns', 'http://www.eclipse.org/emf/2002/Ecore')]
 
 [query public getName (aClassRoleInstance : ClassRoleInstance) : String = 
 		aClassRoleInstance.featureInstances->select(feat : FeatureRoleInstance | feat.oclIsKindOf(InstanceFeatureRoleInstance))->
@@ -20,5 +20,15 @@
 				first().name.equalsIgnoreCase('errorMessage'))->asSequence()->first().oclAsType(InstanceFeatureRoleInstance).value
 
 /]
+
+[query public Get_ProjectClassRoleInstance(anPatternInstance : PatternInstance) : 
+			ClassRoleInstance = anPatternInstance.GetClassRoleIntancebyName('Project')->first() /]
+
+[query public GetClassRoleIntancebyName(anPatternInstance : PatternInstance, anClassName : EString) : 
+			  Sequence(ClassRoleInstance) = anPatternInstance.eContents(ClassRoleInstance)
+											 ->select(anClassRoleInstance : ClassRoleInstance | 
+												anClassRoleInstance.role.ref->asSequence()
+											 ->select(anEClass : EClass | anEClass.name = anClassName)
+											 ->asSequence()->size()>0)/]
 
 

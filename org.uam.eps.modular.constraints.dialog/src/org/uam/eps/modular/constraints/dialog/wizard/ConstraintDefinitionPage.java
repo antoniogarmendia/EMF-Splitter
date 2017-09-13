@@ -1,7 +1,5 @@
 package org.uam.eps.modular.constraints.dialog.wizard;
 
-import java.util.Random;
-
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
@@ -80,7 +78,7 @@ public class ConstraintDefinitionPage extends WizardPage{
 	    eGlobalColumn.getColumn().setWidth(100);
 	    eGlobalColumn.getColumn().setText("Constraint Definition");
 	    eGlobalColumn.setLabelProvider(new ConstraintDefinitionColumnLabelProvider());
-	    eGlobalColumn.setEditingSupport(new ConstraintDefinitionEditingProvider(viewer));
+	    eGlobalColumn.setEditingSupport(new ConstraintDefinitionEditingProvider(viewer,metaModel.getList_classes()));
 	    	    
 	    TreeViewerColumn eClassColumn = new TreeViewerColumn(viewer, SWT.NONE);
 	    eClassColumn.getColumn().setWidth(90);
@@ -109,9 +107,6 @@ public class ConstraintDefinitionPage extends WizardPage{
             public void widgetSelected(SelectionEvent e) {
             	
             	Constraint newConstraint = ConstraintsFactory.eINSTANCE.createConstraint();
-            	Random randomGenerator = new Random();
-            	newConstraint.setEClass(metaModel.getList_classes().
-            			get(randomGenerator.nextInt(metaModel.getList_classes().size()))); 
             	newConstraint.setName("Constraint" + (constraints.getConstraints().size() + 1));
             	newConstraint.setStatement("");
                 constraints.getConstraints().add(newConstraint);

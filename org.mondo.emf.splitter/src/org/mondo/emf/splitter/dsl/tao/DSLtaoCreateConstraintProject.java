@@ -99,7 +99,7 @@ public class DSLtaoCreateConstraintProject implements IPatternImplementation {
 		
 		WizardConstraint wizard = new WizardConstraint(nemf);
 		
-		// find a resource mmgraph
+		// find a resource rtpat
 		URI mmConsURI = resourceURI.trimFileExtension().appendFileExtension("cons");
 		
 		boolean exist = new ExtensibleURIConverterImpl().exists(mmConsURI, null);

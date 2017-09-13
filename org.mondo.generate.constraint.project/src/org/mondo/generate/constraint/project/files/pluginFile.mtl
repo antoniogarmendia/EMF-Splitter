@@ -1,8 +1,8 @@
 [comment encoding = UTF-8 /]
-[module pluginFile('http://www.eclipse.org/emf/2002/Ecore')]
+[module pluginFile('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns')]
+[import org::mondo::generate::constraint::project::request::queries/]
 
-
-[template public generatePluginFile(anProjectName : String)]
+[template public generatePluginFile(anProjectName : String, anPatternInstance : PatternInstance)]
 
 [file ('plugin.xml',false, 'UTF-8')]
 <?xml version="1.0" encoding="UTF-8"?>
@@ -24,6 +24,22 @@
                   label="Execute EOL exp"
                   mnemonic="L"
                   style="push">
+			 <visibleWhen
+                     checkEnabled="true">
+                  <with
+                        variable="activeMenuSelection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           operator="and">
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+							  value="[anProjectName/].modular.[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/].ModularNature">							
+                        </test>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
          </menu>
       </menuContribution>

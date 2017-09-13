@@ -17,7 +17,7 @@ var ecoreUtil = emfTool.ecoreUtil;
 for (element in [c.element.name/].all.asSet()) {
 	var check = element.constraint();
 	if (check == false) {
-		result.add(Sequence{ecoreUtil.getURI(element).toString(),element.messasge()});		
+		result.add(Sequence{ecoreUtil.getURI(element).toString(),element.message()});		
 	}				
 }
 
@@ -27,7 +27,7 @@ operation [c.element.name/] constraint() : Boolean {
 	return [c.getStatement()/]
 }
 
-operation [c.element.name/] messasge() : String {
+operation [c.element.name/] message() : String {
 	return [c.getMessage()/]	
 }
 [/file]

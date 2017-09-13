@@ -42,8 +42,7 @@ public class WizardConstraint extends Wizard{
 		
 		// add pages to the wizard
 		addPage(patternPage);
-		addPage(definitionPage);
-		
+		addPage(definitionPage);		
 	}
 	
 	@Override

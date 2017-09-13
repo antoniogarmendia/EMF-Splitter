@@ -2,7 +2,10 @@ package org.uam.eps.modular.constraints.dialog.def.constraint.definition;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -15,9 +18,11 @@ import constraints.ConstraintDefinition;
 public class ConstraintDefinitionEditingProvider extends EditingSupport {
 
 	private ComboBoxCellEditor cellEditor;
+	private EList<EClass> eListClasses;
 	
-	public ConstraintDefinitionEditingProvider(ColumnViewer viewer) {
+	public ConstraintDefinitionEditingProvider(ColumnViewer viewer, EList<EClass> eList) {
 		super(viewer);			
+		this.eListClasses = eList;
 	}	
 
 	@Override
@@ -67,6 +72,14 @@ public class ConstraintDefinitionEditingProvider extends EditingSupport {
 			ConstraintDefinition constraintDef = ConstraintDefinition.get(index);
 			if (constraintDef.equals(ConstraintDefinition.GLOBAL))
 				constraint.setEClass(null);
+			else {
+				if (constraint.getEClass() == null) {
+					Random randomGenerator = new Random();
+					constraint.setEClass(this.eListClasses.
+	            			get(randomGenerator.nextInt(this.eListClasses.size()))); 
+				}
+			}
+			
 			constraint.setDefinition(constraintDef);
 			getViewer().update(element, null);
 		}			

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -22,13 +23,19 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.BasicMonitor;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.PreferenceConstants;
 import org.mondo.generate.constraint.project.main.WorkflowConstraintProject;
 
+import runtimePatterns.PatternInstance;
+import runtimePatterns.PatternInstances;
 import splitterLibrary.impl.CreateEclipseProjectImpl;
 
 public class CreateConstraintProject extends CreateEclipseProjectImpl{
@@ -139,10 +146,11 @@ public class CreateConstraintProject extends CreateEclipseProjectImpl{
 		String current_plug_path = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
 		File targetFolder = new File(current_plug_path + '/' + project.getName() + "/");
 		
-		final List<String> generatorargs = new ArrayList<String>();
+		final List<Object> generatorargs = new ArrayList<Object>();
 		generatorargs.add(this.currentProjectName);	
 		generatorargs.add(new File(consURI).getName());
 		generatorargs.add(this.pathEcore);
+		generatorargs.add(this.getModularPattern());
 		
 		try {
 			WorkflowConstraintProject generateAllFiles = new WorkflowConstraintProject(getModel(), targetFolder, generatorargs);
@@ -152,6 +160,25 @@ public class CreateConstraintProject extends CreateEclipseProjectImpl{
 			
 			e.printStackTrace();
 		}	
+	}
+	
+	private PatternInstance getModularPattern() {
+		
+		URI modularUri = URI.createFileURI(consURI);
+		modularUri = modularUri.trimFileExtension().appendFileExtension("rtpat");
+		ResourceSet reset = new ResourceSetImpl();
+		Resource res = reset.getResource(modularUri,true);
+		
+		PatternInstances instances = (PatternInstances) res.getContents().get(0);
+		
+		Iterator<PatternInstance> itPatterns = instances.getAppliedPatterns().iterator();
+		while (itPatterns.hasNext()) {
+			PatternInstance patternInstance = (PatternInstance) itPatterns.next();
+			if (patternInstance.getIdent().equals("Modularity"))
+				return patternInstance;
+		}
+		
+		return null;
 	}
 
 	protected void CreateAllPackages(IJavaProject javaproc) {

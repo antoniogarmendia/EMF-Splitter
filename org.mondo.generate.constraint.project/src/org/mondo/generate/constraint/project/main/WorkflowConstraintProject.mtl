@@ -15,12 +15,13 @@
 [import org::mondo::generate::constraint::project::files::dialog::constraintResourceMarkerFile /]
 [import org::mondo::generate::constraint::project::files::builder::constraintIncrementalProjectBuilderFile /]
 
-[template public WorkflowConstraintProject(anPatternInstance : PatternInstance, anProjectName : String, constraintName : String, pathEcore : String)]
+[template public WorkflowConstraintProject(anPatternInstance : PatternInstance, anProjectName : String, constraintName : String, pathEcore : String
+	,modularPatternInstance : PatternInstance)]
 [comment @main /]	
 	
 [generateActivatorFile(anProjectName)/]
 [generateManifestFile(anProjectName, anPatternInstance)/]	
-[generatePluginFile(anProjectName)/]
+[generatePluginFile(anProjectName,modularPatternInstance)/]
 
 [generateconstraintFiles(anPatternInstance)/]
 
