@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -24,19 +25,29 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.BasicMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.PreferenceConstants;
 import org.mondo.generate.constraint.project.main.WorkflowConstraintProject;
 
+import dataStructureContain.ContainStructure;
+import dataStructureContain.PackageUnit;
+import dataStructureContain.impl.DataStructureContainFactoryImpl;
+import dslHeuristicVisualization.HeuristicStrategy;
+import dslHeuristicVisualization.impl.DslHeuristicVisualizationFactoryImpl;
+import runtimePatterns.ClassRoleInstance;
 import runtimePatterns.PatternInstance;
 import runtimePatterns.PatternInstances;
+import splitterLibrary.EcoreEMF;
 import splitterLibrary.impl.CreateEclipseProjectImpl;
+import splitterLibrary.impl.SplitterLibraryFactoryImpl;
 
 public class CreateConstraintProject extends CreateEclipseProjectImpl{
 	
@@ -46,7 +57,7 @@ public class CreateConstraintProject extends CreateEclipseProjectImpl{
 	private EObject model;
 	private String consURI;
 	private String pathEcore;
-	
+		
 	public CreateConstraintProject (String anProjectName, IProgressMonitor anMonitor, String consURI, String pathEcore) {
 		
 		super();
@@ -67,7 +78,7 @@ public class CreateConstraintProject extends CreateEclipseProjectImpl{
 			this.isMavenProject = false;
 			this.model = null;
 			this.consURI = consURI;
-			this.pathEcore = pathEcore;
+			this.pathEcore = pathEcore;			
 			
 		} catch (IOException e) {
 			
@@ -128,19 +139,35 @@ public class CreateConstraintProject extends CreateEclipseProjectImpl{
 	
 	protected void copyModelCons() {
 		
-		File consFile = new File(consURI);
-		File newConsFile = new File(project.getLocation().append("constraints/").toString());
-			
+		ResourceSet reset = new ResourceSetImpl();
+		ResourceSet newReset = new ResourceSetImpl();
+		
+		Resource resource = reset.getResource(URI.createURI("file:/" + consURI), true);
+		Resource newResource = newReset.createResource(URI.createURI("file:/" + project.getLocation().append("constraints/" + resource.getURI().lastSegment()).toString()));
+		
+		Copier copier = new Copier();
+		Collection<EObject> results = copier.copyAll(resource.getContents());
+		copier.copyReferences();
+		
+		newResource.getContents().addAll(results);
+		
 		try {
-			FileUtils.copyFileToDirectory(consFile, newConsFile);
-			
+			newResource.save(null);
 		} catch (IOException e) {
 			
 			e.printStackTrace();
-		}	
+		}		
+		System.out.println("Copy");
 	}
 
 	protected void generateFiles() {
+		
+		/*
+		 * Get the data of what are the classes inside the package and the units.
+		 * */
+		PatternInstance modularPattern = this.getModularPattern();
+		
+		ContainStructure containsStructure = getUnitPackageContainsStructure(modularPattern);
 		
 		//Get Workspace Path
 		String current_plug_path = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
@@ -151,6 +178,8 @@ public class CreateConstraintProject extends CreateEclipseProjectImpl{
 		generatorargs.add(new File(consURI).getName());
 		generatorargs.add(this.pathEcore);
 		generatorargs.add(this.getModularPattern());
+		generatorargs.add(containsStructure);
+		generatorargs.add(this.getGenModel(modularPattern));
 		
 		try {
 			WorkflowConstraintProject generateAllFiles = new WorkflowConstraintProject(getModel(), targetFolder, generatorargs);
@@ -250,5 +279,74 @@ public class CreateConstraintProject extends CreateEclipseProjectImpl{
 		return successNotifications;
 	}
 	
-
+	private ContainStructure getUnitPackageContainsStructure(PatternInstance modularPattern) {
+				
+		Resource res = modularPattern.getClassInstances().get(0).getElement().eResource();
+		EcoreEMF nemf = SplitterLibraryFactoryImpl.eINSTANCE.createEcoreEMF();		
+		nemf.setRs(res);
+		
+		HeuristicStrategy heur = DslHeuristicVisualizationFactoryImpl.eINSTANCE.createHeuristicStrategy();
+		heur.setNemf(nemf);
+		heur.ExecuteDirectPathMatrix();
+				
+		ContainStructure containsStructure = DataStructureContainFactoryImpl.eINSTANCE.createContainStructure();
+		Iterator<ClassRoleInstance> itClassInstances = modularPattern.getClassInstances().iterator();
+		while (itClassInstances.hasNext()) {
+			ClassRoleInstance classRoleInstance = (ClassRoleInstance) itClassInstances.next();
+			Iterator<EClass> itRef = classRoleInstance.getRole().getRef().iterator();
+			while (itRef.hasNext()) {
+				EClass eClass = (EClass) itRef.next();
+				if (eClass.getName().equals("Package") || eClass.getName().equals("Unit")) {
+					EClass packUnit = classRoleInstance.getElement();
+					PackageUnit containClasses = DataStructureContainFactoryImpl.eINSTANCE.createPackageUnit();
+					if (eClass.getName().equals("Package"))
+						containClasses.setUnit(false);
+					containClasses.setAnEClass(packUnit);
+					int index = heur.getNemf().getList_classes().indexOf(packUnit);
+					
+					EList<Boolean> listContains = heur.getEcoreContainment().getPathMatrix().get(index);
+					for (int i = 0; i < listContains.size(); i++) {
+						Boolean containClass = (Boolean) listContains.get(i);
+						if (containClass == true) {
+							EClass containEClass = heur.getNemf().getList_classes().get(i);
+							if (!containEClass.equals(packUnit))
+								containClasses.getContains().add(containEClass);						
+						}				
+					}
+					addEAllSuperTypes(containClasses);
+					containsStructure.getPackagesUnits().add(containClasses);
+				}				
+			}		
+		}		
+		return containsStructure;		
+	}
+	
+	/*
+	 * Add the Super Types EClasses
+	 * */	
+	private void addEAllSuperTypes(PackageUnit containClasses) {
+		
+		EList<EClass> superTypes = new BasicEList<EClass>();
+		Iterator<EClass> itContainClasses = containClasses.getContains().iterator();
+		while (itContainClasses.hasNext()) {
+			EClass eClass = (EClass) itContainClasses.next();
+			Iterator<EClass> itOfEAllSuperTypes = eClass.getEAllSuperTypes().iterator();
+			while (itOfEAllSuperTypes.hasNext()) {
+				EClass superType = (EClass) itOfEAllSuperTypes.next();
+				if (containClasses.getContains().indexOf(superType) == -1 && superTypes.indexOf(superType) == -1) {
+					superTypes.add(superType);
+				}				
+			}
+		}
+		
+		// add to the contain classes list
+		containClasses.getContains().addAll(superTypes);		
+	}
+	
+	public String getGenModel(PatternInstance modularPattern) {
+		
+		String rtpatFilePath = modularPattern.getClassInstances().get(0).getElement().eResource().getURI().toFileString();
+		return rtpatFilePath.substring(0, rtpatFilePath.lastIndexOf('.')).concat(".genmodel");
+	} 
+	
 }

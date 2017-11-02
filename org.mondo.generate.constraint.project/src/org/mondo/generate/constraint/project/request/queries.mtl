@@ -1,5 +1,6 @@
 [comment encoding = UTF-8 /]
-[module queries('http://mondo.org/runtimePatterns', 'http://www.eclipse.org/emf/2002/Ecore')]
+[module queries('http://mondo.org/runtimePatterns', 'http://www.eclipse.org/emf/2002/Ecore',
+	'http://miso.org/dataStructureContain', 'http://www.eclipse.org/emf/2002/GenModel')]
 
 [query public getName (aClassRoleInstance : ClassRoleInstance) : String = 
 		aClassRoleInstance.featureInstances->select(feat : FeatureRoleInstance | feat.oclIsKindOf(InstanceFeatureRoleInstance))->
@@ -31,4 +32,103 @@
 											 ->select(anEClass : EClass | anEClass.name = anClassName)
 											 ->asSequence()->size()>0)/]
 
+[query public getClassContainsName(packUnit : PackageUnit) : 
+		String = if (packUnit.unit = true) then
+					'Unit' + packUnit.anEClass.name.toString().toLowerCase().toUpperFirst()
+					else 
+						'Package' + packUnit.anEClass.name.toString().toLowerCase().toUpperFirst()
+						endif					
+	/]
+
+[comment Load GenModel /]
+[query public LoadGenModel(genModelPath : String, eResource : EResource): EObject = 
+		invoke('org.mondo.generate.constraint.project.createProject.LibraryConstraint', 
+				'Load(java.lang.String,org.eclipse.emf.ecore.resource.Resource)',Sequence{genModelPath,eResource}).oclAsType(EObject) /]
+
+[query public generateEClassImportBasePackage(anEClass : EClassifier) :
+				String = invoke('org.mondo.generate.constraint.project.createProject.LibraryConstraint', 
+				'generateEClassImportBasePackage(org.eclipse.emf.ecore.EClassifier)',Sequence{anEClass}).oclAsType(String)/]
+
+[query public generateEClassImport(anEClass : EClassifier) :
+				String = invoke('org.mondo.generate.constraint.project.createProject.LibraryConstraint', 
+				'generateEClassImport(org.eclipse.emf.ecore.EClassifier)',Sequence{anEClass}).oclAsType(String)/]
+
+[query public getGenClassFromEClass (anEClass : EClass, anEObjectGenModel : GenModel) :
+		  GenClass = anEObjectGenModel.genPackages->asSequence()				
+							->union(getClosureGenPackages(anEObjectGenModel.genPackages->asSequence()))
+							->collect(anGenPackage : GenPackage | anGenPackage.genClasses)->asSet()
+							->select(anGenClass : GenClass | anGenClass.ecoreClass.name.equalsIgnoreCase(anEClass.name))
+							->asSequence()->first()								
+	/]
+
+	[query public getClosureGenPackages(genPackages : Sequence(GenPackage)) : 
+		  Sequence(GenPackage) = genPackages->closure(anPackage : GenPackage | anPackage.nestedGenPackages)
+							->flatten()->asSequence()
+	/]	
+
+[query public generateEClassImportFactoryImpl(anEClass : EClass) :
+				String = invoke('org.mondo.generate.constraint.project.createProject.LibraryConstraint', 
+				'generateEClassImportFactoryImpl(org.eclipse.emf.ecore.EClass)',Sequence{anEClass}).oclAsType(String)/]
+
+[query public getRootPackageString(anEClass : EClass) :
+				String = invoke('org.mondo.generate.constraint.project.createProject.LibraryConstraint', 
+				'getRootPackageString(org.eclipse.emf.ecore.EClass)',Sequence{anEClass}).oclAsType(String)/]
+
+[query public getRootFactoryClass (genPackage : GenPackage, anEObjectGenModel : GenModel, anEClass : EClass) :
+				String =  getRootFactoryImport(genPackage, anEObjectGenModel, anEClass).toString().substring(1, 
+							getRootFactoryImport(genPackage, anEObjectGenModel, anEClass).toString().index('.') - 1)				
+	/]
+
+[query public getRootFactoryImport (genPackage : GenPackage, anEObjectGenModel : GenModel, anEClass : EClass) :
+				String = if (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = true and
+								genPackage.basePackage->isEmpty() = false) then
+						    genPackage.basePackage.concat('.' + generateEClassImportFactoryImpl(anEClass))
+							else if (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = false and 
+								genPackage.basePackage->isEmpty() = false) then
+								genPackage.basePackage.concat('.' + anEClass.eContainer().oclAsType(EPackage).name).
+									concat('.impl.').concat(genPackage.prefix.concat('FactoryImpl'))
+								else if (anEObjectGenModel.genPackages.classPackageSuffix->isEmpty() = true and 
+										genPackage.basePackage->isEmpty() = true) then
+											generateEClassImportFactoryImpl(anEClass)
+										else
+										 getRootPackageString(anEClass).toString().concat('.' + 
+											anEObjectGenModel.genPackages->first().classPackageSuffix + '.' + genPackage.prefix.concat('FactoryImpl'))
+									endif
+								endif
+							endif			
+	/]
+
+[query public Get_FileClassRoleInstance(anPatternInstance : PatternInstance) : 
+			Sequence(ClassRoleInstance) = anPatternInstance.GetClassRoleIntancebyName('Unit') /]
+
+[query public Get_FolderClassRoleInstance(anPatternInstance : PatternInstance) : 
+			Sequence(ClassRoleInstance) = anPatternInstance.GetClassRoleIntancebyName('Package')->asSequence() /]
+
+[query public Get_ClassRoleInstance_EAttribute(anClassRoleInstance : ClassRoleInstance,anAttributeName : EString) : 
+			String = if(ExistGet_ClassRoleInstance_EAttribute(anClassRoleInstance, anAttributeName)->size() > 0) then
+						if (ExistGet_ClassRoleInstance_EAttribute(anClassRoleInstance, anAttributeName)->first().oclAsType(InstanceFeatureRoleInstance)->isEmpty() = true) then 
+								'null' else
+							ExistGet_ClassRoleInstance_EAttribute(anClassRoleInstance, anAttributeName)->first().oclAsType(InstanceFeatureRoleInstance).value.toString()
+						endif
+					 else
+						'null'
+					endif
+					/]
+
+[query public ExistGet_ClassRoleInstance_EAttribute (anClassRoleInstance : ClassRoleInstance,anAttributeName : EString) : 
+
+		Sequence(FeatureRoleInstance) = if(anClassRoleInstance.featureInstances->asSequence()
+					 ->select(anFeatureRoleInstance : FeatureRoleInstance | anFeatureRoleInstance.oclIsKindOf(InstanceFeatureRoleInstance))
+					 ->select(anInstanceFeatureRoleInstance : FeatureRoleInstance |
+					 anInstanceFeatureRoleInstance.oclAsType(InstanceFeatureRoleInstance).role.ref->select(anEAttribute : EAttribute |
+					 anEAttribute.name=anAttributeName)->size()>0)->size() <= 0) then
+							Sequence(FeatureRoleInstance){}
+					 else
+						 anClassRoleInstance.featureInstances->asSequence()
+						 ->select(anFeatureRoleInstance : FeatureRoleInstance | anFeatureRoleInstance.oclIsKindOf(InstanceFeatureRoleInstance))
+						 ->select(anInstanceFeatureRoleInstance : FeatureRoleInstance |
+						 anInstanceFeatureRoleInstance.oclAsType(InstanceFeatureRoleInstance).role.ref->select(anEAttribute : EAttribute |
+						 anEAttribute.name=anAttributeName)->size()>0)
+					 endif					 
+					/]
 

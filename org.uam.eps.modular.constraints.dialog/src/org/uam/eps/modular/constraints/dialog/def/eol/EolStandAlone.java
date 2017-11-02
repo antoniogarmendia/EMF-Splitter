@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.IEolModule;
+import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.IModel;
 
 public class EolStandAlone extends EpsilonStandAlone{
@@ -62,6 +63,11 @@ public class EolStandAlone extends EpsilonStandAlone{
 		List<IModel> models = new ArrayList<IModel>();
 		models.add(createEmfModel("Model", true, true));		
 		return models;
-	}	
+	}
+	
+	public void addParameters(List<Variable> parameters) {
+		
+		this.parameters = parameters;	
+	}
 
 }

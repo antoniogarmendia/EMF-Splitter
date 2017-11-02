@@ -9,48 +9,111 @@ package [anProjectName/].[getProperty('prefix_name')/].builder;
 
 import java.util.Map;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.mondo.generate.modular.project.ext.IModularBuilder;
 
 public class ConstraintIncrementalProjectBuilder implements IModularBuilder {
+	
+	private final ConstraintScopeCategorizer categorizer = new ConstraintScopeCategorizer();
+	
+	private final ExecuteEOLConstraint executeConstraint = new ExecuteEOLConstraint();
 
+	
 	@Override
 	public IProject['['/]] build(int kind, Map<String, String> args, IncrementalProjectBuilder builder, IProgressMonitor monitor) {
 		
-		System.out.println("Custom Constraint Builder triggered");
-		
-		switch (kind) {
-		
-		case IncrementalProjectBuilder.FULL_BUILD:
-			fullBuild(monitor);
-			break;
-		
-		case IncrementalProjectBuilder.INCREMENTAL_BUILD:
-			incrementalBuild(builder.getDelta(builder.getProject()), monitor);
-			break;	
-			
-		case IncrementalProjectBuilder.AUTO_BUILD:
-			
-			break;			
-		default:
-			break;
-		}		
+		if (kind == IncrementalProjectBuilder.FULL_BUILD) {
+			fullBuild(builder.getProject(),monitor);
+	      } else {
+	         IResourceDelta delta = builder.getDelta(builder.getProject());	        		 
+	         if (delta == null) {
+	        	 fullBuild(builder.getProject(),monitor);
+	         } else {
+	        	 incrementalBuild(delta, monitor);
+	         }
+	      }
+	    
 		return null;
 	}
 
-	private void fullBuild(IProgressMonitor monitor) {
+	private void fullBuild(IProject iProject,IProgressMonitor monitor) {
 		
+		try {
+			 iProject.accept(new IResourceVisitor() {
+				
+				@Override
+				public boolean visit(IResource resource) throws CoreException {
+										
+					executeResource(resource);					
+					return true; //visit children too
+				}
+			});
+	      }
+		 catch (CoreException e) { }
 		System.out.println("Full Build");
 	}	
 
 	private void incrementalBuild(IResourceDelta delta, final IProgressMonitor monitor) {
 		
+		try {
+			
+			/*
+			 * The same as full build, but using delta.
+			 * */
+			
+			delta.accept(new IResourceDeltaVisitor() {
+				
+				@Override
+				public boolean visit(IResourceDelta delta) throws CoreException {
+					
+					IResource deltaResource = delta.getResource();	
+					if (delta.getKind() > 0 && delta.getKind() <= 4) {
+						IResource resource = null;
+						if (deltaResource instanceof IProject) {
+							resource = ((IProject) deltaResource).findMember(deltaResource.getName() + ".xmi");						
+						} else if (deltaResource instanceof IFolder) {
+							resource = ((IFolder) deltaResource).findMember(deltaResource.getName() + ".xmi");
+						} else 
+							resource = deltaResource;
+						
+						if (categorizer.isProject(deltaResource) == true || categorizer.isPackage(deltaResource) == true)	
+							return true;
+						else
+							executeResource(resource);					
+						
+						// do not visit the children in this case
+						System.out.println(deltaResource.getFullPath() + "--" + resource.getFullPath() + "changed");
+					}
+					return true; 					
+				}
+			});
+		} catch (CoreException e) {			
+			e.printStackTrace();
+		}		
 		System.out.println("Incremental Build");
 	}
 
+	private void executeResource(IResource resource) {
+		
+		if (categorizer.isProject(resource) == true)
+			executeConstraint.executeGlobalQueries(resource);
+		else if (categorizer.isRootPackage(resource) == true) {
+			executeConstraint.executeRootPackageQueries(resource);
+			executeConstraint.executePackageQueries(resource);						
+		} else if (categorizer.isPackage(resource) == true)
+			executeConstraint.executePackageQueries(resource);
+		else if (categorizer.isUnit(resource) == true)
+			executeConstraint.executeUnitQueries(resource);
+		
+	}
 }
 
 [/file]

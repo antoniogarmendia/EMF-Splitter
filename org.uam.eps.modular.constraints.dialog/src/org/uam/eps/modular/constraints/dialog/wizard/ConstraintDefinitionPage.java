@@ -16,10 +16,10 @@ import org.uam.eps.modular.constraints.dialog.def.ConstraintAllActionDialog;
 import org.uam.eps.modular.constraints.dialog.def.ConstraintTreeContentProvider;
 import org.uam.eps.modular.constraints.dialog.def.constraint.definition.ConstraintDefinitionColumnLabelProvider;
 import org.uam.eps.modular.constraints.dialog.def.constraint.definition.ConstraintDefinitionEditingProvider;
+import org.uam.eps.modular.constraints.dialog.def.context.eclass.EClassColumnLabelProvider;
+import org.uam.eps.modular.constraints.dialog.def.context.eclass.EClassEditingProvider;
 import org.uam.eps.modular.constraints.dialog.def.contraint.ConstraintColumnLabelProvider;
 import org.uam.eps.modular.constraints.dialog.def.contraint.ConstraintEditingProvider;
-import org.uam.eps.modular.constraints.dialog.def.eclass.EClassColumnLabelProvider;
-import org.uam.eps.modular.constraints.dialog.def.eclass.EClassEditingProvider;
 import org.uam.eps.modular.constraints.dialog.def.message.MessageColumnLabelProvider;
 import org.uam.eps.modular.constraints.dialog.def.message.MessageEditingProvider;
 import org.uam.eps.modular.constraints.dialog.def.name.NameColumnLabelProvider;
@@ -33,7 +33,7 @@ import splitterLibrary.EcoreEMF;
 public class ConstraintDefinitionPage extends WizardPage{
 
 	private MetamodelConstraint constraints;
-	private EcoreEMF metaModel;
+	private EcoreEMF metaModel; //BasicEList
 	
 	protected ConstraintDefinitionPage(String pageName, MetamodelConstraint constraints, EcoreEMF nemf) {
 		
@@ -51,9 +51,8 @@ public class ConstraintDefinitionPage extends WizardPage{
 		
 		GridData containerData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		containerData.widthHint = 400;
-		containerData.heightHint = 250;
-		containerData.minimumHeight = 250;
-	    container.setLayoutData(containerData);
+		containerData.heightHint = 280;
+		container.setLayoutData(containerData);
 	    
 	    GridLayout containerLayout = new GridLayout();
 	    containerLayout.numColumns = 1;
@@ -75,14 +74,14 @@ public class ConstraintDefinitionPage extends WizardPage{
 	    eNameColumn.setEditingSupport(new NameEditingProvider(viewer));
 	    
 	    TreeViewerColumn eGlobalColumn = new TreeViewerColumn(viewer, SWT.NONE);
-	    eGlobalColumn.getColumn().setWidth(100);
-	    eGlobalColumn.getColumn().setText("Constraint Definition");
+	    eGlobalColumn.getColumn().setWidth(110);
+	    eGlobalColumn.getColumn().setText("Constraint Scope");
 	    eGlobalColumn.setLabelProvider(new ConstraintDefinitionColumnLabelProvider());
 	    eGlobalColumn.setEditingSupport(new ConstraintDefinitionEditingProvider(viewer,metaModel.getList_classes()));
 	    	    
 	    TreeViewerColumn eClassColumn = new TreeViewerColumn(viewer, SWT.NONE);
 	    eClassColumn.getColumn().setWidth(90);
-	    eClassColumn.getColumn().setText("EClass");
+	    eClassColumn.getColumn().setText("Context");
 	    eClassColumn.setLabelProvider(new EClassColumnLabelProvider());
 	    eClassColumn.setEditingSupport(new EClassEditingProvider(viewer,metaModel.getList_classes()));
 	    

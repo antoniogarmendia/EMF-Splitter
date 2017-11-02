@@ -28,6 +28,8 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.epsilon.eol.types.EolSequence;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -251,17 +253,22 @@ public class ConstraintDialog extends Dialog{
 						EolSequence<?> tuple = (EolSequence<?>) tupleObject;
 						String uriObject = (String) tuple.get(0);
 						String str = uriObject.substring(0, uriObject.lastIndexOf('#'));
+						if (str.startsWith("file") == true) {
+							str = fileUriToPlatform(uriObject);							
+						}
 						String eObjectUri = uriObject.substring(uriObject.lastIndexOf('#'), uriObject.length());
 						String errorMessage = (String) tuple.get(1);
 						org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createURI(str);
-						IFile resource = null;
-						resource = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true)));
-						if (!resource.exists()) {
-						
-							File file = new File(URI.create(str));
-							resource = getIFileFromFile(file);
-						}						
-						ConstraintResourceMarker resourceMarker = new ConstraintResourceMarker(resource, eObjectUri, constraintName,errorMessage);
+						String lastFrargment = uri.trimFileExtension().lastSegment();
+						String lastLastFragment =  uri.trimFileExtension().trimSegments(1).lastSegment();
+						IResource iResource = null;
+						if (lastFrargment.equals(lastLastFragment)) {
+							 uri = uri.trimSegments(1);
+							 iResource = ResourcesPlugin.getWorkspace().getRoot().getFolder(new Path(uri.toPlatformString(true)));
+						} else													
+							iResource = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true)));
+												
+						ConstraintResourceMarker resourceMarker = new ConstraintResourceMarker(iResource, eObjectUri, constraintName,errorMessage);
 						new ConstraintMarkerManager(resourceMarker).addErrorMarker();						
 					}
 				}				
@@ -270,6 +277,16 @@ public class ConstraintDialog extends Dialog{
 		}
 		
 		return "The result is not an EOLSequence";
+	}
+
+	private String fileUriToPlatform(String fileURI) {
+		
+		URIConverter converter = new ExtensibleURIConverterImpl();
+		org.eclipse.emf.common.util.URI platformURI = org.eclipse.emf.common.util.URI.createPlatformResourceURI("/", false);
+		org.eclipse.emf.common.util.URI fileUri = org.eclipse.emf.common.util.URI.createFileURI(ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString() + File.separator);
+		converter.getURIMap().put(fileUri, platformURI);
+		org.eclipse.emf.common.util.URI afileURI = converter.normalize(org.eclipse.emf.common.util.URI.createURI(fileURI));
+		return afileURI.toString();
 	}
 
 	private void deleteMarker(IContainer iContainer, String constraintName) {

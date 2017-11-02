@@ -57,6 +57,7 @@ public abstract class EpsilonStandAlone {
 		}
 		
 		for (Variable parameter : parameters) {
+			//module.getContext().getFrameStack().putGlobal(parameter);
 			module.getContext().getFrameStack().put(parameter);
 		}
 		

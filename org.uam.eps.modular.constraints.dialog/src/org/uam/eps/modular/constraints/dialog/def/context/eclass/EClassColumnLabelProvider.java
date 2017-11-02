@@ -1,4 +1,4 @@
-package org.uam.eps.modular.constraints.dialog.def.eclass;
+package org.uam.eps.modular.constraints.dialog.def.context.eclass;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -15,7 +15,7 @@ public class EClassColumnLabelProvider extends ColumnLabelProvider {
 			if (eClass != null)			
 				return ((Constraint) element).getEClass().getName();
 			else
-				return "";
+				return "-Not defined-";
 		}
 		
 		return super.getText(element);

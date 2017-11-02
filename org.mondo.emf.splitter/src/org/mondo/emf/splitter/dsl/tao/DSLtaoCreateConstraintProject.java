@@ -64,11 +64,12 @@ public class DSLtaoCreateConstraintProject implements IPatternImplementation {
 					e.printStackTrace();
 		}
 		//END		
-		
+			
 		// file uri of the constraint model
 		String consURI = res.getLocation().removeFileExtension().addFileExtension("cons").toString();
 				
-		CreateConstraintProject createConstraint = new CreateConstraintProject(currentProject.getName(), new NullProgressMonitor(), consURI,pathEcore);
+		CreateConstraintProject createConstraint = new CreateConstraintProject(currentProject.getName(),
+										new NullProgressMonitor(), consURI,pathEcore);
 		createConstraint.setModel(pattern);
 		createConstraint.CreateProject();		
 		

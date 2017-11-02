@@ -285,8 +285,7 @@ public class EcoreEMFImpl extends MinimalEObjectImpl.Container implements EcoreE
 	 * @generated NOT
 	 */
 	public IFile GetIFile() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
+		
 		if(fileuri!=null)
 		{
 			IWorkspace workspace= ResourcesPlugin.getWorkspace(); 
@@ -302,8 +301,7 @@ public class EcoreEMFImpl extends MinimalEObjectImpl.Container implements EcoreE
 	 * @generated NOT
 	 */
 	public EPackage GetRootPackage() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
+		
 		if(packMetamodel==null){
 								
 			EList<EObject> list_packages = getRs().getContents();

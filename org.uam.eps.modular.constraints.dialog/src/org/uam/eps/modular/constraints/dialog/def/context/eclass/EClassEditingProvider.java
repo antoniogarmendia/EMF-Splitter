@@ -1,4 +1,4 @@
-package org.uam.eps.modular.constraints.dialog.def.eclass;
+package org.uam.eps.modular.constraints.dialog.def.context.eclass;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -9,7 +9,6 @@ import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 import constraints.Constraint;
 
@@ -17,6 +16,7 @@ public class EClassEditingProvider extends EditingSupport {
 
 	private DialogCellEditor dialogSelectEClass; 
 	private EList<EClass> eListClasses;
+	private static final String notDefined = "-Not defined-";
 	
 	public EClassEditingProvider(ColumnViewer viewer, EList<EClass> eList) {
 		
@@ -32,13 +32,23 @@ public class EClassEditingProvider extends EditingSupport {
 			@Override
 			protected Object openDialogBox(Control cellEditorWindow) {
 				
-				ElementListSelectionDialog dialog = new ElementListSelectionDialog(cellEditorWindow.getShell(),
-						new EClassLabelProvider());
+				boolean isContextDefined = false;
+				if (element instanceof Constraint) {
+					EClass eClass =  ((Constraint) element).getEClass();
+					if (eClass != null)
+						isContextDefined = true;
+				}
+				
+				ContextElementListDialog dialog = new ContextElementListDialog(cellEditorWindow.getShell(),
+						new EClassLabelProvider(),isContextDefined);
 				dialog.setTitle("Select the Class");
 				dialog.setMessage("Select a String (* = any string, ? = any char):");
-				dialog.setElements(eListClasses.toArray());
-				
+				dialog.setElements(eListClasses.toArray());				
 				if (dialog.open() == Dialog.OK) {
+					
+					if (dialog.isContextDefined() == false) {
+						return "-Not defined-";
+					}	
 					
 					return dialog.getFirstResult();
 				}
@@ -54,24 +64,22 @@ public class EClassEditingProvider extends EditingSupport {
 	@Override
 	protected boolean canEdit(Object element) {
 		
-		if (element instanceof Constraint) {
-			
-			EClass eClass = ((Constraint) element).getEClass();
-			if (eClass == null)
-				return false;			
-		}	
 		return true;
 	}
 
 	@Override
 	protected Object getValue(Object element) {
 		
+		
 		if (element instanceof Constraint) {
 			EClass eClass =  ((Constraint) element).getEClass();
-			if (eClass != null)
-				return eClass.getName();
+			if (eClass != null) {
+				System.out.println("paso por aqui1");
+				System.out.println(eClass.getName());
+				return eClass.getName();				
+			}
 			else
-				return "";
+				return "-Not defined-";
 		}
 		
 		return null;
@@ -87,6 +95,12 @@ public class EClassEditingProvider extends EditingSupport {
 				if (value instanceof EClass) {
 					((Constraint) element).setEClass((EClass) value);
 					getViewer().update(element, null);
+				} else if (value instanceof String) {
+					String strValue = (String) value;
+					if (strValue.equals(notDefined)) {
+						((Constraint) element).setEClass(null);
+						getViewer().update(element, null);
+					}
 				}			
 			}			
 		}		

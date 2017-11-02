@@ -1,4 +1,4 @@
-package org.uam.eps.modular.constraints.dialog.def.eclass;
+package org.uam.eps.modular.constraints.dialog.def.context.eclass;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -35,7 +35,9 @@ public class EClassLabelProvider implements ILabelProvider {
 	@Override
 	public Image getImage(Object element) {
 		
-		return imageEClass;	
+		if (element instanceof EClass)
+			return imageEClass;
+		return null;
 	}
 
 	@Override
@@ -43,7 +45,7 @@ public class EClassLabelProvider implements ILabelProvider {
 		
 		if (element instanceof EClass) {
 			return ((EClass) element).getName();
-		}			
+		}
 		return "unknown";
 	}
 

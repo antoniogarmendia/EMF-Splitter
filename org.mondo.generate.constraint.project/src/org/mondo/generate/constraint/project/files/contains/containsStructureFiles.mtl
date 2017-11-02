@@ -1,0 +1,50 @@
+[comment encoding = UTF-8 /]
+[module containsStructureFiles('http://miso.org/dataStructureContain','http://www.eclipse.org/emf/2002/GenModel', 
+											'http://www.eclipse.org/emf/2002/Ecore')]
+[import org::mondo::generate::constraint::project::request::queries /]
+
+[template public generateconstraintFiles(anProjectName : String, structureContain : ContainStructure, anEObjectGenModel : GenModel)]
+
+[for(packUnit : PackageUnit | structureContain.packagesUnits)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/contains/').
+	concat(packUnit.getClassContainsName() + '.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].contains;
+
+import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+
+[let genPackage : GenPackage =  getGenClassFromEClass(packUnit.anEClass,anEObjectGenModel).eContainer().oclAsType(GenPackage) ]
+
+import [getRootFactoryClass(genPackage, anEObjectGenModel,packUnit.anEClass)/].[getRootFactoryClass(genPackage, anEObjectGenModel,packUnit.anEClass)/]Factory;
+
+
+public class [packUnit.getClassContainsName()/] {
+
+	public static final EClass getRoot() {
+		
+		return [getRootFactoryClass(genPackage, anEObjectGenModel,packUnit.anEClass)/]Factory.eINSTANCE.get[getRootFactoryClass(genPackage, anEObjectGenModel,packUnit.anEClass)/]Package().getSubsystem();	
+	}
+
+	public static final EList<EClass> listOfContains = ECollections.
+			
+			asEList(
+					[for (c : EClass | packUnit.contains)]
+						[getRootFactoryClass(genPackage, anEObjectGenModel,packUnit.anEClass)/]Factory.eINSTANCE.
+									get[getRootFactoryClass(genPackage, anEObjectGenModel,packUnit.anEClass)/]Package().
+								get[c.name/]()
+						[if (not (packUnit.contains->asSequence()->size() = i) )]
+							,
+						[/if]
+					[/for]				
+			);
+	
+}
+
+[/let]
+
+[/file]
+
+[/for]
+[/template]

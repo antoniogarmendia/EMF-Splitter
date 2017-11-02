@@ -1,0 +1,68 @@
+[comment encoding = UTF-8 /]
+[module constraintScopeCategorizerFile('http://www.eclipse.org/emf/2002/Ecore', 'http://mondo.org/runtimePatterns')]
+[import org::mondo::generate::constraint::project::request::queries /]
+
+
+[template public generateConstraintScopeCategorizerFile(anProjectName : String, pathEcore : String, modularPatternInstance : PatternInstance)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/builder/').concat('ConstraintScopeCategorizer.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].builder;
+
+import org.apache.commons.io.FilenameUtils;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+
+public class ConstraintScopeCategorizer {
+	
+	public ConstraintScopeCategorizer() {
+		
+	}
+
+	public boolean isProject(IResource resource) {		
+		IContainer container = resource.getParent();
+		if (container instanceof IProject) {
+			if (container.getName().equals(FilenameUtils.getBaseName(resource.getName())))
+				return true;
+		}		
+		return false;
+	}
+	
+	public boolean isRootPackage(IResource resource) {		
+		IContainer container = resource.getParent();
+		IContainer superContainer = container.getParent();
+		
+		if (superContainer instanceof IProject) {
+			if (container.getName().equals(FilenameUtils.getBaseName(resource.getName())) && resource.getFileExtension().equals("xmi"))			
+				return true;
+		}				
+		return false;
+	}
+	
+	public boolean isPackage(IResource resource) {		
+		IContainer container = resource.getParent();
+		if (container.getName().equals(FilenameUtils.getBaseName(resource.getName())) && resource.getFileExtension().equals("xmi"))
+			return true;
+		
+		return false;
+	}
+	
+	public boolean isUnit(IResource resource) {		
+		String extension = resource.getFileExtension();
+		if (extension != null) {
+		[for (c : ClassRoleInstance | Get_FileClassRoleInstance(modularPatternInstance))] 
+			[if (Get_FileClassRoleInstance(modularPatternInstance)->size() = i and Get_FileClassRoleInstance(modularPatternInstance)->size() > 1)]
+			else
+			[/if]
+			if (extension.equals("[c.Get_ClassRoleInstance_EAttribute('extension')/]"))
+				return true;
+		[/for]	
+			
+		}
+		return false;
+	}
+	
+}
+
+[/file]
+[/template]

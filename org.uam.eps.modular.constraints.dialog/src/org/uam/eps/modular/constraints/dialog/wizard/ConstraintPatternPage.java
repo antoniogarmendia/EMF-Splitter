@@ -32,7 +32,7 @@ public class ConstraintPatternPage extends WizardPage{
 		labelImage.setImage(imageConstraintPattern);
 		GridData gridImage = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridImage.widthHint = 200;
-		gridImage.heightHint = 250;
+		gridImage.heightHint = 280;
 		labelImage.setLayoutData(gridImage);		
 		
 		setControl(container);

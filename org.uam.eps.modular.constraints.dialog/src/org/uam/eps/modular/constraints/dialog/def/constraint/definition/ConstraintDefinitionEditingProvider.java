@@ -70,7 +70,8 @@ public class ConstraintDefinitionEditingProvider extends EditingSupport {
 			Constraint constraint = (Constraint) element;
 			Integer index = (Integer) value;
 			ConstraintDefinition constraintDef = ConstraintDefinition.get(index);
-			if (constraintDef.equals(ConstraintDefinition.GLOBAL))
+			if (constraintDef.equals(ConstraintDefinition.GLOBAL) || 
+				  constraintDef.equals(ConstraintDefinition.SAME_ROOT_PACKAGE))
 				constraint.setEClass(null);
 			else {
 				if (constraint.getEClass() == null) {

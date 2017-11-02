@@ -350,8 +350,6 @@ public class HeuristicStrategyImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated NOT
 	 */
 	public void ExecuteHeuristics() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
 		//Obtain Direct and Path Matrix
 		ExecuteDirectPathMatrix();
 		//Obtain the Root Element
