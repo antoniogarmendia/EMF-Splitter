@@ -14,7 +14,11 @@
 var result = Sequence{};
 var emfTool : new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
 var ecoreUtil = emfTool.ecoreUtil;
-for (element in [c.element.name/].all.asSet()) {
+var queryTool : new Native("org.miso.wind.turbine.cs.constraint.builder.ConstraintQueryTool");
+
+var listOfObjects = queryTool.getListToExecuteConstraint(Model.resource,"[c.element.name/]");
+
+for (element in listOfObjects) {
 	var check = element.constraint();
 	if (check == false) {
 		result.add(Sequence{ecoreUtil.getURI(element).toString(),element.message()});		

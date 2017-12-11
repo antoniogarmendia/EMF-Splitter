@@ -43,7 +43,11 @@ public class ConstraintMarkerManager {
 		marker.setAttribute(CONSTRAINT_NAME, this.resourceMarker.getConstraintName());
 		marker.setAttribute(IMarker.MESSAGE, this.resourceMarker.getErrorMessage());
 		marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-		marker.setAttribute(IMarker.LINE_NUMBER, line);
+		if (this.resourceMarker.getUriEObject() != null)
+			marker.setAttribute("URI_KEY", this.resourceMarker.getPlatformFile().concat(this.resourceMarker.getUriEObject()));
+		else
+			marker.setAttribute("URI_KEY", this.resourceMarker.getPlatformFile());
+		//marker.setAttribute(IMarker.LINE_NUMBER, line);
 		return marker;
 	}
 

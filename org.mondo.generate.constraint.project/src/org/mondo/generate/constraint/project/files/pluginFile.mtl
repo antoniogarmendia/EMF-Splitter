@@ -73,7 +73,14 @@
          point="org.miso.wind.turbine.cs.modular.wtcomponents.WTComponentsModularBuilders">
       <client
             class="[anProjectName/].[getProperty('prefix_name')/].builder.ConstraintIncrementalProjectBuilder"></client>
-   </extension> 	
+   </extension> 
+   <extension
+              point="org.eclipse.epsilon.common.dt.tool">
+           <tool
+                 class="[anProjectName/].[getProperty('prefix_name')/].builder.ConstraintQueryTool"
+                 defaultName="ConstraintQueryTool">
+           </tool>
+      </extension> 	
 </plugin>
 [/file]
 [/template]

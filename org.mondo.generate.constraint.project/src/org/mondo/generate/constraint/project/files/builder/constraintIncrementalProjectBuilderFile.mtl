@@ -74,23 +74,26 @@ public class ConstraintIncrementalProjectBuilder implements IModularBuilder {
 				@Override
 				public boolean visit(IResourceDelta delta) throws CoreException {
 					
-					IResource deltaResource = delta.getResource();	
-					if (delta.getKind() > 0 && delta.getKind() <= 4) {
-						IResource resource = null;
-						if (deltaResource instanceof IProject) {
-							resource = ((IProject) deltaResource).findMember(deltaResource.getName() + ".xmi");						
-						} else if (deltaResource instanceof IFolder) {
-							resource = ((IFolder) deltaResource).findMember(deltaResource.getName() + ".xmi");
-						} else 
-							resource = deltaResource;
-						
-						if (categorizer.isProject(deltaResource) == true || categorizer.isPackage(deltaResource) == true)	
-							return true;
-						else
-							executeResource(resource);					
-						
-						// do not visit the children in this case
-						System.out.println(deltaResource.getFullPath() + "--" + resource.getFullPath() + "changed");
+					if (!(delta.getKind() == IResourceDelta.REMOVED && delta.getMovedToPath() == null)) {
+
+						IResource deltaResource = delta.getResource();	
+						if (delta.getKind() > 0 && delta.getKind() <= 4) {
+							IResource resource = null;
+							if (deltaResource instanceof IProject) {
+								resource = ((IProject) deltaResource).findMember(deltaResource.getName() + ".xmi");						
+							} else if (deltaResource instanceof IFolder) {
+								resource = ((IFolder) deltaResource).findMember(deltaResource.getName() + ".xmi");
+							} else 
+								resource = deltaResource;
+							
+							if (categorizer.isProject(deltaResource) == true || categorizer.isPackage(deltaResource) == true)	
+								return true;
+							else
+								executeResource(resource);					
+							
+							// do not visit the children in this case
+							System.out.println(deltaResource.getFullPath() + "--" + resource.getFullPath() + "changed");
+						}
 					}
 					return true; 					
 				}

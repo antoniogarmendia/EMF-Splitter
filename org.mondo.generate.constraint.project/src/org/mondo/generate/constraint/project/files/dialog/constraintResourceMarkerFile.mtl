@@ -12,13 +12,16 @@ import org.eclipse.core.resources.IResource;
 public class ConstraintResourceMarker {
 	
 	private IResource resource;
+	private String platformFile;
 	private String uriEObject;
 	private String constraintName;
 	private String errorMessage;
 	
-	public ConstraintResourceMarker(IResource resource, String uriEObject, String constraintName, String errorMessage) {
+	public ConstraintResourceMarker(IResource resource, String uriEObject, String constraintName, String errorMessage, 
+										String platformFile) {
 		super();
 		this.resource = resource;
+		this.platformFile = platformFile;
 		this.uriEObject = uriEObject;
 		this.constraintName = constraintName;
 		this.errorMessage = errorMessage;
@@ -46,6 +49,12 @@ public class ConstraintResourceMarker {
 	}
 	public void setConstraintName(String constraintName) {
 		this.constraintName = constraintName;
+	}
+	public String getPlatformFile() {
+		return this.platformFile;
+	}
+	public void setPlatformFile(String platformFile) {
+		this.platformFile = platformFile;
 	}
 }
 

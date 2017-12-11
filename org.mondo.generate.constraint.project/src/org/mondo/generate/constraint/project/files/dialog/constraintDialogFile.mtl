@@ -7,30 +7,16 @@
 [file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/dialog/').concat('ConstraintDialog.java'),false, 'UTF-8')]
 package [anProjectName/].[getProperty('prefix_name')/].dialog;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URI;
 import java.util.Iterator;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.URIConverter;
-import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
-import org.eclipse.epsilon.eol.types.EolSequence;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
@@ -45,26 +31,26 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TreeItem;
+import [anProjectName/].[getProperty('prefix_name')/].builder.ConstraintScopeCategorizer;
+import [anProjectName/].[getProperty('prefix_name')/].builder.ExecuteEOLConstraint;
 import [anProjectName/].[getProperty('prefix_name')/].expression.NameExpressionColumnLabelProvider;
 import [anProjectName/].[getProperty('prefix_name')/].result.ResultColumnLabelProvider;
 import [anProjectName/].[getProperty('prefix_name')/].result.ResultEditingProvider;
-import org.uam.eps.modular.constraints.dialog.def.eol.EolStandAlone;
 
 import constraints.Constraint;
 import constraints.MetamodelConstraint;
+import constraints.ConstraintDefinition;
 
 public class ConstraintDialog extends Dialog{
 
-	private Resource resConstraint;	
-	private IContainer container;
-    private String modelURI;
+	private String modelURI;
 	
-	public ConstraintDialog(Shell parent, Resource res, String modelURI, IContainer container) {
+    private final ExecuteEOLConstraint executeConstraint = new ExecuteEOLConstraint();
+    
+	public ConstraintDialog(Shell parent,String modelURI) {
 		
 		super(parent);		
-		this.resConstraint = res;
-		this.modelURI = modelURI;
-		this.container = container;	
+		this.modelURI = modelURI;		
 	}
 	
 	@Override
@@ -150,169 +136,61 @@ public class ConstraintDialog extends Dialog{
         	@Override
         	public void widgetSelected(SelectionEvent e) {
         		
-        		try {
-        			// metamodel uri
-        			String projectMMString = ConstraintDialog.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString();
-        			IPath pathMM = new Path(projectMMString);
-        			pathMM = pathMM.removeLastSegments(1).append("[pathEcore/]");
-        			URI mmURI = URI.create(pathMM.toString());
-        			
-        			// global uri where are the models
-        			String currentEolString = ConstraintDialog.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString().
-							concat("constraints/");        			
-        			
-					Iterator<Constraint> itOfConstraints = getCheckedConstraint(viewer).iterator();
-					while (itOfConstraints.hasNext()) {
-						
-						Constraint constraint = (Constraint) itOfConstraints.next();
-						URI eolModule = null;
-						File tempFile = null;
-						URI modelUri = null;
-						if (constraint.getEClass() == null) {
-							// create the temp file
-							tempFile = createTempEolFile(constraint.getName(),constraint.getStatement());
-							//end 
-							eolModule = tempFile.toURI();
-							modelUri = URI.create(container.getProject().getLocationURI().toString().
-									concat("/" + container.getProject().getName() + ".xmi"));
-						} else {					
-							
-							String eolModuleString = currentEolString.concat(constraint.getName() + ".eol");
-							eolModule = URI.create(eolModuleString);
-							modelUri = URI.create("file:/" + modelURI);
-						}						
-						
-						EolStandAlone executeEolModule = new EolStandAlone(mmURI, eolModule,modelUri);
-						executeEolModule.execute();
-						if (constraint.getEClass() == null) {
-							tempFile.delete();
-							constraint.setResult(showResultGlobal(executeEolModule.getResult(), constraint, 
-									mmURI, modelUri, container.getProject()));
-							}
-						else
-							constraint.setResult(showResult(executeEolModule.getResult(),constraint.getName()));												
-						
-						viewer.update(constraint, null);
-					}	 					
+        		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(modelURI));
+        		ConstraintDefinition constraintDefinition = getCategoriser();
+        		Iterator<Constraint> itOfConstraints = getCheckedConstraint(viewer).iterator();
+				while (itOfConstraints.hasNext()) {
+					Constraint constraint = itOfConstraints.next();
+					boolean result = false;
+					if (constraintDefinition.equals(ConstraintDefinition.GLOBAL)) 
+						result = executeConstraint.executeQueries(constraint, file);
+					else if (constraintDefinition.equals(ConstraintDefinition.SAME_ROOT_PACKAGE) || 
+								constraintDefinition.equals(ConstraintDefinition.SAME_PACKAGE)) 
+						result = executeConstraint.executeQueriesCheckContext(constraint, file,false);
+					else if (constraintDefinition.equals(ConstraintDefinition.UNIT))
+						result = executeConstraint.executeQueriesCheckContext(constraint, file,true);
 					
-				} catch (Exception e1) {
-					
-					e1.printStackTrace();
-				}       		
+					if (result == true)
+						constraint.setResult("Successful");
+					else
+						constraint.setResult("Unsuccessful (See Problems View)");
+					viewer.update(constraint, null);
+				}				
         	}        	
 		});
 	    
-	    viewer.setInput(getConstraints());
+        org.eclipse.emf.common.util.URI asd = org.eclipse.emf.common.util.URI.createFileURI(modelURI);
+        ResourceSet reset = new ResourceSetImpl();
+        Resource res = reset.getResource(asd, true);
+        
+	    viewer.setInput(executeConstraint.getConstraints(res, getCategoriser()));
 	    
 		return contents;
+	}
+		
+		
+	private ConstraintDefinition getCategoriser() {
+		
+		ConstraintScopeCategorizer categoriser = new ConstraintScopeCategorizer();
+		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(this.modelURI));
+		
+		if (categoriser.isProject(file) == true)
+			return ConstraintDefinition.GLOBAL;
+		else if (categoriser.isRootPackage(file) == true)
+			return ConstraintDefinition.SAME_ROOT_PACKAGE;
+		else if (categoriser.isPackage(file) == true)
+			return ConstraintDefinition.SAME_PACKAGE;
+		return ConstraintDefinition.UNIT;
+	}
+	
+	private void checkedAllItemsWith(TreeViewer viewer,boolean checked) {
+		
+		TreeItem['['/]] items = viewer.getTree().getItems();  
+		for (int i = 0; i < items.length; i++) {
+			TreeItem item = items['['/]i];
+			item.setChecked(checked);			
+		}		
 	}	
-	
-	private String showResultGlobal(Object result, Constraint constraint, URI mmURI, URI modelUri, IProject iProject) throws Exception {		
-		
-		if (result instanceof Boolean) {
-			deleteMarker(iProject, constraint.getName());
-			Boolean bResult = (Boolean) result;
-			if (bResult == true)
-				return "Successful";
-			else {
-				File temp = createTempEolFile(constraint.getName() + "errorMessage" , constraint.getErrorMessage());
-				EolStandAlone executeEolModule = new EolStandAlone(mmURI, temp.toURI(),modelUri);
-				executeEolModule.execute();
-				ConstraintResourceMarker resourceMarker = new ConstraintResourceMarker(iProject, 
-						null, constraint.getName(),executeEolModule.getResult().toString());
-				new ConstraintMarkerManager(resourceMarker).addErrorMarker();
-				temp.delete();
-			}			
-		}
-		
-		return "Unsuccessful (See Problems View)";
-	}
-	
-	private File createTempEolFile(String name, String statement) throws IOException {
-		
-		File tempFile = File.createTempFile(name, ".eol");
-		BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
-		bw.write("return " + statement);
-		bw.close();
-		
-		return tempFile;		
-	}
-
-	private String showResult(Object result, String constraintName) { // works with EOLSequence
-		
-		if (result instanceof EolSequence<?>) {
-			EolSequence<?> sequence = (EolSequence<?>) result;
-			deleteMarker(this.container,constraintName);
-			if (sequence.size() == 0) 
-				return "Successful";
-			else {
-				Iterator<?> itContents = sequence.iterator();
-				while (itContents.hasNext()) {
-					Object tupleObject = (Object) itContents.next();
-					if (tupleObject instanceof EolSequence<?>) {
-						EolSequence<?> tuple = (EolSequence<?>) tupleObject;
-						String uriObject = (String) tuple.get(0);
-						String str = uriObject.substring(0, uriObject.lastIndexOf('#'));
-						if (str.startsWith("file") == true) {
-							str = fileUriToPlatform(uriObject);							
-						}
-						String eObjectUri = uriObject.substring(uriObject.lastIndexOf('#'), uriObject.length());
-						String errorMessage = (String) tuple.get(1);
-						org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createURI(str);
-						String lastFrargment = uri.trimFileExtension().lastSegment();
-						String lastLastFragment =  uri.trimFileExtension().trimSegments(1).lastSegment();
-						IResource iResource = null;
-						if (lastFrargment.equals(lastLastFragment)) {
-							 uri = uri.trimSegments(1);
-							 iResource = ResourcesPlugin.getWorkspace().getRoot().getFolder(new Path(uri.toPlatformString(true)));
-						} else													
-							iResource = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uri.toPlatformString(true)));
-												
-						ConstraintResourceMarker resourceMarker = new ConstraintResourceMarker(iResource, eObjectUri, constraintName,errorMessage);
-						new ConstraintMarkerManager(resourceMarker).addErrorMarker();						
-					}
-				}				
-				return "Unsuccessful (See Problems View)";
-			}
-		}
-		
-		return "The result is not an EOLSequence";
-	}
-
-	private String fileUriToPlatform(String fileURI) {
-		
-		URIConverter converter = new ExtensibleURIConverterImpl();
-		org.eclipse.emf.common.util.URI platformURI = org.eclipse.emf.common.util.URI.createPlatformResourceURI("/", false);
-		org.eclipse.emf.common.util.URI fileUri = org.eclipse.emf.common.util.URI.createFileURI(ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString() + File.separator);
-		converter.getURIMap().put(fileUri, platformURI);
-		org.eclipse.emf.common.util.URI afileURI = converter.normalize(org.eclipse.emf.common.util.URI.createURI(fileURI));
-		return afileURI.toString();
-	}
-
-	private void deleteMarker(IContainer iContainer, String constraintName) {
-		
-		try {
-			IMarker['['/]] constraintMarkers = iContainer.findMarkers(ConstraintMarkerManager.FAILED_CONSTRAINT_MARKER_ID, true, IResource.DEPTH_INFINITE);
-			for (int i = 0; i < constraintMarkers.length; i++) {
-				IMarker currentMarker = constraintMarkers['['/]i];
-				String currentConstraintName = (String) currentMarker.getAttribute(ConstraintMarkerManager.CONSTRAINT_NAME);
-				if (currentConstraintName.equals(constraintName))
-					currentMarker.delete();
-			}			
-		} catch (CoreException e) {
-			
-			e.printStackTrace();
-		}
-		
-	}
-
-	private IFile getIFileFromFile(File file) {
-			
-			IWorkspace workspace= ResourcesPlugin.getWorkspace();
-			IPath location= Path.fromOSString(file.getAbsolutePath());
-			IFile newFile = workspace.getRoot().getFileForLocation(location);
-			return newFile;
-	}
 	
 	private EList<Constraint> getCheckedConstraint(TreeViewer viewer) {
 		
@@ -324,31 +202,12 @@ public class ConstraintDialog extends Dialog{
 			if (item.getChecked() == true) {
 				
 				listOfConstraint.add((Constraint) item.getData());
-			} 
-			
+			}			
 		}		
 		return listOfConstraint;
 	}
-
-	private EList<Constraint> getConstraints() {
-		
-		EObject rootEObject = resConstraint.getContents().get(0);
-		if (rootEObject instanceof MetamodelConstraint) {
-			return ((MetamodelConstraint) rootEObject).getConstraints();
-		}		
-		return null;
-	}
-	
-	private void checkedAllItemsWith(TreeViewer viewer,boolean checked) {
-		
-		TreeItem['['/]] items = viewer.getTree().getItems();  
-		for (int i = 0; i < items.length; i++) {
-			TreeItem item = items['['/]i];
-			item.setChecked(checked);			
-		}		
-	}	
-
 }
+
 
 [/file]
 

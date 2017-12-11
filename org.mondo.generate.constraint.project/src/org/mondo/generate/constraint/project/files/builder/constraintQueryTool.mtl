@@ -1,0 +1,50 @@
+[comment encoding = UTF-8 /]
+[module constraintQueryTool('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generateConstraintQueryTool(anProjectName : String, pathEcore : String)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/builder/').concat('ConstraintQueryTool.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].builder;
+
+import java.util.Iterator;
+
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+
+public class ConstraintQueryTool {
+	
+	public EList<EObject> getListToExecuteConstraint(Resource res, String strEClass) {
+		
+		EList<EObject> list = new BasicEList<EObject>();
+		Iterator<EObject> itAllContents = EcoreUtil.getAllProperContents(res, false);
+		while (itAllContents.hasNext()) {
+			EObject eObject = (EObject) itAllContents.next();
+			if (eObject.eClass().getName().equals(strEClass) || checkAllSuperTypes(eObject, strEClass)) {
+				list.add(eObject);
+			}				
+		}
+		
+		return list;
+	}
+
+	public boolean checkAllSuperTypes(EObject eObject, String strEClass) {
+		
+		Iterator<EClass> itSuperTypes = eObject.eClass().getEAllSuperTypes().iterator();
+		while (itSuperTypes.hasNext()) {
+			EClass eClass = (EClass) itSuperTypes.next();
+			if (eClass.getName().equals(strEClass))
+				return true;
+		}
+		
+		return false;
+	}
+}
+
+[/file]
+
+[/template]

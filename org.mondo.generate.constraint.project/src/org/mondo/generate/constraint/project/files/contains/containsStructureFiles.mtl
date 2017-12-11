@@ -24,7 +24,8 @@ public class [packUnit.getClassContainsName()/] {
 
 	public static final EClass getRoot() {
 		
-		return [getRootFactoryClass(genPackage, anEObjectGenModel,packUnit.anEClass)/]Factory.eINSTANCE.get[getRootFactoryClass(genPackage, anEObjectGenModel,packUnit.anEClass)/]Package().getSubsystem();	
+		return [getRootFactoryClass(genPackage, anEObjectGenModel,packUnit.anEClass)/]Factory.eINSTANCE.get[getRootFactoryClass(genPackage, anEObjectGenModel,packUnit.anEClass)/]Package()
+					.get[packUnit.anEClass.name/]();	
 	}
 
 	public static final EList<EClass> listOfContains = ECollections.

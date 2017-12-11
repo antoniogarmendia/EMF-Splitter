@@ -1,7 +1,6 @@
 [comment encoding = UTF-8 /]
 [module eolExecuteFile('http://www.eclipse.org/emf/2002/Ecore')]
 
-
 [template public generateeolExecuteFile(anProjectName : String, constraintName : String)]
 
 [file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/menu/').concat('ExecuteEOLMenu.java'),false, 'UTF-8')]
@@ -68,7 +67,7 @@ public class ExecuteEOLMenu implements IHandler {
 				ResourceSet reset = new ResourceSetImpl();
 				Resource res = reset.getResource(consURI, true);
 					
-				ConstraintDialog dialog = new ConstraintDialog(HandlerUtil.getActiveShell(event),res,modelURI,((IContainer) firstelement));
+				ConstraintDialog dialog = new ConstraintDialog(HandlerUtil.getActiveShell(event),modelURI);
 				
 				if(dialog.open() == Dialog.OK) {
 					//Execute EOL expressions
