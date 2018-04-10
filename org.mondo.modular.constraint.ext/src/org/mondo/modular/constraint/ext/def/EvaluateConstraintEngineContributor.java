@@ -21,7 +21,7 @@ public class EvaluateConstraintEngineContributor {
 	/*Execute Constraint*/
 	
 	@Execute
-	public void executeConstraint(IExtensionRegistry registry,String paramId, String constraint, URI modelURI, URI metaModelURI, boolean isUnit){
+	public void executeConstraint(IExtensionRegistry registry,String paramId, String constraint, URI modelURI, URI metaModelURI,  List<String> metamodelURIs, boolean isUnit){
 		
 		IConfigurationElement[] config =
 		        registry.getConfigurationElementsFor(ICONSTRAINT_EXECUTION_ID);
@@ -33,7 +33,7 @@ public class EvaluateConstraintEngineContributor {
 		        if (o instanceof IExecuteConstraint) {
 		          final String Id = (String) e.getAttribute("Id");
 		          if(Id.equals(paramId)){
-		        	  executeExtensionConstraint(o,constraint, modelURI, metaModelURI, isUnit);
+		        	  executeExtensionConstraint(o,constraint, modelURI, metaModelURI, metamodelURIs, isUnit);
 			          break;
 		          }
 		        }
@@ -43,7 +43,7 @@ public class EvaluateConstraintEngineContributor {
 		    }		
 	}
 	
-	private void executeExtensionConstraint(Object o, String constraint, URI modelURI, URI metaModelURI, boolean isUnit) {
+	private void executeExtensionConstraint(Object o, String constraint, URI modelURI, URI metaModelURI, List<String> metamodelURIs, boolean isUnit) {
 	
 		ISafeRunnable runnable = new ISafeRunnable() {
 			
@@ -54,7 +54,7 @@ public class EvaluateConstraintEngineContributor {
 
 			@Override
 			public void run() throws Exception {
-				resultConstraint =  ((IExecuteConstraint) o).executeConstraint(constraint, modelURI,metaModelURI, isUnit);
+				resultConstraint =  ((IExecuteConstraint) o).executeConstraint(constraint, modelURI,metaModelURI, metamodelURIs, isUnit);
 				}
 			};
 			SafeRunner.run(runnable);

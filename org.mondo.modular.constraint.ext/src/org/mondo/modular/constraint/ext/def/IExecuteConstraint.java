@@ -6,5 +6,5 @@ import java.util.List;
 public interface IExecuteConstraint {
 	
 	public boolean init(List<String> metamodelURIs, String modularNature);
-	public Object executeConstraint(String constraint, URI modelURI, URI metaModelURI, boolean isUnit);	
+	public Object executeConstraint(String constraint, URI modelURI, URI metaModelURI, List<String> metamodelURIs, boolean isUnit);	
 }
