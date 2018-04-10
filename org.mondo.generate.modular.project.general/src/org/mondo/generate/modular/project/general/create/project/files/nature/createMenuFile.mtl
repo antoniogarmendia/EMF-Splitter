@@ -48,8 +48,12 @@ public class CreateMenu extends ExtensionContributionFactory {
 				if(firstelement instanceof IFolder)
 					pro = ((IFolder)firstelement).getProject();			
 				try {
-					IProjectNature nature = pro.getNature(GeneralProjectNature.ID);
-					if(nature==null)
+					if (pro.isOpen() == true)
+					{
+						IProjectNature nature = pro.getNature(GeneralProjectNature.ID);
+						if(nature==null)
+							return;
+					} else 
 						return;
 				} catch (CoreException e) {
 					

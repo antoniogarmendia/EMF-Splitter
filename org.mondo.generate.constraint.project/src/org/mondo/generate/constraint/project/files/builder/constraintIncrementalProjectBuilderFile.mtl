@@ -1,14 +1,16 @@
 [comment encoding = UTF-8 /]
-[module constraintIncrementalProjectBuilderFile('http://www.eclipse.org/emf/2002/Ecore')]
+[module constraintIncrementalProjectBuilderFile('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns')]
+[import org::mondo::generate::constraint::project::request::queries /]
 
-
-[template public generateConstraintIncrementalProjectBuilderFile(anProjectName : String, pathEcore : String)]
+[template public generateConstraintIncrementalProjectBuilderFile(anProjectName : String, pathEcore : String, modularPatternInstance : PatternInstance)]
 
 [file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/builder/').concat('ConstraintIncrementalProjectBuilder.java'),false, 'UTF-8')]
 package [anProjectName/].[getProperty('prefix_name')/].builder;
 
 import java.util.Map;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -44,30 +46,25 @@ public class ConstraintIncrementalProjectBuilder implements IModularBuilder {
 		return null;
 	}
 
-	private void fullBuild(IProject iProject,IProgressMonitor monitor) {
+	public void fullBuild(IProject iProject,IProgressMonitor monitor) {
 		
 		try {
 			 iProject.accept(new IResourceVisitor() {
 				
 				@Override
 				public boolean visit(IResource resource) throws CoreException {
-										
-					executeResource(resource);					
-					return true; //visit children too
+						
+					return buildResource(resource);				
 				}
 			});
 	      }
 		 catch (CoreException e) { }
 		System.out.println("Full Build");
 	}	
-
+	
 	private void incrementalBuild(IResourceDelta delta, final IProgressMonitor monitor) {
 		
 		try {
-			
-			/*
-			 * The same as full build, but using delta.
-			 * */
 			
 			delta.accept(new IResourceDeltaVisitor() {
 				
@@ -76,26 +73,12 @@ public class ConstraintIncrementalProjectBuilder implements IModularBuilder {
 					
 					if (!(delta.getKind() == IResourceDelta.REMOVED && delta.getMovedToPath() == null)) {
 
-						IResource deltaResource = delta.getResource();	
+						IResource deltaResource = delta.getResource();
 						if (delta.getKind() > 0 && delta.getKind() <= 4) {
-							IResource resource = null;
-							if (deltaResource instanceof IProject) {
-								resource = ((IProject) deltaResource).findMember(deltaResource.getName() + ".xmi");						
-							} else if (deltaResource instanceof IFolder) {
-								resource = ((IFolder) deltaResource).findMember(deltaResource.getName() + ".xmi");
-							} else 
-								resource = deltaResource;
-							
-							if (categorizer.isProject(deltaResource) == true || categorizer.isPackage(deltaResource) == true)	
-								return true;
-							else
-								executeResource(resource);					
-							
-							// do not visit the children in this case
-							System.out.println(deltaResource.getFullPath() + "--" + resource.getFullPath() + "changed");
-						}
+							return buildResource(deltaResource);					
+						}						
 					}
-					return true; 					
+					return true; // visit children too					
 				}
 			});
 		} catch (CoreException e) {			
@@ -103,19 +86,85 @@ public class ConstraintIncrementalProjectBuilder implements IModularBuilder {
 		}		
 		System.out.println("Incremental Build");
 	}
+	
+	public boolean buildResource(IResource resource) {
+		
+		if (resource instanceof IProject) {
+			
+			IResource representedFile = ((IProject) resource).findMember(resource.getName() + ".xmi");
+			executeConstraint.executeGlobalQueries(representedFile);			
+			return checkConstraintsGlobal();												
+		} else if (resource instanceof IFolder) {
+			
+			IResource representedFile = getRepresentedFile((IFolder) resource);
+			
+			if (categorizer.isRootPackage(representedFile) == true) {
+				executeConstraint.executeRootPackageQueries(representedFile);
+				executeConstraint.executePackageQueries(representedFile);
+				return checkConstraintsSameRootPackage();
+			} else {
+				executeConstraint.executePackageQueries(representedFile);	
+				return checkConstraintsSamePackage();
+			}						
+									
+		} else if (resource instanceof IFile) {						
+			
+			IFile file = (IFile) resource;
+			String name = file.getName();
+			if(name.equals(".project"))
+				return true;
+			
+			if (isRepresentedFile(file) == true)
+				return true;
+			else {
+				if (categorizer.isUnit(resource) == true)
+					executeConstraint.executeUnitQueries(resource);
+				return true;
+			}						
+		}		
+		return true;
+	}
 
-	private void executeResource(IResource resource) {
+	public IFile getRepresentedFile(IFolder folder) {
 		
-		if (categorizer.isProject(resource) == true)
-			executeConstraint.executeGlobalQueries(resource);
-		else if (categorizer.isRootPackage(resource) == true) {
-			executeConstraint.executeRootPackageQueries(resource);
-			executeConstraint.executePackageQueries(resource);						
-		} else if (categorizer.isPackage(resource) == true)
-			executeConstraint.executePackageQueries(resource);
-		else if (categorizer.isUnit(resource) == true)
-			executeConstraint.executeUnitQueries(resource);
+		for (int i = 1; i <= [Get_FolderClassRoleInstance(modularPatternInstance)->size()/]; i++) {
+			
+			IFile file = folder.getFile(folder.getName() + "." + i);
+			if (file.exists())
+				return file;			
+		}
+		return null;		
+	}
+
+	public boolean isRepresentedFile(IFile file) {
+			
+			IContainer container = file.getParent();
+			String containerName = container.getName();
+			String fileName = file.getFullPath().removeFileExtension().lastSegment();
+			if (fileName.equals(containerName))
+				return true;		
+			return false;
+	}
+	
+	public boolean checkConstraintsGlobal() {
 		
+		if (executeConstraint.getRootPackageQueries().size() == 0)
+			return checkConstraintsSameRootPackage();		
+		return true;
+	}
+	
+	public boolean checkConstraintsSameRootPackage() {
+		
+		if (executeConstraint.getPackageQueries().size() == 0)
+			return checkConstraintsSamePackage();
+		return true;
+	}
+	
+	public boolean checkConstraintsSamePackage() {
+		
+		if (executeConstraint.getUnitQueries().size() == 0)
+			return false;		
+		return true;
 	}
 }
 

@@ -6,16 +6,13 @@
 [file ('src/'.concat(anProjectName.toLower() + '.' + anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/CreateMenu.java'),false, 'UTF-8')]
 package [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/];
 
-import java.io.IOException;
 import java.util.HashMap;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -27,18 +24,6 @@ import org.eclipse.ui.menus.IContributionRoot;
 import org.eclipse.ui.services.IServiceLocator;
 
 import [anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].wizard.[anPatternInstance.Get_ProjectClass().name/]NewProjectNature;
-
-[for (c : ClassRoleInstance | Get_FolderClassRoleInstance(anPatternInstance)->union(anPatternInstance.Get_ProjectClassRoleInstance()
-																						 ->select(anClassRoleInstance : ClassRoleInstance | anClassRoleInstance.referenceInstances
-																						 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence()))]
-[let genPackage : GenPackage =  getGenClassFromEClass(c.element,anEObjectGenModel).eContainer().oclAsType(GenPackage) ]
-[if (genPackage.basePackage->isEmpty() = false)]
-import [genPackage.basePackage/].[generateEClassImportBasePackage(c.element)/];
-[else]
-import [generateEClassImport(c.element)/];
-[/if]
-[/let]
-[/for]
 
 public class CreateMenu extends ExtensionContributionFactory {
 
@@ -63,12 +48,16 @@ public class CreateMenu extends ExtensionContributionFactory {
 				if(firstelement instanceof IFolder)
 					pro = ((IFolder)firstelement).getProject();			
 				try {
-					IProjectNature nature = pro.getNature([anPatternInstance.Get_ProjectClass().name/]NewProjectNature.ID);
-					if(nature==null)
-						return;
 					
-					nature = pro.getNature("[anProjectName.toLower()/].[getProperty('prefix_name')/].generalmodularnature");
-					if(nature != null)
+					if (pro.isOpen() == true) {
+						IProjectNature nature = pro.getNature([anPatternInstance.Get_ProjectClass().name/]NewProjectNature.ID);
+						if(nature==null)
+							return;
+						
+						nature = pro.getNature("[anProjectName.toLower()/].[getProperty('prefix_name')/].generalmodularnature");
+						if(nature != null)
+							return;
+					} else
 						return;				
 					
 				} catch (CoreException e) {
@@ -117,24 +106,27 @@ public class CreateMenu extends ExtensionContributionFactory {
 				}
 				else if(firstelement instanceof IFolder)
 				{
-					IFolder fol = (IFolder)firstelement;
-					IPath filePath = fol.getFullPath().append("/"+fol.getName().concat(".xmi"));
-					XMI_File file = new XMI_File(URI.createPlatformResourceURI(filePath.toString(), true), true);
-					EObject root = null;
-					try {
-						root = file.Get_Root();
-					} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					
+					IFolder folder = (IFolder)firstelement;
+					int index = -1;
+					for (int i = 1; i <= [Get_FolderClassRoleInstance(anPatternInstance)->union(anPatternInstance.Get_ProjectClassRoleInstance()
+																							 ->select(anClassRoleInstance : ClassRoleInstance | anClassRoleInstance.referenceInstances
+																							 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence())->size()/]; i++) { 
+
+						IFile file = folder.getFile(folder.getName().concat("." + i));
+						if (file.exists() == true) {
+							index = i;
+							break;
+						}
 					}
 					
-					if(root!=null)
-					{					
+					if (index != -1) {
+
 						[for (c : ClassRoleInstance | Get_FolderClassRoleInstance(anPatternInstance)->union(anPatternInstance.Get_ProjectClassRoleInstance()
 																							 ->select(anClassRoleInstance : ClassRoleInstance | anClassRoleInstance.referenceInstances
 																							 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence()))]
-						if(root instanceof [c.element.name /])
-						{
+						if(index == [i/]) {
+
 							CommandContributionItemParameter pcommand = new CommandContributionItemParameter(serviceLocator,
 							"", "org.eclipse.ui.newWizard", CommandContributionItem.STYLE_PUSH);
 							pcommand.parameters = new HashMap<String,String>();
@@ -169,8 +161,9 @@ public class CreateMenu extends ExtensionContributionFactory {
 							[/for]
 							
 						}
-						[/for]				
-					}				
+						
+						[/for]
+					}								
 				}
 				additions.addContributionItem(menu, null);
 			}

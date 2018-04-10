@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.model.constraint.execution.definition.ext" name="ConstraintExecution" schema="schema/org.model.constraint.execution.definition.ext.exsd"/>
+
+</plugin>

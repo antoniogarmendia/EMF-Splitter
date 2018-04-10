@@ -13,6 +13,7 @@ public class EolStandAlone extends EpsilonStandAlone{
 
 	private URI mmURI;
 	private URI eolModule;
+	private String strEolModule;
 	private URI modelURI;
 	
 	public EolStandAlone(URI mmURI, URI eolModule, URI modelURI) {
@@ -20,6 +21,15 @@ public class EolStandAlone extends EpsilonStandAlone{
 		this.mmURI = mmURI;
 		this.eolModule = eolModule;
 		this.modelURI = modelURI;
+		this.strEolModule = null;
+	}
+	
+	public EolStandAlone(URI mmURI, String strEolModule, URI modelURI) {
+		super();
+		this.mmURI = mmURI;
+		this.eolModule = null;
+		this.modelURI = modelURI;
+		this.strEolModule = strEolModule;
 	}
 
 	@Override
@@ -68,6 +78,12 @@ public class EolStandAlone extends EpsilonStandAlone{
 	public void addParameters(List<Variable> parameters) {
 		
 		this.parameters = parameters;	
+	}
+
+	@Override
+	public String getEolModuleString() {
+		
+		return strEolModule;
 	}
 
 }

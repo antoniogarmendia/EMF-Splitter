@@ -57,7 +57,6 @@ import [genPackage.basePackage/].[generateEClassImportBasePackage(c.element)/];
 public class ExecuteEOLConstraint {
 	
 	private MetamodelConstraint mmconstraints;
-	private String currentEolString;
 	private java.net.URI metaModelUri;
 	
 	// EList of Constraints taking into account the Scope
@@ -74,13 +73,6 @@ public class ExecuteEOLConstraint {
 		this.unitQueries = new BasicEList<Constraint>();
 		obtainResourceOfConstraints();
 		updateListOfConstraints();
-		try {
-			// Folder for the eol constraints
-			this.currentEolString =  ExecuteEOLConstraint.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString().
-					concat("constraints/");
-		} catch (URISyntaxException e) {			
-			e.printStackTrace();
-		}		
 		obtaintMetamodelUri();
 	}
 	
@@ -140,86 +132,121 @@ public class ExecuteEOLConstraint {
 		Iterator<Constraint> itQueries = queries.iterator();
 		while (itQueries.hasNext()) {
 			Constraint constraint = (Constraint) itQueries.next();
-			Object result = null;
-			if (constraint.getEClass() == null) {
-				File tempFile = createTempEolFile(constraint.getName(), constraint.getStatement());
-				result = executeEOLExpression(tempFile.toURI(), resource.getLocationURI());
-				tempFile.delete();
-				markResourceWithoutContext(result, constraint, metaModelUri, resource);
-			} else {
-				String eolModuleString = this.currentEolString.concat(constraint.getName() + ".eol");
-				java.net.URI eolModule = java.net.URI.create(eolModuleString);
-				result = executeEOLExpression(eolModule, resource.getLocationURI());
-				markResourceWithContext(result, constraint.getName(), resource);
-			}			
+			String eolModuleString = null;
+			try {
+				eolModuleString = (String) AllConstraint.class.getField(constraint.getName()).get(null);
+			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {				
+				e.printStackTrace();
+			}
+			Object result = executeEOLExpression(eolModuleString, resource.getLocationURI());		
+			if (constraint.getEClass() == null)
+					markResourceWithoutContext(result, constraint, metaModelUri, resource);
+					else
+						markResourceWithContext(result, constraint.getName(), resource);
+		}
+
+		if (queries.size() > 0) {
+			try {
+				resource.refreshLocal(IResource.DEPTH_ZERO, null);
+			} catch (CoreException e) {				
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public boolean executeQueries(Constraint constraint, IResource resource) {
 		
-		Object result = null;
-		if (constraint.getEClass() == null) {
-			File tempFile = createTempEolFile(constraint.getName(), constraint.getStatement());
-			result = executeEOLExpression(tempFile.toURI(), resource.getLocationURI());
-			tempFile.delete();
-			return markResourceWithoutContext(result, constraint, metaModelUri, resource);
-		} else {
-			String eolModuleString = this.currentEolString.concat(constraint.getName() + ".eol");
-			java.net.URI eolModule = java.net.URI.create(eolModuleString);
-			result = executeEOLExpression(eolModule, resource.getLocationURI());
-			return markResourceWithContext(result, constraint.getName(), resource);			
-		}			
+		String eolModuleString = null;
+		boolean anyError = false;
+		try {
+			eolModuleString = (String) AllConstraint.class.getField(constraint.getName()).get(null);
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {				
+			e.printStackTrace();
+		}
+		Object result = executeEOLExpression(eolModuleString, resource.getLocationURI());
+		if (constraint.getEClass() == null)
+			anyError = markResourceWithoutContext(result, constraint, metaModelUri, resource);
+			else
+				anyError = markResourceWithContext(result, constraint.getName(), resource);	
+		
+		try {
+			resource.refreshLocal(IResource.DEPTH_ZERO, null);
+		} catch (CoreException e) {				
+			e.printStackTrace();
+		}	
+		
+		return anyError;
 	}
 	
 	public void executeQueriesCheckContext(EList<Constraint> queries, IResource resource, boolean unit) {
 		
 		Iterator<Constraint> itQueries = queries.iterator();
+		boolean executeEOL = false;
 		while (itQueries.hasNext()) {
 			Constraint constraint = (Constraint) itQueries.next();
-			Object result = null;
-			if (constraint.getEClass() == null) {
-				File tempFile = createTempEolFile(constraint.getName(), constraint.getStatement());
-				result = executeEOLExpression(tempFile.toURI(), resource.getLocationURI());
-				tempFile.delete();
-				markResourceWithoutContext(result, constraint, metaModelUri, resource);
-			} else {
-				boolean execute = false;
+			boolean execute = true;
+			if (constraint.getEClass() != null) {				
 				if (unit == true)
 					execute = checkUnitContext(resource, constraint.getEClass());
 				else
 					execute = checkPackageContext(resource, constraint.getEClass());
-				if (execute == true) {
-					String eolModuleString = this.currentEolString.concat(constraint.getName() + ".eol");
-					java.net.URI eolModule = java.net.URI.create(eolModuleString);
-					result = executeEOLExpression(eolModule, resource.getLocationURI());
-					markResourceWithContext(result, constraint.getName(), resource);
-				}
-			}			
+			}
+			if (execute == true) {
+					executeEOL = true;
+					String eolModuleString = null;
+					try {
+						eolModuleString = (String) AllConstraint.class.getField(constraint.getName()).get(null);
+					} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {				
+						e.printStackTrace();
+					}
+					Object result = executeEOLExpression(eolModuleString, resource.getLocationURI());
+					if (constraint.getEClass() == null)
+						markResourceWithoutContext(result, constraint, metaModelUri, resource);
+					else
+						markResourceWithContext(result, constraint.getName(), resource);
+			}						
+		}
+	
+		if (executeEOL == true) {
+			try {
+				resource.refreshLocal(IResource.DEPTH_ZERO, null);
+			} catch (CoreException e) {				
+				e.printStackTrace();
+			}
 		}		
 	}
 
 	public boolean executeQueriesCheckContext(Constraint constraint, IResource resource, boolean unit) {
 		
-		Object result = null;
-		if (constraint.getEClass() == null) {
-			File tempFile = createTempEolFile(constraint.getName(), constraint.getStatement());
-			result = executeEOLExpression(tempFile.toURI(), resource.getLocationURI());
-			tempFile.delete();
-			return markResourceWithoutContext(result, constraint, metaModelUri, resource);
-		} else {
-			boolean execute = false;
+		boolean execute = true;
+		boolean anyError = false;
+		if (constraint.getEClass() != null) {				
 			if (unit == true)
 				execute = checkUnitContext(resource, constraint.getEClass());
 			else
 				execute = checkPackageContext(resource, constraint.getEClass());
-			if (execute == true) {
-				String eolModuleString = this.currentEolString.concat(constraint.getName() + ".eol");
-				java.net.URI eolModule = java.net.URI.create(eolModuleString);
-				result = executeEOLExpression(eolModule, resource.getLocationURI());
-				return markResourceWithContext(result, constraint.getName(), resource);
-			}
 		}
-		return true;			
+		if (execute == true) {
+			String eolModuleString = null;
+			try {
+				eolModuleString = (String) AllConstraint.class.getField(constraint.getName()).get(null);
+			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {				
+				e.printStackTrace();
+			}
+			Object result = executeEOLExpression(eolModuleString, resource.getLocationURI());			
+			if (constraint.getEClass() == null)
+				anyError = markResourceWithoutContext(result, constraint, metaModelUri, resource);
+			else
+				anyError = markResourceWithContext(result, constraint.getName(), resource);
+		}
+		
+		try {
+			resource.refreshLocal(IResource.DEPTH_ZERO, null);
+		} catch (CoreException e) {				
+			e.printStackTrace();
+		}
+		
+		return anyError;			
 	}	
 	
 	public boolean checkUnitContext(IResource resource, EClass eClass) {
@@ -233,7 +260,7 @@ public class ExecuteEOLConstraint {
 				if (eClass.getName().equals(Unit[c.element.name.toLowerCase().toUpperFirst()/].getRoot().getName()) == true)
 					return true;
 				else {
-					return compareEClasses(Unit[c.element.name.toLowerCase().toUpperFirst()/].listOfContains, eClass);			
+					return compareEClasses(Unit[c.element.name.toLowerCase().toUpperFirst()/].listOfContains, eClass.getName());			
 				}
 			} 
 		[/for]	
@@ -252,7 +279,7 @@ public class ExecuteEOLConstraint {
 				if (eClass.getName().equals(Unit[c.element.name.toLowerCase().toUpperFirst()/].getRoot().getName()) == true)
 					return true;
 				else {
-					return compareEClasses(Unit[c.element.name.toLowerCase().toUpperFirst()/].listOfContains, eClass);			
+					return compareEClasses(Unit[c.element.name.toLowerCase().toUpperFirst()/].listOfContains, eClass.getName());			
 				}
 			} 
 		[/for]	
@@ -262,47 +289,47 @@ public class ExecuteEOLConstraint {
 	
 	public boolean checkPackageContext(IResource resource, EClass eClass) {
 		
-		ResourceSet reset = new ResourceSetImpl();
-		Resource res = reset.getResource(URI.createPlatformResourceURI(resource.getFullPath().toString(),true), true);
-		
-		EObject root = res.getContents().get(0);
+		String extension = resource.getFullPath().getFileExtension();
 		[for (c : ClassRoleInstance | Get_FolderClassRoleInstance(modularPatternInstance))] 
 			[if (Get_FolderClassRoleInstance(modularPatternInstance)->size() = i and Get_FolderClassRoleInstance(modularPatternInstance)->size() > 1)]
 			else
 			[/if]
-			if (root instanceof [c.element.name/]) { 
+			if (extension.equals("[i/]")) {
 				if (eClass.getName().equals(Package[c.element.name.toLowerCase().toUpperFirst()/].getRoot().getName()) == true)
-				return true;
-			else			
-				return compareEClasses(Package[c.element.name.toLowerCase().toUpperFirst()/].listOfContains,root.eClass());	
-			}
+					return true;
+				else			
+					return compareEClasses(Package[c.element.name.toLowerCase().toUpperFirst()/].listOfContains,eClass.getName());	
+			}		
 		[/for]
+	
 		return false;
 	}
 	
 	public boolean checkPackageContext(Resource res, EClass eClass) {
 		
-		EObject root = res.getContents().get(0);
+		String extension = res.getURI().fileExtension();
 		[for (c : ClassRoleInstance | Get_FolderClassRoleInstance(modularPatternInstance))] 
 			[if (Get_FolderClassRoleInstance(modularPatternInstance)->size() = i and Get_FolderClassRoleInstance(modularPatternInstance)->size() > 1)]
 			else
 			[/if]
-			if (root instanceof [c.element.name/]) { 
+			if (extension.equals("[i/]")) {
 				if (eClass.getName().equals(Package[c.element.name.toLowerCase().toUpperFirst()/].getRoot().getName()) == true)
-				return true;
-			else			
-				return compareEClasses(Package[c.element.name.toLowerCase().toUpperFirst()/].listOfContains,root.eClass());	
-			}
+					return true;
+				else			
+					return compareEClasses(Package[c.element.name.toLowerCase().toUpperFirst()/].listOfContains,eClass.getName());	
+			}		
 		[/for]
+	
 		return false;
 	}
+	
 
-	public boolean compareEClasses(EList<EClass> listOfClasses, EClass eClass) {
+	public boolean compareEClasses(EList<EClass> listOfClasses, String eClassName) {
 		
 		Iterator<EClass> it = listOfClasses.iterator();
 		while (it.hasNext()) {
 			EClass currentEClass = (EClass) it.next();
-			if (currentEClass.getName().equals(eClass.getName()))
+			if (currentEClass.getName().equals(eClassName))
 				return true;			
 		}		
 		return false;
@@ -430,7 +457,7 @@ public class ExecuteEOLConstraint {
 		executeQueriesCheckContext(unitQueries, resource,true);
 	}
 	
-	public Object executeEOLExpression(java.net.URI eolModule, java.net.URI modelUri) {
+	public Object executeEOLExpression(String eolModule, java.net.URI modelUri) {
 		
 		EolStandAlone executeEolModule = new EolStandAlone(metaModelUri, eolModule,modelUri);
 		try {
@@ -438,8 +465,8 @@ public class ExecuteEOLConstraint {
 			return executeEolModule.getResult();
 		} catch (Exception e) {			
 			e.printStackTrace();
-		}
-		return null;		
+		}	
+		return null;
 	}
 	
 	private File createTempEolFile(String name, String statement) {
@@ -505,6 +532,22 @@ public class ExecuteEOLConstraint {
 		}
 		
 		return listOfConstraints;
+	}
+
+	public EList<Constraint> getGlobalQueries() {
+		return globalQueries;
+	}
+	
+	public EList<Constraint> getRootPackageQueries() {
+		return rootPackageQueries;
+	}
+
+	public EList<Constraint> getPackageQueries() {
+		return packageQueries;
+	}
+
+	public EList<Constraint> getUnitQueries() {
+		return unitQueries;
 	}
 	
 }

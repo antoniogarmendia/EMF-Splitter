@@ -1,5 +1,6 @@
 [comment encoding = UTF-8 /]
 [module WorkflowConstraintProject('http://mondo.org/runtimePatterns','http://miso.org/dataStructureContain',
+	'http://miso.es/constraints',
 	'http://www.eclipse.org/emf/2002/GenModel')/]
 [import org::mondo::generate::constraint::project::request::queries /]
 [import org::mondo::generate::constraint::project::files::activatorFile /]
@@ -20,9 +21,10 @@
 [import org::mondo::generate::constraint::project::files::builder::constraintScopeCategorizerFile /]
 [import org::mondo::generate::constraint::project::files::builder::executeEOLConstraintFile /]
 [import org::mondo::generate::constraint::project::files::builder::constraintQueryTool /]
+[import org::mondo::generate::constraint::project::files::builder::allConstraintFile /]
 
 [template public WorkflowConstraintProject(anPatternInstance : PatternInstance, anProjectName : String, constraintName : String, pathEcore : String
-	,modularPatternInstance : PatternInstance, structureContain : ContainStructure, genModelPath : String )]
+	,modularPatternInstance : PatternInstance, structureContain : ContainStructure, mmConstraint: MetamodelConstraint,genModelPath : String )]
 [comment @main /]	
 
 
@@ -32,7 +34,7 @@
 [generateManifestFile(anProjectName, anPatternInstance)/]	
 [generatePluginFile(anProjectName,modularPatternInstance)/]
 
-[generateconstraintFiles(anPatternInstance)/]
+[generateconstraintFiles(anPatternInstance, mmConstraint)/]
 
 [generateeolExecuteFile(anProjectName, constraintName)/]
 
@@ -49,10 +51,11 @@
 [generateConstraintResourceMarkerFile(anProjectName)/]
 
 [comment Builder /]
-[generateConstraintIncrementalProjectBuilderFile(anProjectName, pathEcore)/]
+[generateConstraintIncrementalProjectBuilderFile(anProjectName, pathEcore, modularPatternInstance)/]
 [generateConstraintScopeCategorizerFile(anProjectName, pathEcore, modularPatternInstance)/]
 [generateExecuteEOLConstraintFile(anProjectName, pathEcore, modularPatternInstance, anEObjectGenModel)/]
 [generateConstraintQueryTool(anProjectName, pathEcore)/]
+[generateAllConstraintFile(anProjectName, anPatternInstance, mmConstraint)/]
 
 [comment Contains /]
 [generateconstraintFiles(anProjectName, structureContain, anEObjectGenModel)/]

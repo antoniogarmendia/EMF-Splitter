@@ -37,6 +37,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.PreferenceConstants;
 import org.mondo.generate.constraint.project.main.WorkflowConstraintProject;
 
+import constraints.MetamodelConstraint;
 import dataStructureContain.ContainStructure;
 import dataStructureContain.PackageUnit;
 import dataStructureContain.impl.DataStructureContainFactoryImpl;
@@ -179,6 +180,7 @@ public class CreateConstraintProject extends CreateEclipseProjectImpl{
 		generatorargs.add(this.pathEcore);
 		generatorargs.add(this.getModularPattern());
 		generatorargs.add(containsStructure);
+		generatorargs.add(getConstraintCons());
 		generatorargs.add(this.getGenModel(modularPattern));
 		
 		try {
@@ -209,7 +211,20 @@ public class CreateConstraintProject extends CreateEclipseProjectImpl{
 		
 		return null;
 	}
-
+	
+	
+	private MetamodelConstraint getConstraintCons() {
+		
+		URI constraintURI = URI.createFileURI(consURI);
+		ResourceSet reset = new ResourceSetImpl();
+		Resource res = reset.getResource(constraintURI,true);
+		
+		MetamodelConstraint mmConstraint = (MetamodelConstraint) res.getContents().get(0);
+		
+		return mmConstraint;
+	} 
+	
+	
 	protected void CreateAllPackages(IJavaProject javaproc) {
 		
 		CreateJavaPackages(javaproc, "");				

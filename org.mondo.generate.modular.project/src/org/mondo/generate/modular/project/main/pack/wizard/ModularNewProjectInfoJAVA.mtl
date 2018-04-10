@@ -517,7 +517,8 @@ public class [c.element.name/]NewProjectInfo {
 			IContainer fol = this.createFolder(folderURI, folderName, container);
 			
 			// Path to Create XMI File
-			String filePath = fol.getFullPath().toString().concat("/"+fol.getName().concat(".xmi"));
+			String extension = getPackageExtension(eObject);
+			String filePath = fol.getFullPath().toString().concat("/"+fol.getName().concat("." + extension));
 			
 			// Obtain File URI
 			URI fileUri = URI.createPlatformResourceURI(filePath,true);
@@ -624,6 +625,16 @@ public class [c.element.name/]NewProjectInfo {
 		
 		return null;
 	} 
+	
+	private String getPackageExtension(EObject eObject) {
+		
+		[for (c : ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance()) ]
+		 if(eObject instanceof [c.element.name.concat('Impl')/])
+				return "[i/]";	
+			 [/for]	
+		
+		return null;
+	}
 	
 	private static final char['['/]] ILLEGAL_CHARACTERS = { '/', '\n', '\r', '\t', '\0', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':' };
 	

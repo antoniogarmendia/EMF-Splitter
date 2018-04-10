@@ -41,7 +41,7 @@ public class EvaluateCrossReferencesContributor {
 	}
 
 	private void executeExtension(Object o, String modularNature, Resource res,boolean searchWS,EClass anEClass,String eolExpression) {
-		// TODO Auto-generated method stub
+		
 		ISafeRunnable runnable = new ISafeRunnable() {
 		
 		@Override
@@ -72,7 +72,7 @@ public class EvaluateCrossReferencesContributor {
 			try {
 				o = e.createExecutableExtension("class");
 			} catch (CoreException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			}
 			if (o instanceof IEditorCrossReferences)

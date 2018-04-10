@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="WorkflowFilterUI" name="org.mondo.generate.filter.project">
-    <property name="ECLIPSE_HOME" value="D:/EclipseS/2.eclipse-modeling-neon-3-win32-x86_64_Current"/>
-    <property name="ECLIPSE_WORKSPACE" value="D:/EclipseS/2.eclipse-modeling-neon-3-win32-x86_64_Current/workspaces/1.GithubEMFSplitter"/>
+    <property name="ECLIPSE_HOME" value="E:/EclipseS/EclipseNeonEMFSplitter/1.eclipse-modeling-neon-3-win32-x86_64"/>
+    <property name="ECLIPSE_WORKSPACE" value="E:/EclipseS/EclipseNeonEMFSplitter/1.eclipse-modeling-neon-3-win32-x86_64/workspaces/EMFSplitterGithub"/>
 
     <!-- The classpath with only the dependencies used by the project -->
     <path id="org.mondo.generate.filter.project.libraryclasspath">
@@ -29,7 +29,7 @@
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.acceleo.engine_3.6.6.201610060831.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.emf.codegen.ecore_2.12.0.v20160526-0356.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.emf.codegen_2.11.0.v20160526-0356.jar"/>
-        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.guava_15.0.0.v201403281430.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.guava_18.0.0.v20161115-1643.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.jdt.core_3.12.3.v20170228-1205.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.jdt.compiler.apt_1.2.100.v20160418-1457.jar"/>
         <pathelement location="${ECLIPSE_HOME}/plugins/org.eclipse.jdt.compiler.tool_1.1.100.v20160418-1457.jar"/>

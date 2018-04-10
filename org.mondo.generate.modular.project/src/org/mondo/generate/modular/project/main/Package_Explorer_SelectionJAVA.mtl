@@ -95,11 +95,21 @@ public class Package_Explorer_Selection extends ViewerFilter {
 	
 	public boolean Parent_Filter_XMI(IFile fil){
 		
-		IResource res_parent = fil.getParent();
-		if(fil.getName().equals(res_parent.getName()+".xmi")){
-			return false;				
-		}
-		return true;
+		String strIndex = fil.getFileExtension();
+		if (strIndex.equals("xmi") && fil.getParent() instanceof IProject && fil.getParent().getName().equals(fil.getFullPath().removeFileExtension().lastSegment())) 
+			return false;
+		try {
+			Integer index = Integer.parseInt(strIndex);
+			if (index >= 1 && index <= [anPatternInstance.Get_FolderClassRoleInstance()->union(anPatternInstance.Get_ProjectClassRoleInstance()
+																						 ->select(anClassRoleInstance : ClassRoleInstance | anClassRoleInstance.referenceInstances
+																						 ->select(ref : ReferenceRoleInstance | ref.element.eType.name.toString() = anClassRoleInstance.element.name.toString())->size() > 0)->asSequence())->size()/])
+		       return false;
+	    }
+	    catch( Exception e ) {
+	        return true;
+	    }	
+			
+		return true;		
 	}
 
 }

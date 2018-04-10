@@ -12,6 +12,8 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -55,8 +57,11 @@ public class ExecuteEOLMenu implements IHandler {
 			if(firstelement instanceof IResource){
 		
 				String modelURI = null;
-				if (firstelement instanceof IContainer) 
+				if (firstelement instanceof IProject) 
 					modelURI = ((IContainer) firstelement).getLocation().append(((IContainer) firstelement).getName()).addFileExtension("xmi").toString();
+				else if (firstelement instanceof IFolder) {
+					modelURI = getRepresentedFile((IFolder) firstelement);
+				}
 				else if (firstelement instanceof IFile)
 					modelURI = ((IFile) firstelement).getLocation().toString();
 				
@@ -77,6 +82,17 @@ public class ExecuteEOLMenu implements IHandler {
 		}
 
 		return null;	
+	}
+
+	public String getRepresentedFile(IFolder folder) {
+		
+		for (int i = 1; i <= 2; i++) {
+			
+			IFile file = folder.getFile(folder.getName() + "." + i);
+			if (file.exists())
+				return file.getLocation().toString();			
+		}
+		return null;		
 	}
 
 	@Override

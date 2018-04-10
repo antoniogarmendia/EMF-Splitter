@@ -15,7 +15,6 @@ import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.IModel;
 import org.eclipse.epsilon.eol.models.IRelativePathResolver;
-import org.eclipse.epsilon.eol.types.IToolNativeTypeDelegate;
 
 public abstract class EpsilonStandAlone {
 	
@@ -42,7 +41,11 @@ public abstract class EpsilonStandAlone {
 	public void execute() throws Exception {
 		
 		module = createModule();
-		module.parse(getEolModuleURI());
+		
+		if (getEolModuleURI() == null)
+			module.parse(getEolModuleString());
+		else
+			module.parse(getEolModuleURI());
 		
 		if (module.getParseProblems().size() > 0) {
 			System.err.println("Parse errors occured...");
@@ -105,6 +108,8 @@ public abstract class EpsilonStandAlone {
 	public abstract URI getMMURI();
 	
 	public abstract URI getEolModuleURI();
+	
+	public abstract String getEolModuleString();
 	
 	public abstract URI getModelURI(); 
 

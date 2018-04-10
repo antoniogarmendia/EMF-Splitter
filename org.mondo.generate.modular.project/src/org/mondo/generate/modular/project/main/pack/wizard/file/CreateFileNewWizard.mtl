@@ -160,7 +160,7 @@ public class [c.element.name/]CreateFileWizard extends Wizard implements INewWiz
 			
 		//Add the root to the object
 		[c.element.name /] rootObject = [genPackage.prefix /]FactoryImpl.eINSTANCE.create[c.element.name /]();
-[/let]
+		[/let]
 		//Set the Attributes
 		[for (attr : EAttribute | c.element.eAllAttributes)]
 		[if (attr.derived = false)]
@@ -187,7 +187,14 @@ public class [c.element.name/]CreateFileWizard extends Wizard implements INewWiz
         
 		//Search the file
 		IContainer fol_parent = file.getParent();
-		IFile file_parent = fol_parent.getFile(new Path(fol_parent.getName().concat(".xmi")));
+		IFile file_parent = getParentFile(fol_parent);
+		
+		if (file_parent == null) {
+			
+			MessageDialog.openError(getShell(), "Error", "The parent file cannot be found");
+			return;
+		}
+		
 		XMI_File file_xmi = new XMI_File(URI.createPlatformResourceURI(file_parent.getFullPath().toString(),true),child_xmi.getFile_reset());		
 		
 		((EList<EObject>)file_xmi.Get_Root().eGet(file_xmi.Get_Root().eClass().getEStructuralFeature("[ anPatternInstance.GetContainmentFileReferences(c).name /]"), true)).add(child_xmi.Get_Root());
@@ -207,6 +214,16 @@ public class [c.element.name/]CreateFileWizard extends Wizard implements INewWiz
 		});
 		new EvaluateSiriusProjectCreation().executeFile(Platform.getExtensionRegistry(),fileURI);
 		monitor.worked(1);
+	}
+	
+	private IFile getParentFile(IContainer folder) {
+		
+		for (int i = 1; i <=  [anPatternInstance.Get_FolderClassRoleInstance()->size()/]; i++) {
+			IFile file = folder.getFile(new Path(folder.getName().concat("." + i)));
+			if (file.exists())
+				return file;						
+		}		
+		return null;
 	}
 	
 	/**

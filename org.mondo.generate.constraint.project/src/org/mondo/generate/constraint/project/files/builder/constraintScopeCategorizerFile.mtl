@@ -29,21 +29,20 @@ public class ConstraintScopeCategorizer {
 	}
 	
 	public boolean isRootPackage(IResource resource) {		
-		IContainer container = resource.getParent();
-		IContainer superContainer = container.getParent();
+		IContainer superContainer = resource.getParent().getParent();
 		
 		if (superContainer instanceof IProject) {
-			if (container.getName().equals(FilenameUtils.getBaseName(resource.getName())) && resource.getFileExtension().equals("xmi"))			
-				return true;
+			return true;
 		}				
 		return false;
 	}
 	
 	public boolean isPackage(IResource resource) {		
-		IContainer container = resource.getParent();
-		if (container.getName().equals(FilenameUtils.getBaseName(resource.getName())) && resource.getFileExtension().equals("xmi"))
-			return true;
-		
+		if (!(resource instanceof IProject)) {
+			IContainer container = resource.getParent();
+			if (container.getName().equals(FilenameUtils.getBaseName(resource.getName())) && resource.getFileExtension().equals("xmi"))
+				return true;
+		}
 		return false;
 	}
 	

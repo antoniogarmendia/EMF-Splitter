@@ -135,6 +135,7 @@ public class DSLtaoCreateConstraintProject implements IPatternImplementation {
 			PatternApplicationUtils.applyPattern(DSLtaoUtils.transformFromAppliedPatternsToMMInterfaceRelDiagram(consInstance,pattern),
 						DSLtaoUtils.getDiagramDSLtao(), pattern, patternInstances, "Constraint", false);
 			
+			
 			System.out.println("The Constraint Pattern was instantiated!");	
 			
 		} else {

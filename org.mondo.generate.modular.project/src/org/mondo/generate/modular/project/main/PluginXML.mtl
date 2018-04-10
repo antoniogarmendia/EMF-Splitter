@@ -193,7 +193,7 @@
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
-            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer?after=group.new">
+            locationURI="popup:org.eclipse.ui.popup.any?after=group.new">
          <menu
                id="[anProjectName/].[Get_ProjectClass(anPatternInstance).name.toLower()/].Menu"
                label="[Get_ProjectClass(anPatternInstance).name.toUpperFirst() /]"
@@ -228,7 +228,7 @@
       <menuContribution
             allPopups="true"
             class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].CreateMenu"
-            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer?after=group.new">
+            locationURI="popup:org.eclipse.ui.popup.any?after=group.new">
          <menu
                id="New"
                label="New [Get_ProjectClass(anPatternInstance).name.toUpperFirst() /]"
@@ -255,7 +255,7 @@
 	  <menuContribution
             allPopups="true"
             class="[anProjectName.toLower()/].[anPatternInstance.Get_ProjectClassRoleInstance().element.name.toLowerCase()/][getProperty('prefix_name')/].OpenWithMenu"
-            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer?after=group.new">
+            locationURI="popup:org.eclipse.ui.popup.any?after=group.new">
          <menu
                id="OpenWith"
                label="Open With">

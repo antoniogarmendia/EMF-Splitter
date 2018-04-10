@@ -1,8 +1,8 @@
 [comment encoding = UTF-8 /]
-[module constraintFiles('http://mondo.org/runtimePatterns')]
+[module constraintFiles('http://mondo.org/runtimePatterns','http://miso.es/constraints')]
 [import org::mondo::generate::constraint::project::request::queries /]
 
-[template public generateconstraintFiles(aPatternInstance : PatternInstance)]
+[template public generateconstraintFiles(aPatternInstance : PatternInstance, mmConstraint: MetamodelConstraint)]
 
 [for(c : ClassRoleInstance | aPatternInstance.classInstances)]
 
@@ -11,6 +11,7 @@
 [let message : String = c.getMessage()]
 
 [file ('constraints/'+ c.getName() + '.eol',false, 'UTF-8')]
+
 var result = Sequence{};
 var emfTool : new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
 var ecoreUtil = emfTool.ecoreUtil;
@@ -36,10 +37,23 @@ operation [c.element.name/] message() : String {
 }
 [/file]
 
+
 [/let]
 [/let]
 [/let]
 
 [/for]
+
+[for(cons : Constraint | mmConstraint.constraints)]
+
+[if (cons.eClass = null)]
+[file ('constraints/'+ cons.name + '.eol',false, 'UTF-8')]
+return [cons.statement/]
+[/file]
+[/if]
+
+[/for]
+
+
 
 [/template]

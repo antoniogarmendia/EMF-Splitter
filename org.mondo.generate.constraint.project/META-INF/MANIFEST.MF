@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui,
  org.eclipse.acceleo.common,
  org.eclipse.acceleo.engine,
- org.mondo.mm.heuristic.visualization;bundle-version="0.1.0"
+ org.mondo.mm.heuristic.visualization;bundle-version="0.1.0",
+ org.uam.eps.modular.contraints;bundle-version="0.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.mondo.generate.constraint.project.createProject,

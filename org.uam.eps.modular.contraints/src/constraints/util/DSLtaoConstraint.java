@@ -59,9 +59,9 @@ public class DSLtaoConstraint {
 			while (itConstraintRules.hasNext()) {
 				
 				Constraint constraint = (Constraint) itConstraintRules.next();
-				if (constraint.getEClass() != null)				
+				if (constraint.getEClass() != null)
 					addConstraintClassInstance(consClass,constraint,consInstances,constraintName,statement,errorMessage);				
-			}
+			}	
 		}	
 		
 		return consInstances;
