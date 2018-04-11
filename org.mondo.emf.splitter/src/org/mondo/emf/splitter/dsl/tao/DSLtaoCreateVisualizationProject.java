@@ -19,8 +19,13 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -121,7 +126,8 @@ public class DSLtaoCreateVisualizationProject implements IPatternImplementation 
 	@Override
 	public boolean applyPattern(EPackage ePack, Pattern pattern,
 			PatternInstances patternInstances, IPath iPath) {
-		// TODO Auto-generated method stub
+		
+		URI resourceURI = ePack.eResource().getURI();
 		//File URI of the Diagram Model
 		IResource resEcore = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(iPath);
 		
@@ -151,10 +157,42 @@ public class DSLtaoCreateVisualizationProject implements IPatternImplementation 
 		else
 			wizard_visualization.initEcore(resEcore.getLocationURI().toString(),null);
 		
-		wizard_visualization.setHeuristicStrategy(heuristicStrategy);
+		//Graphical Representation Wizard
+		DialogConcreteVisualization	 dialog = new DialogConcreteVisualization(PlatformUI.getWorkbench().
+				getActiveWorkbenchWindow().getShell(),wizard_visualization);
 		
-		DialogConcreteVisualization	 dialog = new DialogConcreteVisualization(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),wizard_visualization);
 		
+		//Search a graphic representation
+		URI graphicR = resourceURI.trimFileExtension().appendFileExtension("graphicR");
+		
+		boolean fileExist = new ExtensibleURIConverterImpl().exists(graphicR, null);
+		
+		if (fileExist == true) {
+			
+			boolean result = MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+					"Update/Override", 
+							"A file with the graphical representation pattern definition has been detected. "
+							+ "Would you like to update the pattern?");
+			
+			//update 
+			if(result == true) {
+				ResourceSet reset = new ResourceSetImpl();
+				Resource res = reset.getResource(graphicR, true);
+				try {
+					res.load(null);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				GraphicRepresentation gR = (GraphicRepresentation) res.getContents().get(0);
+				heuristicStrategy.setGraphic_representation(gR);
+				wizard_visualization.setHeuristicStrategy(heuristicStrategy);
+			}
+			else
+				wizard_visualization.setHeuristicStrategy(heuristicStrategy);
+		}	
+		
+		
+				
 		if (dialog.open() == Window.OK) 
 		{ 	
 		

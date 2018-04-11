@@ -320,6 +320,7 @@ public class PageDiagramElements extends WizardPage {
 	
 	public void Fill_Tree(){
 			
+		RepresentationDD  asdas = ((RepresentationDD)getGraphicRepresentation().getListRepresentations().get(getCurrentRepresentation()));
 		EClass rootEClass = ((RepresentationDD)getGraphicRepresentation().getListRepresentations().get(getCurrentRepresentation())).getRoot().getAnEClass();
 		if(rootEClass != null)
 		{

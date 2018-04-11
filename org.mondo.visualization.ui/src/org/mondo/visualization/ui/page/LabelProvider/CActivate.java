@@ -28,8 +28,8 @@ public class CActivate extends ColumnLabelProvider {
 		if(element instanceof AffixedCompartmentElement)
 			return ((AffixedCompartmentElement) element).getAnEReference().getName();
 		
-		if(element instanceof EdgeLabelEAttribute)
-			return ((EdgeLabelEAttribute) element).getLabelEAttribute().getName();
+		if(element instanceof LabelEAttribute)
+			return ((LabelEAttribute) element).getAnEAttribute().getName();
 		return "";
 	}
 

@@ -96,7 +96,7 @@ public class PageStrategySettings extends WizardPage{
 		container.setLayout(layout);
 		layout.numColumns = 2;
 		//End Define Container
-		
+			
 		if(getRepresentation()==0)
 			CreateControlRootStrategy(container);		
 		CreateControlArcStrategy(container);

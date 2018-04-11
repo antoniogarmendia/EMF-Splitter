@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module initFile('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns','http://www.eclipse.org/emf/2002/GenModel')]
+[module initFile('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns','http://www.eclipse.org/emf/2002/GenModel','http://www.eclipse.org/emf/2002/Ecore')]
 [import org::mondo::generate::modular::project::main::requests::global_queriesModularProject /]
 
 [template public generateinitFile(anProjectName : String, anPatternInstance : PatternInstance, anPackageName: String, anEObjectGenModel : GenModel)]
@@ -40,9 +40,9 @@ public class Init implements IStartup {
 			EvaluateCrossReferencesContributor eval = new EvaluateCrossReferencesContributor();
 			List<String> listMetamodelURIs = new ArrayList<String>();
 			listMetamodelURIs.add("http://www.eclipse.org/emf/2002/Ecore");
-			getDependencies ("http://mondo.org/WT", listMetamodelURIs);
-			listMetamodelURIs.add("http://mondo.org/WT");
-			eval.executeInit(registry, IdExtension, WTComponentsNewProjectNature.ID, listMetamodelURIs);
+			getDependencies ("[Get_ProjectClass(anPatternInstance).eContainer().eGet('nsURI')/]", listMetamodelURIs);
+			listMetamodelURIs.add("[Get_ProjectClass(anPatternInstance).eContainer().eGet('nsURI')/]");
+			eval.executeInit(registry, IdExtension, [Get_ProjectClass(anPatternInstance).name/]NewProjectNature.ID, listMetamodelURIs);
 			//Initialize Indexed Attributes
 			new EvaluateExecuteIndexedAttributeContributor().ExecIndexAttribute(registry);
 		}		

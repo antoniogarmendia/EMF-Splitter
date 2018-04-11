@@ -54,7 +54,8 @@ public class GraphicalSiriusEditor implements IEditorLauncher {
 		// Step 2: Get the DRepresentation to open
 		DAnalysis root = (DAnalysis) createdSession.getSessionResource().getContents().get(0);
 		DView dView = root.getOwnedViews().get(0);
-		DRepresentation dRepresentation = dView.getOwnedRepresentations().get(0);
+		//DRepresentation dRepresentation = dView.getOwnedRepresentations().get(0);
+		DRepresentation dRepresentation = dView.getOwnedRepresentationDescriptors().get(0).getRepresentation();
 				
 		// Step 3: Open representation
 		DialectUIManager.INSTANCE.openEditor(createdSession, dRepresentation, monitor);
