@@ -1,0 +1,33 @@
+[comment encoding = UTF-8 /]
+[module preferenceOptionsFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generatePreferenceOptionPage(anProjectName : String)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/preferences/').concat('PreferenceOptions.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].preferences;
+
+import java.util.List;
+
+import org.eclipse.core.runtime.Platform;
+import org.mondo.modular.constraint.ext.def.EvaluateConstraintEngineContributor;
+
+public class PreferenceOptions {
+	
+	/*Engine Options*/
+	
+	public static final String ENGINE_CHOICE = "choiceEngine";
+	public static final String DEFAULT_ENGINE = "DefaultEolEngine";
+	
+	public static final List<String> getEngineOptions()
+	{
+		EvaluateConstraintEngineContributor eval = new EvaluateConstraintEngineContributor();
+		List<String> listOfValues = eval.listContributors(Platform.getExtensionRegistry());
+		return listOfValues;
+	}
+
+}
+
+[/file]
+
+[/template]
