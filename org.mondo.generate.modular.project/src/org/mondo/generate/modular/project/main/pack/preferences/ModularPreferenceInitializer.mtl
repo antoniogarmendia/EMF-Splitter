@@ -27,6 +27,8 @@ public class [c.element.name/]PreferenceInitializer extends AbstractPreferenceIn
 	 */
 	public void initializeDefaultPreferences() {
 		
+		/*Tree Editor Options*/
+		
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		List<String> listvalues = PreferenceOptions.GetTreeEditorFeatureOptions();
 		String defId = null;
@@ -43,7 +45,23 @@ public class [c.element.name/]PreferenceInitializer extends AbstractPreferenceIn
 		else
 			defId = "Hawk";		
 		
-		store.setDefault(PreferenceOptions.FeatureEditor_CHOICE, defId);				
+		store.setDefault(PreferenceOptions.FeatureEditor_CHOICE, defId);	
+
+		/*Engine to Execute Constraint in a Fragmented Model*/
+		List<String> listEngines = PreferenceOptions.getEngineOptions();
+		String defEngine = null;
+		
+		if (listEngines.size() != 0) {
+			
+			Integer index = listEngines.indexOf(PreferenceOptions.DEFAULT_ENGINE);
+			
+			if (index.equals(-1)) {
+				defEngine = listEngines.get(0);
+			} else {
+				defEngine = PreferenceOptions.DEFAULT_ENGINE;
+			}			
+			store.setDefault(PreferenceOptions.ENGINE_CHOICE, defEngine);
+		}					
 	}
 
 }

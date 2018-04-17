@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.preference.*;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.mondo.generate.index.project.execute.EvaluateExecuteIndexedAttributeContributor;
+import org.mondo.modular.constraint.ext.def.EvaluateConstraintEngineContributor;
 import org.mondo.modular.references.ext.EvaluateCrossReferencesContributor;
 
 import org.eclipse.ui.IWorkbench;
@@ -56,9 +57,14 @@ public class [c.element.name/]PreferencePage
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("");
 	}
-
+	
+	/*Tree Editor Wizard*/
 	protected RadioGroupFieldEditor TreeEditorWizard;
 	protected String previously;
+
+	/*Engine to execute constraint*/
+	protected RadioGroupFieldEditor engine;
+	protected String previouslyEngine;
 	
 	/**
 	 * Creates the field editors. Field editors are abstractions of
@@ -83,7 +89,29 @@ public class [c.element.name/]PreferencePage
 				"Tree Editor Feature Wizard",
 				1,
 				labelAndvalues, 
-				getFieldEditorParent()));		
+				getFieldEditorParent()));	
+
+		/*Select the Engine to execute constraint*/
+		
+		List<String> listOfEngines = PreferenceOptions.getEngineOptions();
+		int countEngines = listOfEngines.size();		
+		
+		if (listOfEngines.size() != 0) {
+			
+			previouslyEngine = Activator.getDefault().getPreferenceStore().getString(PreferenceOptions.ENGINE_CHOICE);
+			
+			String['['/]]['['/]] labelAndvaluesEngine = new String['['/]countEngines]['['/]2];
+			for (int i = 0; i < countEngines; i++)
+				for (int j = 0; j < 2; j++) 
+					labelAndvaluesEngine['['/]i]['['/]j] = listOfEngines.get(i);
+				
+			addField(new RadioGroupFieldEditor(
+					PreferenceOptions.ENGINE_CHOICE,
+					"Engine for the execution of constraints",
+					1,
+					labelAndvaluesEngine, 
+					getFieldEditorParent()));			
+		}	
 	}
 	
 	/* (non-Javadoc)
@@ -116,7 +144,26 @@ public class [c.element.name/]PreferencePage
 				//Initialize Indexed Attributes
 				new EvaluateExecuteIndexedAttributeContributor().ExecIndexAttribute(registry);
 			}			
-		}		
+		}	
+
+		/*Engine*/
+		String currentEngine = Activator.getDefault().getPreferenceStore().getString(PreferenceOptions.ENGINE_CHOICE);
+		
+		if(!currentEngine.equals(previouslyEngine)) {
+			
+			IExtensionRegistry registry = Platform.getExtensionRegistry();
+			EvaluateConstraintEngineContributor eval = new EvaluateConstraintEngineContributor(); 
+						
+			if(!currentEngine.equals(PreferenceOptions.DEFAULT_ENGINE)){
+				
+				List<String> listMetamodelURIs = new ArrayList<String>();
+				listMetamodelURIs.add(ecoreURI);
+				getDependencies ("[c.element.ePackage.nsURI/]", listMetamodelURIs);
+				listMetamodelURIs.add("[c.element.ePackage.nsURI/]");
+				eval.executeInit(registry, currentEngine, [c.element.name/]NewProjectNature.ID, listMetamodelURIs);				
+			}			
+		}
+			
 		return performOk;
 	}
 

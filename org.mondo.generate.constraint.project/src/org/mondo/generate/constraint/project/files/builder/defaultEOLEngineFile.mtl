@@ -1,0 +1,41 @@
+[comment encoding = UTF-8 /]
+[module defaultEOLEngineFile('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[template public generateDefaultEOLEngineFile(anProjectName : String)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/builder/').concat('DefaultEolExecutionEngine.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].builder;
+
+import java.net.URI;
+import java.util.List;
+
+import org.mondo.modular.constraint.ext.def.IExecuteConstraint;
+import org.uam.eps.modular.constraints.dialog.def.eol.EolStandAlone;
+
+public class DefaultEolExecutionEngine implements IExecuteConstraint {
+
+	public DefaultEolExecutionEngine() {		
+	}
+
+	@Override
+	public boolean init(List<String> metamodelURIs, String modularNature) {
+		// Nothing to do
+		return false;
+	}
+	
+	@Override
+	public Object executeConstraint(String constraint, URI modelURI, URI metaModelURI, List<String> metamodelURIs,  boolean isUnit) {
+		
+		EolStandAlone executeEolModule = new EolStandAlone(metaModelURI, constraint, modelURI);
+		try {
+			executeEolModule.execute();
+			return executeEolModule.getResult();
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}		
+		return null;
+	}
+}
+[/file]
+[/template]

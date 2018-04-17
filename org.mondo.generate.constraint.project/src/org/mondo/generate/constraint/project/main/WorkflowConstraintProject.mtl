@@ -22,6 +22,8 @@
 [import org::mondo::generate::constraint::project::files::builder::executeEOLConstraintFile /]
 [import org::mondo::generate::constraint::project::files::builder::constraintQueryTool /]
 [import org::mondo::generate::constraint::project::files::builder::allConstraintFile /]
+[import org::mondo::generate::constraint::project::files::builder::defaultEOLEngineFile /]
+[import org::mondo::generate::constraint::project::files::builder::allHawkConstraintFile /]
 
 [template public WorkflowConstraintProject(anPatternInstance : PatternInstance, anProjectName : String, constraintName : String, pathEcore : String
 	,modularPatternInstance : PatternInstance, structureContain : ContainStructure, mmConstraint: MetamodelConstraint,genModelPath : String )]
@@ -31,7 +33,7 @@
 [let anEObjectGenModel : GenModel = LoadGenModel(genModelPath,modularPatternInstance.eResource())]
 	
 [generateActivatorFile(anProjectName)/]
-[generateManifestFile(anProjectName, anPatternInstance)/]	
+[generateManifestFile(anProjectName, anPatternInstance, modularPatternInstance)/]	
 [generatePluginFile(anProjectName,modularPatternInstance)/]
 
 [generateconstraintFiles(anPatternInstance, mmConstraint)/]
@@ -56,6 +58,8 @@
 [generateExecuteEOLConstraintFile(anProjectName, pathEcore, modularPatternInstance, anEObjectGenModel)/]
 [generateConstraintQueryTool(anProjectName, pathEcore)/]
 [generateAllConstraintFile(anProjectName, anPatternInstance, mmConstraint)/]
+[generateAllHawkConstraintFile(anProjectName, anPatternInstance, mmConstraint)/]
+[generateDefaultEOLEngineFile(anProjectName)/]
 
 [comment Contains /]
 [generateconstraintFiles(anProjectName, structureContain, anEObjectGenModel)/]

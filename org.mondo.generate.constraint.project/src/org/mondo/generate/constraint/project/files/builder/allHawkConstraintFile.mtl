@@ -1,0 +1,43 @@
+[comment encoding = UTF-8 /]
+[module allHawkConstraintFile('http://mondo.org/runtimePatterns','http://miso.es/constraints')]
+[import org::mondo::generate::constraint::project::request::queries /]
+
+[template public generateAllHawkConstraintFile(anProjectName : String,aPatternInstance : PatternInstance, mmConstraint: MetamodelConstraint)]
+
+[file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/builder/').concat('AllHawkConstraint.java'),false, 'UTF-8')]
+package [anProjectName/].[getProperty('prefix_name')/].builder;
+
+public class AllHawkConstraint {
+	
+	[for(c : ClassRoleInstance | aPatternInstance.classInstances)]
+	
+	public static String [c.getName()/] = "var result = Sequence{};"
+			+ "var listOfObjects = Model.getAllOf(mmURI, \"[c.element.name/]\", filePath);"
+			+ "for (element in listOfObjects) {"
+			+	"var check = element.constraint();"
+			+ 	"if (check == false) {"
+			+		"result.add(Sequence{element,element.message()});"		
+			+	"}"				
+			+ "}"
+			+ "return result;"
+			+ "operation [c.element.name/] constraint() : Boolean {"
+			+	"return [c.getStatement().tokenizeLine()/]" 
+			+"}"
+			+ "operation [c.element.name/] message() : String {"
+			+	"return [c.getMessage().tokenizeLine().replaceAll('\"','\\\\"')/]"	
+			+"}";
+	
+	[/for]
+
+
+	[for(cons : Constraint | mmConstraint.constraints)]
+
+	[if (cons.eClass = null)]
+	public static String [cons.name/] = "return [cons.statement/]";	
+	[/if]
+	
+	[/for]
+}
+[/file]
+
+[/template]

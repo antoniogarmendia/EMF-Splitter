@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IMarker;
@@ -23,6 +24,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -36,6 +38,11 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.epsilon.eol.types.EolSequence;
 import org.miso.wind.turbine.cs.constraint.dialog.ConstraintMarkerManager;
 import org.miso.wind.turbine.cs.constraint.dialog.ConstraintResourceMarker;
+[for (c :  ClassRoleInstance | modularPatternInstance.Get_ProjectClassRoleInstance())]
+import [anProjectName/].[c.element.name.toLower()/][getProperty('modular_prefix')/].Activator; 
+import [anProjectName/].[c.element.name.toLower()/][getProperty('modular_prefix')/].preferences.PreferenceOptions;
+ [/for]
+import org.mondo.modular.constraint.ext.def.EvaluateConstraintEngineContributor;
 import org.uam.eps.modular.constraints.dialog.def.eol.EolStandAlone;
 [comment Import the contains package/]
 import [anProjectName/].[getProperty('prefix_name')/].contains.*;
@@ -58,6 +65,7 @@ public class ExecuteEOLConstraint {
 	
 	private MetamodelConstraint mmconstraints;
 	private java.net.URI metaModelUri;
+	private String IdExtension;
 	
 	// EList of Constraints taking into account the Scope
 	private EList<Constraint> globalQueries;
@@ -67,6 +75,7 @@ public class ExecuteEOLConstraint {
 	
 	public ExecuteEOLConstraint() {
 		
+		this.IdExtension = Activator.getDefault().getPreferenceStore().getString(PreferenceOptions.ENGINE_CHOICE);
 		this.globalQueries = new BasicEList<Constraint>();
 		this.rootPackageQueries = new BasicEList<Constraint>();
 		this.packageQueries = new BasicEList<Constraint>();
@@ -95,7 +104,7 @@ public class ExecuteEOLConstraint {
 		try {
 			String projectMMString = ExecuteEOLConstraint.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString();
 			IPath pathMM = new Path(projectMMString);
-			pathMM = pathMM.removeLastSegments(1).append("org.miso.wind.turbine.cs/WT_DesignPatterns.ecore");
+			pathMM = pathMM.removeLastSegments(1).append("org.miso.wind.turbine.cs/WT_DesignPatterns.ecore");// Change! [pathEcore.toString()/]
 			this.metaModelUri = java.net.URI.create(pathMM.toString());
 			
 		} catch (URISyntaxException e) {			
@@ -134,11 +143,11 @@ public class ExecuteEOLConstraint {
 			Constraint constraint = (Constraint) itQueries.next();
 			String eolModuleString = null;
 			try {
-				eolModuleString = (String) AllConstraint.class.getField(constraint.getName()).get(null);
+				eolModuleString = getConstraint(constraint.getName());
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {				
 				e.printStackTrace();
 			}
-			Object result = executeEOLExpression(eolModuleString, resource.getLocationURI());		
+			Object result = executeEOLExpression(eolModuleString, resource.getLocationURI(), false);		
 			if (constraint.getEClass() == null)
 					markResourceWithoutContext(result, constraint, metaModelUri, resource);
 					else
@@ -159,11 +168,11 @@ public class ExecuteEOLConstraint {
 		String eolModuleString = null;
 		boolean anyError = false;
 		try {
-			eolModuleString = (String) AllConstraint.class.getField(constraint.getName()).get(null);
+			eolModuleString = getConstraint(constraint.getName());
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {				
 			e.printStackTrace();
 		}
-		Object result = executeEOLExpression(eolModuleString, resource.getLocationURI());
+		Object result = executeEOLExpression(eolModuleString, resource.getLocationURI(), false);
 		if (constraint.getEClass() == null)
 			anyError = markResourceWithoutContext(result, constraint, metaModelUri, resource);
 			else
@@ -195,11 +204,11 @@ public class ExecuteEOLConstraint {
 					executeEOL = true;
 					String eolModuleString = null;
 					try {
-						eolModuleString = (String) AllConstraint.class.getField(constraint.getName()).get(null);
+						eolModuleString = getConstraint(constraint.getName());
 					} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {				
 						e.printStackTrace();
 					}
-					Object result = executeEOLExpression(eolModuleString, resource.getLocationURI());
+					Object result = executeEOLExpression(eolModuleString, resource.getLocationURI(), unit);
 					if (constraint.getEClass() == null)
 						markResourceWithoutContext(result, constraint, metaModelUri, resource);
 					else
@@ -229,11 +238,11 @@ public class ExecuteEOLConstraint {
 		if (execute == true) {
 			String eolModuleString = null;
 			try {
-				eolModuleString = (String) AllConstraint.class.getField(constraint.getName()).get(null);
+				eolModuleString = getConstraint(constraint.getName());
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {				
 				e.printStackTrace();
 			}
-			Object result = executeEOLExpression(eolModuleString, resource.getLocationURI());			
+			Object result = executeEOLExpression(eolModuleString, resource.getLocationURI(), unit);			
 			if (constraint.getEClass() == null)
 				anyError = markResourceWithoutContext(result, constraint, metaModelUri, resource);
 			else
@@ -457,16 +466,20 @@ public class ExecuteEOLConstraint {
 		executeQueriesCheckContext(unitQueries, resource,true);
 	}
 	
-	public Object executeEOLExpression(String eolModule, java.net.URI modelUri) {
+	public Object executeEOLExpression(String eolModule, java.net.URI modelUri, boolean isUnit) {
 		
-		EolStandAlone executeEolModule = new EolStandAlone(metaModelUri, eolModule,modelUri);
-		try {
-			executeEolModule.execute();
-			return executeEolModule.getResult();
-		} catch (Exception e) {			
-			e.printStackTrace();
-		}	
-		return null;
+		/*Execute Engine Contributor*/
+		EvaluateConstraintEngineContributor eval = new EvaluateConstraintEngineContributor();
+		eval.executeConstraint(Platform.getExtensionRegistry(), this.IdExtension, eolModule, modelUri, metaModelUri, Arrays.asList("http://mondo.org/WT"), isUnit);
+		return eval.getResultConstraint();
+	}
+
+	public String getConstraint(String constraintName) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		
+		if (this.IdExtension.equals(PreferenceOptions.DEFAULT_ENGINE)) 
+			return (String) AllConstraint.class.getField(constraintName).get(null);
+			else
+				return (String) AllHawkConstraint.class.getField(constraintName).get(null);
 	}
 	
 	private File createTempEolFile(String name, String statement) {

@@ -80,7 +80,15 @@
                  class="[anProjectName/].[getProperty('prefix_name')/].builder.ConstraintQueryTool"
                  defaultName="ConstraintQueryTool">
            </tool>
-      </extension> 	
+      </extension> 
+	<extension
+         point="org.model.constraint.execution.definition.ext">
+      <client
+            Id="DefaultEolEngine"
+            class="[anProjectName/].[getProperty('prefix_name')/].builder.DefaultEolExecutionEngine">
+      </client>
+   </extension>
+		
 </plugin>
 [/file]
 [/template]
