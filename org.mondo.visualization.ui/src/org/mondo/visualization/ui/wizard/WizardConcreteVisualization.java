@@ -16,6 +16,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.mondo.visualization.ui.page.PageStrategySettings;
 import org.mondo.visualization.ui.page.diagram.decorator.PageDefineDiagramElementDecorator;
+import org.mondo.visualization.ui.page.diagram.element.ActionTreePageDiagramElements;
 import org.mondo.visualization.ui.page.diagram.element.PageDiagramElements;
 import org.mondo.visualization.ui.preferences.PreferenceOptions;
 import org.mondo.visualization.ui.Activator;
@@ -124,8 +125,9 @@ public class WizardConcreteVisualization extends Wizard{
 	@Override
 	public IWizardPage getStartingPage() {
 		
-		if(isUpdateGraphicR())			
+		if(isUpdateGraphicR()) {
 			return pageElements;
+		}
 		
 		return super.getStartingPage();
 	}
@@ -292,6 +294,8 @@ public class WizardConcreteVisualization extends Wizard{
 								//if(((Node) element).getContainerReference() == null)
 								//{
 									int index = getNemf().getList_classes().indexOf(((Node) element).getAnEClass());
+									if (index == -1) //Do it by Name
+										index = ActionTreePageDiagramElements.searchByName(((Node)element).getAnEClass(), getNemf().getList_classes());
 									EList<Integer> listOfParents = getHeuristicStrategy().getEcoreContainment().getAllParents(index);
 									Iterator<Integer> itParents = listOfParents.iterator();
 									while (itParents.hasNext()) {
@@ -316,6 +320,8 @@ public class WizardConcreteVisualization extends Wizard{
 							else if(element instanceof Edge)
 							{
 								int index = getNemf().getList_classes().indexOf(((Edge) element).getAnEClass());
+								if (index == -1) //Do it by Name
+									index = ActionTreePageDiagramElements.searchByName(((Edge)element).getAnEClass(), getNemf().getList_classes());
 								EList<Integer> listOfParents = getHeuristicStrategy().getEcoreContainment().getAllParents(index);
 								Iterator<Integer> itParents = listOfParents.iterator();
 								while (itParents.hasNext()) {

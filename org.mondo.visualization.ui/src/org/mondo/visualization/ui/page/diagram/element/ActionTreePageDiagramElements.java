@@ -303,10 +303,26 @@ public class ActionTreePageDiagramElements {
 	public static boolean PossibleElement(EClass rootEClass, EList<EList<Boolean>> pathMatrix, EList<EClass> listEClass, EClass possibleElement)
 	{
 		int indexRoot = listEClass.indexOf(rootEClass);
+		if(indexRoot == -1)
+			indexRoot = searchByName(rootEClass,listEClass);
 		int indexPossible = listEClass.indexOf(possibleElement);
+		if(indexPossible == -1)
+			indexPossible = searchByName(possibleElement,listEClass);
 		if(pathMatrix.get(indexRoot).get(indexPossible).equals(true))
 			return true;
 		else
 			return false;
+	}	
+	
+	public static int searchByName(EClass rootEClass, EList<EClass> listEClass) {
+		
+		for (int i = 0; i < listEClass.size(); i++) {
+			if(listEClass.get(i).getName().equals(rootEClass.getName()))
+				return i;
+		}
+		
+		return -1;
 	}
+	
+	
 }

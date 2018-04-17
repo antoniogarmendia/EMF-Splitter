@@ -1,7 +1,8 @@
 [comment encoding = UTF-8 /]
 [module CreateWizardForCrossReferences('http://www.eclipse.org/emf/2002/Ecore','http://mondo.org/runtimePatterns')]
+[import org::mondo::generate::modular::project::main::requests::global_queriesModularProject /]
 
-[template public generateCreateWizardForCrossReferences(anProName : String, anEClass : EClass)]
+[template public generateCreateWizardForCrossReferences(anProName : String, anEClass : EClass,anPatternInstance : PatternInstance)]
 
 [file ('src/'.concat(anProName.toLower() + '.' + anEClass.name.toLowerCase() + getProperty('prefix_name')).replaceAll('\\.','/').concat('/editors/').concat('ModularFeatureEditorDialog.java'),false, 'UTF-8')]
 package [anProName.toLower()/].[anEClass.name.toLowerCase()/][getProperty('prefix_name')/].editors;
@@ -95,7 +96,6 @@ public class ModularFeatureEditorDialog extends Dialog{
 
 	protected ModularFeatureEditorDialog(Shell parent, EObject parameObject, EStructuralFeature paramfeature, String paramIdExtension,
 			ILabelProvider paramLabelProvider) {
-		// TODO Auto-generated constructor stub
 		super(parent);
 		setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MAX);	
 		this.eObject = parameObject;
@@ -643,11 +643,35 @@ public class ModularFeatureEditorDialog extends Dialog{
 	public void ScopeResourcePackage() {
 		URI uri = eObject.eResource().getURI();
 		IPath ipath = new Path(uri.path()).removeLastSegments(1);
-		ipath = ipath.append(ipath.lastSegment().concat(".xmi"));
+		ipath = ipath.append(ipath.lastSegment().concat("." + searchExtension(uri)));
 		ResourceSet set = new ResourceSetImpl();
 		res = set.createResource(URI.createURI("platform:" + ipath.toString()));
 		current_scope = ScopeDefinitionEnum.SAME_PACKAGE;
 	};
+
+	public String searchExtension(URI uri) {
+		
+		URI parentURI = uri.trimSegments(1);
+		String folderName = parentURI.lastSegment();
+		URI testURI = null;
+		for (int i = 1; i <= [anPatternInstance.Get_FolderClassRoleInstance()->size()/]; i++) {
+			testURI = parentURI.appendSegment(folderName + "." + i);
+			if (existFile(testURI) == true) {
+				return Integer.toString(i);
+			}
+		}				
+		return null;
+	}
+	
+	private boolean existFile(URI modelURI){
+		
+		String path = modelURI.toPlatformString(true);			
+		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(path));
+		if (file.exists() == true)
+			return true;
+		
+		return false;
+	}
 
 	public void ScopeResourceUnit() {
 

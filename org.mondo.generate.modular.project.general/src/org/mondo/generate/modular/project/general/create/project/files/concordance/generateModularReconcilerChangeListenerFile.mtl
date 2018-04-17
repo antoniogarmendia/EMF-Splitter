@@ -1,7 +1,9 @@
 [comment encoding = UTF-8 /]
-[module generateModularReconcilerChangeListenerFile('http://www.eclipse.org/emf/2002/Ecore')]
+[module generateModularReconcilerChangeListenerFile('http://www.eclipse.org/emf/2002/Ecore', 'http://mondo.org/runtimePatterns')]
 
-[template public generateModularReconcilerChangeListener(anProjectName : String)]
+[import org::mondo::generate::modular::project::general::create::project::request::generalQueries/]
+
+[template public generateModularReconcilerChangeListener(anProjectName : String, anPatternInstances : PatternInstances)]
 [file ('src/'.concat(anProjectName.toLower() + '.' + getProperty('prefix_name')).replaceAll('\\.','/').concat('/concordance/ModularReconcilerChangeListener.java'),false, 'UTF-8')]
 package [anProjectName.toLower()/].[getProperty('prefix_name')/].concordance;
 
@@ -96,10 +98,13 @@ public class ModularReconcilerChangeListener extends DefaultModelChangeListener 
 		
 		URI parentURI = moved.getUri().trimSegments(1);
 		String folderName = parentURI.lastSegment();
-		parentURI = parentURI.appendSegment(folderName + ".xmi");
-		if (existFile(parentURI) == false) {
+		int extension = searchExtension(parentURI);
+		if (extension == -1) {
 			return false;
+		} else {
+			parentURI = parentURI.appendSegment(folderName + "." + extension);
 		}
+
 		try {
 			Resource parentResource = moved.getEmfResource(false).getResourceSet().getResource(parentURI, true);
 			EObject rootEObject = parentResource.getContents().get(0);
@@ -128,6 +133,20 @@ public class ModularReconcilerChangeListener extends DefaultModelChangeListener 
 			e.printStackTrace();
 		}	
 		return true;	
+	}
+	
+	private int searchExtension(URI parentURI) {
+		
+		String folderName = parentURI.lastSegment();
+		URI testURI = null;
+		for (int i = 1; i <= [anPatternInstances.getClassesRolePackage()->asSequence()->size()/]; i++) {
+			testURI = parentURI.appendSegment(folderName + "." + i);
+			if (existFile(testURI) == true) {
+				return i;
+			}
+		}
+		
+		return -1;
 	}
 	
 	private void danglingProxy(IConcordanceModel moved, String feature) {		

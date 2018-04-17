@@ -30,6 +30,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.annotation.Generated;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.BasicEList;
@@ -480,6 +482,9 @@ public class HeuristicStrategyImpl extends MinimalEObjectImpl.Container implemen
 			if(element!=null){
 				//Define Palette
 				int index = nemf.getList_classes().indexOf(element.getAnEClass());
+				//If the index is -1 do it by Name
+				if (index == -1)
+					index = searchByName(element.getAnEClass(),nemf.getList_classes());				
 				EList<Integer> listOfParents = ecoreContainment.getAllParents(index);
 				Iterator<Integer> itParents = listOfParents.iterator();
 				while (itParents.hasNext()) {
@@ -768,6 +773,19 @@ public class HeuristicStrategyImpl extends MinimalEObjectImpl.Container implemen
 		result.append(currentMMGR);
 		result.append(')');
 		return result.toString();
+	}
+	
+	/*
+	 * @generated NOT
+	 */
+	public static int searchByName(EClass rootEClass, EList<EClass> listEClass) {
+		
+		for (int i = 0; i < listEClass.size(); i++) {
+			if(listEClass.get(i).getName().equals(rootEClass.getName()))
+				return i;
+		}
+		
+		return -1;
 	}
 
 } //HeuristicStrategyImpl

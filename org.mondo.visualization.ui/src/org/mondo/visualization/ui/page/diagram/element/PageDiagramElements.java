@@ -9,6 +9,7 @@ import graphic_representation.RepresentationDD;
 import java.util.Iterator;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -319,8 +320,11 @@ public class PageDiagramElements extends WizardPage {
 	}	
 	
 	public void Fill_Tree(){
-			
-		RepresentationDD  asdas = ((RepresentationDD)getGraphicRepresentation().getListRepresentations().get(getCurrentRepresentation()));
+		
+ 		EObject asd = (EObject)getGraphicRepresentation();
+		
+ 		Object asd1 = asd.eResource();
+ 		
 		EClass rootEClass = ((RepresentationDD)getGraphicRepresentation().getListRepresentations().get(getCurrentRepresentation())).getRoot().getAnEClass();
 		if(rootEClass != null)
 		{
@@ -355,7 +359,7 @@ public class PageDiagramElements extends WizardPage {
 		treeViewer.setContentProvider(new GraphicTreeContentProvider());
 		
 		//Update the Classes that are not part of the diagram
-		updateNoElements();
+		updateNoElements();		
 		
 		treeViewer.setInput(new Object[]{getGraphicRepresentation().getListRepresentations().get(getRepresentation()),
 										getHeuristicStrategySettings().getStrategy_possibleElements()});	

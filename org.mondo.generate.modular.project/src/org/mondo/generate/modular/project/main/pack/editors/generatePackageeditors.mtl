@@ -11,7 +11,7 @@
 [template public generatePackageeditors(anProjectName : String, anPackageName : String, anPatternInstance : PatternInstance,anEObjectGenModel : GenModel)]
 
 [let anEClass : EClass = anPatternInstance.Get_ProjectClassRoleInstance().element]
-	[generateCreateWizardForCrossReferences(anProjectName, anEClass) /]
+	[generateCreateWizardForCrossReferences(anProjectName, anEClass,anPatternInstance) /]
 [/let]
 [let c : ClassRoleInstance = anPatternInstance.Get_ProjectClassRoleInstance()]
 	[ModularCrossReferences(anProjectName, c)/]

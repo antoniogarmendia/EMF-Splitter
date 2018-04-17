@@ -47,6 +47,7 @@ public class DSLtaoUtils {
 	
 	public static final String catInfrastructureFunctionality = "Infrastructure Functionality";
 	public static final String catLanguageFragmentation = "Language Fragmentation";
+	public static final String catConcreteSyntax = "Concrete Syntax";
 	
 	
 	// Patterns
@@ -55,14 +56,23 @@ public class DSLtaoUtils {
 	public static final String catVisibility = "Visibility";
 	public static final String catConstraint = "Constraint";
 	public static final String catIndex = "IndexAttribute";
+	public static final String catGraphRepresentation = "Graph-based Representation";
 	
 	/*
 	 * Get Modular Pattern from the pattern set
 	 * */	
 	
-	public static Pattern getModularPattern(PatternSet iPatternModel){
+	public static Pattern getModularPattern(PatternSet iPatternModel) {
 		
 		return getPatternInSubCategory(iPatternModel, catInfrastructureFunctionality, catLanguageFragmentation, catModularity);	
+	}
+	
+	/*
+	 * Get Graph Representation Pattern from the pattern set
+	 * */
+	
+	public static Pattern getGraphRepresentation(PatternSet iPatternModel) {
+		return getPatternInSubCategory(iPatternModel, catConcreteSyntax, null, catGraphRepresentation);	
 	}
 	
 	/*
@@ -110,6 +120,14 @@ public class DSLtaoUtils {
 			Category category = (Category) itCategories.next();
 			if(category.getName().equals(patternCategory)){
 				
+				if (patternSubCategory == null) { //Search the pattern in the category
+					Iterator<Pattern> itPatterns = category.getPatterns().iterator();
+					while (itPatterns.hasNext()) {
+						Pattern pattern = (Pattern) itPatterns.next();
+						if(pattern.getName().equals(patternName))
+							return pattern; 
+					}
+				}				
 				Iterator<Category> itSubCategories = category.getSubcategories().iterator();
 				while (itSubCategories.hasNext()) {
 					Category subCategory = (Category) itSubCategories.next();

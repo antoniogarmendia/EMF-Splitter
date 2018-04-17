@@ -15,14 +15,17 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.BasicInternalEList;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -30,22 +33,29 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.miso.wizard.instantiate.modular.pattern.utils.GraphToModularityPattern;
+import org.miso.wizard.instantiate.modular.pattern.utils.PatternModularUtils;
 import org.mondo.acceleo.generate.sirius.createProject.CreateSiriusPluginProject;
 import org.mondo.editor.extensionpoints.IPatternImplementation;
 import org.mondo.editor.extensionpoints.ValidationInfo;
 import org.mondo.editor.graphiti.diagram.utils.ModelUtils;
 import org.mondo.editor.ui.utils.patterns.MMInterfaceRelDiagram;
+import org.mondo.editor.ui.utils.patterns.PatternApplicationUtils;
 import org.mondo.editor.ui.utils.patterns.PatternUtils;
 import org.mondo.editor.ui.utils.patterns.RuntimePatternsModelUtils;
 import org.mondo.visualization.ui.libraryrtpat.XMIRuntimePatternsImplImpl;
 import org.mondo.visualization.ui.wizard.DialogConcreteVisualization;
 import org.mondo.visualization.ui.wizard.WizardConcreteVisualization;
 
+import com.google.common.collect.Iterables;
+
 import RepresentationGraph.RepresentationGraphFactory;
 import dslHeuristicVisualization.HeuristicStrategy;
 import dslHeuristicVisualization.RepreHeurSS;
 import dslHeuristicVisualization.impl.DslHeuristicVisualizationFactoryImpl;
 import runtimePatterns.ClassRoleInstance;
+import runtimePatterns.FeatureRoleInstance;
+import runtimePatterns.InstanceFeatureRoleInstance;
 
 import org.eclipse.graphiti.ui.editor.DiagramBehavior;
 import org.eclipse.graphiti.ui.editor.IDiagramContainerUI;
@@ -53,9 +63,11 @@ import org.eclipse.graphiti.ui.editor.IDiagramContainerUI;
 import runtimePatterns.PatternInstance;
 import runtimePatterns.PatternInstances;
 import runtimePatterns.ReferenceRoleInstance;
+import runtimePatterns.TypeFeatureRoleInstance;
 import runtimePatterns.impl.RuntimePatternsFactoryImpl;
 import splitterLibrary.EcoreEMF;
 import splitterLibrary.impl.SplitterLibraryFactoryImpl;
+import splitterLibrary.util.DSLtaoUtils;
 import dslPatterns.ClassInterface;
 import dslPatterns.ComplexFeatureMain;
 import dslPatterns.FeatureInstance;
@@ -64,6 +76,7 @@ import dslPatterns.FeatureType;
 import dslPatterns.MMInterface;
 import dslPatterns.Pattern;
 import dslPatterns.PatternMetaModel;
+import dslPatterns.PatternSet;
 import dslPatterns.ReferenceInterface;
 import graphic_representation.AllElements;
 import graphic_representation.DiagramElement;
@@ -77,12 +90,11 @@ import graphic_representation.impl.Graphic_representationFactoryImpl;
 public class DSLtaoCreateVisualizationProject implements IPatternImplementation {
 
 	public DSLtaoCreateVisualizationProject() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public boolean execute(EPackage ePack, PatternInstance pattern, IPath iPath) {
-		// TODO Auto-generated method stub
 		IResource res = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(iPath);
 		IProject current_pro = res.getProject();		
 		EcoreEMF nemf = SplitterLibraryFactoryImpl.eINSTANCE.createEcoreEMF();
@@ -96,7 +108,7 @@ public class DSLtaoCreateVisualizationProject implements IPatternImplementation 
 			try {
 					ModelUtils.saveModel(fileuri, ePack);
 			} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 				e.printStackTrace();
 			}
 		//END
@@ -112,14 +124,14 @@ public class DSLtaoCreateVisualizationProject implements IPatternImplementation 
 
 	@Override
 	public ValidationInfo validate(EPackage ePack, PatternInstance pattern) {
-		// TODO Auto-generated method stub
+		// Nothing to do
 		return null;
 	}
 
 	@Override
 	public List<ENamedElement> getOptimalElements(EPackage ePack,
 			MMInterface mminterface) {
-		// TODO Auto-generated method stub
+		// Nothing to do
 		return null;
 	}
 
@@ -138,6 +150,11 @@ public class DSLtaoCreateVisualizationProject implements IPatternImplementation 
 		
 		//Create Heuristic Strategy
 		HeuristicStrategy heuristicStrategy = DslHeuristicVisualizationFactoryImpl.eINSTANCE.createHeuristicStrategy();
+		//Try insert a resource
+		ResourceSet reset = new ResourceSetImpl();
+		Resource resStrategy = reset.createResource(resourceURI.trimFileExtension().appendFileExtension("strategy"));
+		resStrategy.getContents().add(heuristicStrategy);
+		//End
 		GraphicRepresentation graph = Graphic_representationFactoryImpl.eINSTANCE.createGraphicRepresentation();
 		MMGraphic_Representation mmgraph = Graphic_representationFactoryImpl.eINSTANCE.createMMGraphic_Representation();
 		mmgraph.getListRepresentations().add(Graphic_representationFactoryImpl.eINSTANCE.createRepresentationDD());
@@ -167,6 +184,8 @@ public class DSLtaoCreateVisualizationProject implements IPatternImplementation 
 		
 		boolean fileExist = new ExtensibleURIConverterImpl().exists(graphicR, null);
 		
+		wizard_visualization.setHeuristicStrategy(heuristicStrategy);
+		
 		if (fileExist == true) {
 			
 			boolean result = MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
@@ -176,7 +195,8 @@ public class DSLtaoCreateVisualizationProject implements IPatternImplementation 
 			
 			//update 
 			if(result == true) {
-				ResourceSet reset = new ResourceSetImpl();
+				
+				//ResourceSet reset = new ResourceSetImpl();
 				Resource res = reset.getResource(graphicR, true);
 				try {
 					res.load(null);
@@ -185,25 +205,51 @@ public class DSLtaoCreateVisualizationProject implements IPatternImplementation 
 				}
 				GraphicRepresentation gR = (GraphicRepresentation) res.getContents().get(0);
 				heuristicStrategy.setGraphic_representation(gR);
+				graph = gR;
 				wizard_visualization.setHeuristicStrategy(heuristicStrategy);
-			}
-			else
-				wizard_visualization.setHeuristicStrategy(heuristicStrategy);
-		}	
-		
-		
+			}			
+		} else {
+			wizard_visualization.setUpdateGraphicR(false);
+		}
+			
 				
 		if (dialog.open() == Window.OK) 
 		{ 	
+			IProject project = resEcore.getProject();
+			// obtain Graph-Representation Pattern
+			PatternSet patternModel = PatternUtils.getPatternSetModel(project);
+			Pattern graphPattern = DSLtaoUtils.getGraphRepresentation(patternModel);
+			DSLtaoUtils.setPatternAbsoluteUri(project, graphPattern.eResource());
+			
+			PatternInstances graphInstance = DSLtaoUtils.createPatternInstances();
+			
+			//convert GraphicalRepresentation to runtime patterns
+			GRToDSLtaoGraph transoPattern = new GRToDSLtaoGraph(graphPattern);
+			transoPattern.tranformGRToGraphBasedPattern(graph, graphInstance);
+			//graphInstance.getAppliedPatterns().get(0);
+			
+			// save runtime patterns
+			URI uri = resourceURI.trimFileExtension().appendFileExtension("rtpat");
+			boolean exisRtpat = DSLtaoUtils.existRuntimePatterns(uri);
+			
+			// update runtime patterns
+			PatternModularUtils.savePatternInstanceInRtapt(uri,graphInstance.getAppliedPatterns().get(0),DSLtaoUtils.catGraphRepresentation);
+			
+			transformPatternsCompatibleWithDiagram(ePack,graphInstance.getAppliedPatterns().get(0));
+			
+			// apply pattern to the diagram
+			PatternApplicationUtils.applyPattern(transformFromAppliedPatternsToMMInterfaceRelDiagram(graphInstance.getAppliedPatterns().get(0),pattern),
+					getDiagramDSLtao(), pattern, patternInstances, "Graph-based Representation", false);
+			
+			System.out.println("Apply Pattern");
 		
 		//GraphicRepresentation graphicR = wizard_visualization.getHeuristicStrategy().getGraphic_representation();
 				
 		//Add Pattern Instances to Diagram
+			/*
 			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			IEditorPart editor = activePage.getActiveEditor();
-			
-			
-			
+						
 			if (editor instanceof IDiagramContainerUI){
 				
 				DiagramBehavior diagramB = ((IDiagramContainerUI)editor).getDiagramBehavior();
@@ -216,7 +262,7 @@ public class DSLtaoCreateVisualizationProject implements IPatternImplementation 
 
 					@Override
 					protected void doExecute() {
-						// TODO Auto-generated method stub
+						
 						patternInstances.getAppliedPatterns().addAll(pis);
 					}
 				});			
@@ -224,6 +270,10 @@ public class DSLtaoCreateVisualizationProject implements IPatternImplementation 
 				
 				//saveRuntimePatternsInstances(diagramB, pis);
 			}
+			*/
+			
+			
+			
 		//End
 				
 		System.out.println("Dedicated for Graph Based Representation");
@@ -231,6 +281,78 @@ public class DSLtaoCreateVisualizationProject implements IPatternImplementation 
 		
 		return true;
 	}
+	
+private DiagramBehavior getDiagramDSLtao() {
+		
+		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IDiagramContainerUI editor = (IDiagramContainerUI)activePage.getActiveEditor();
+			
+		return editor.getDiagramBehavior();		
+	}
+	
+private List<MMInterfaceRelDiagram> transformFromAppliedPatternsToMMInterfaceRelDiagram(PatternInstance modularInstance, Pattern pattern) {
+		
+		List<MMInterfaceRelDiagram> modularityMM = new LinkedList<MMInterfaceRelDiagram>();
+		Iterator<ClassRoleInstance> itClassRoleInstance = modularInstance.getClassInstances().iterator();
+		
+		int order = 0;
+		// add classes
+		while (itClassRoleInstance.hasNext()) {
+			ClassRoleInstance classRoleInstance = (ClassRoleInstance) itClassRoleInstance.next();
+			MMInterface interfaceClassRoleInstance = classRoleInstance.getRole();
+			String elementDiagram = classRoleInstance.getElement().getName();
+			// add ClassRoleInstance
+			MMInterfaceRelDiagram parentClassRoleInstance = new MMInterfaceRelDiagram
+					(interfaceClassRoleInstance, elementDiagram, order, modularityMM);
+			modularityMM.add(parentClassRoleInstance);		
+			
+			// add reference instances (composition)	
+			Iterator<ReferenceRoleInstance> itReferenceInstances = classRoleInstance.getReferenceInstances().iterator();
+			while (itReferenceInstances.hasNext()) {
+				ReferenceRoleInstance referenceRoleInstance = (ReferenceRoleInstance) itReferenceInstances.next();
+				String value = elementDiagram + "/" + referenceRoleInstance.getElement().getName();
+				MMInterfaceRelDiagram mmReferenceRoleInstance = new MMInterfaceRelDiagram
+						(referenceRoleInstance.getRole(), value, order, modularityMM);
+				mmReferenceRoleInstance.setParent(parentClassRoleInstance);
+				modularityMM.add(mmReferenceRoleInstance);
+			}			
+			
+			// add FeatureType
+			Iterator<FeatureRoleInstance> itFeatureInstances = classRoleInstance.getFeatureInstances().iterator();
+			while (itFeatureInstances.hasNext()) {
+				FeatureRoleInstance featureRoleInstance = (FeatureRoleInstance) itFeatureInstances.next();
+				// add name feature
+				if (featureRoleInstance instanceof TypeFeatureRoleInstance) {
+					TypeFeatureRoleInstance type = (TypeFeatureRoleInstance) featureRoleInstance;
+					String value = elementDiagram + "/" + type.getElement().getName(); 
+					if (value != null) {
+						MMInterfaceRelDiagram mmFeatureType = new MMInterfaceRelDiagram
+								(type.getRole(), value, order, modularityMM);
+						mmFeatureType.setParent(parentClassRoleInstance);						
+						modularityMM.add(mmFeatureType);
+					}
+				}
+				// add extension & icon
+				else if (featureRoleInstance instanceof InstanceFeatureRoleInstance) {
+					InstanceFeatureRoleInstance feat = (InstanceFeatureRoleInstance) featureRoleInstance;
+					String value = feat.getValue();
+					if (value != null) {						
+						MMInterfaceRelDiagram mmFeatureRole = new MMInterfaceRelDiagram
+								(feat.getRole(), value, order, modularityMM);	
+						mmFeatureRole.setParent(parentClassRoleInstance);
+						if(feat.getRole().getRef().get(0).getName().contains("icon"))
+							parentClassRoleInstance.getChildren().add(mmFeatureRole);
+						modularityMM.add(mmFeatureRole);
+					}
+				}
+				
+			}
+			order++;
+		}	
+		
+		return modularityMM;
+	}
+	
 	
 	public EList<PatternInstance> ConvertGraphicRepresentationtoPatternInstance(GraphicRepresentation graph, PatternInstances patternInstances,Pattern pattern)
 	{
@@ -374,6 +496,88 @@ public class DSLtaoCreateVisualizationProject implements IPatternImplementation 
 		  
 		 //String patternInstanceName = RuntimePatternsModelUtils.getPatternNameValid(pis, pat.getName());
 		 //PatternApplicationUtils.applyPattern(patternRelDiagram, db, pat, pis, patternInstanceName, false);
+	}
+	
+	private void transformPatternsCompatibleWithDiagram(EPackage ePack, PatternInstance patternInstance) {
+		
+		EList<EClass> listEClasses = obtainEClasses(ePack);		
+		Iterator<ClassRoleInstance> itClassRoleInstance = patternInstance.getClassInstances().iterator();
+		while (itClassRoleInstance.hasNext()) {
+			ClassRoleInstance classRoleInstance = (ClassRoleInstance) itClassRoleInstance.next();
+			EClass eClass = searchEClassByName(listEClasses, classRoleInstance.getElement().getName());
+			classRoleInstance.setElement(eClass);
+			
+			// set name
+			Iterator<FeatureRoleInstance> itFeatures = classRoleInstance.getFeatureInstances().iterator();
+			while (itFeatures.hasNext()) {
+				FeatureRoleInstance featureRoleInstance = (FeatureRoleInstance) itFeatures.next();
+				if (featureRoleInstance instanceof TypeFeatureRoleInstance) {
+					
+					TypeFeatureRoleInstance typeFeat = (TypeFeatureRoleInstance) featureRoleInstance;
+					EAttribute eAttribute = searchEAttributeByName(eClass, typeFeat.getElement().getName());
+					typeFeat.setElement(eAttribute);					
+				}
+			}
+			
+			//set composition
+			Iterator<ReferenceRoleInstance> itReferences = classRoleInstance.getReferenceInstances().iterator();
+			while (itReferences.hasNext()) {
+				ReferenceRoleInstance referenceRoleInstance = (ReferenceRoleInstance) itReferences.next();
+				EReference eReference = searchEReference(eClass, referenceRoleInstance.getElement().getName());
+				referenceRoleInstance.setElement(eReference);				
+			}			
+		}
+		
+	}
+	
+	private EList<EClass> obtainEClasses(EPackage ePackage) {
+		
+		EClass[] aux = Iterables.toArray(Iterables.filter(ePackage.getEClassifiers(), EClass.class), EClass.class);
+		EList<EClass> listEClasses = new BasicInternalEList<EClass>(EClass.class, aux.length,aux);
+		EList<EPackage> listSubPackages = ePackage.getESubpackages();
+		for (int i = 0; i < listSubPackages.size(); i++) {
+			EPackage currentPack = listSubPackages.get(i);
+			aux = Iterables.toArray(Iterables.filter(currentPack.getEClassifiers(), EClass.class), EClass.class);
+			listEClasses.addAll(new BasicInternalEList<EClass>(EClass.class, aux.length,aux));
+			listSubPackages.addAll(currentPack.getESubpackages());
+		}
+		
+		return listEClasses;		
+	}
+	
+private EClass searchEClassByName(EList<EClass> listEClasses, String name) {
+		
+		
+		Iterator<EClass> itEClasses =  listEClasses.iterator();
+		while (itEClasses.hasNext()) {
+			EClass eClass = (EClass) itEClasses.next();
+			if(eClass.getName().equals(name))
+				return eClass;
+		}		
+		return null;
+	}
+	
+	private EAttribute searchEAttributeByName (EClass eClass, String name) {
+		
+		Iterator<EAttribute> itEAttributes = eClass.getEAllAttributes().iterator();
+		while (itEAttributes.hasNext()) {
+			EAttribute eAttribute = (EAttribute) itEAttributes.next();
+			if (eAttribute.getName().equals(name))
+				return eAttribute;
+		}		
+		return null;		
+	}
+	
+	private EReference searchEReference (EClass eClass, String name) {
+		
+		Iterator<EReference> allContainments = eClass.getEAllContainments().iterator();
+		while (allContainments.hasNext()) {
+			EReference eReference = (EReference) allContainments.next();
+			if (eReference.getName().equals(name))
+				return eReference;
+		}	
+		
+		return null;
 	}
 
 }

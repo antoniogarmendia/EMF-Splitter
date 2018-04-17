@@ -25,7 +25,7 @@
 [generateWizard(anProjectName, anPatternInstances,anEObjectGenModel)/]
 
 [comment generate package concordance /]
-[generatePackageconcordance(anProjectName)/]
+[generatePackageconcordance(anProjectName,anPatternInstances)/]
 
 [/let]
 	

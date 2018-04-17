@@ -192,15 +192,18 @@ public class PageStrategySettings extends WizardPage{
 		
 		if(getListUnitClassRoleInstance()!= null)
 		{
-			btn_modularity.setSelection(true);
-			EList<MMGraphic_Representation> mmRepresentation = getHeuristicStrategy().getGraphic_representation().getAllGraphicRepresentation();
-			ClassRoleInstanceToMMGraphicRepresentation(getListUnitClassRoleInstance(), mmRepresentation);
+			btn_modularity.setSelection(true);			
 		}
 		else
 			if(getHeuristicStrategySettings().getStrategy_root() instanceof ConcreteStrategyMaxContainment)
 				btn_maxroot.setSelection(true);
 		else
-			btn_noparroot.setSelection(true);		
+			btn_noparroot.setSelection(true);	
+		
+		if (((WizardConcreteVisualization)getWizard()).isUpdateGraphicR() == false) {
+			EList<MMGraphic_Representation> mmRepresentation = getHeuristicStrategy().getGraphic_representation().getAllGraphicRepresentation();
+			ClassRoleInstanceToMMGraphicRepresentation(getListUnitClassRoleInstance(), mmRepresentation);
+		}
 		//End Group Root		
 	}
 	

@@ -18,6 +18,19 @@
 			->select(classRoleInstance : ClassRoleInstance | classRoleInstance.isClassRoleInstanceProject())	
 	/]
 
+[query public getClassesRolePackage (anPatternInstances : PatternInstances) : Sequence(ClassRoleInstance) = 
+	anPatternInstances.getModularPatterns()->collect(pattern : PatternInstance | pattern.classInstances)
+			->select(classRoleInstance : ClassRoleInstance | classRoleInstance.isClassRoleInstancePackage())	
+	/]
+
+[query public isClassRoleInstancePackage (classRoleInstance : ClassRoleInstance) : Boolean = 
+	if (classRoleInstance.role.ref->select(anEClass : EClass | anEClass.name.equalsIgnoreCase('Package'))->size() > 0) then
+			true
+		else
+			false
+	endif
+	/]
+
 [query public isClassRoleInstanceProject (classRoleInstance : ClassRoleInstance) : Boolean = 
 	if (classRoleInstance.role.ref->select(anEClass : EClass | anEClass.name.equalsIgnoreCase('Project'))->size() > 0) then
 			true

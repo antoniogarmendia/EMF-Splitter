@@ -9,7 +9,7 @@
 [import org::mondo::generate::modular::project::general::create::project::files::concordance::generateModularProxyAnalyserFile /]
 [import org::mondo::generate::modular::project::general::create::project::files::concordance::generateModularReconcilerChangeListenerFile /]
 
-[template public generatePackageconcordance(anProjectName : String)]
+[template public generatePackageconcordance(anProjectName : String, anPatternInstances : PatternInstances)]
 
 [generateDeleteCrossReferences(anProjectName)/]
 [generateDeletePreviousProxy(anProjectName) /]
@@ -17,6 +17,6 @@
 [generateModularDomain(anProjectName)/]
 [generateModularModelFactory(anProjectName)/]
 [generateModularProxyAnalyser(anProjectName)/]
-[generateModularReconcilerChangeListener(anProjectName)/]
+[generateModularReconcilerChangeListener(anProjectName, anPatternInstances)/]
 
 [/template]

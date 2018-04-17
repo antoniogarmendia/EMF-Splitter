@@ -22,6 +22,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.mondo.visualization.ui.libraryrtpat,
+ org.mondo.visualization.ui.page.diagram.element,
  org.mondo.visualization.ui.wizard
 Import-Package: com.google.common.base,
  org.eclipse.emf.ecore.xmi.impl,

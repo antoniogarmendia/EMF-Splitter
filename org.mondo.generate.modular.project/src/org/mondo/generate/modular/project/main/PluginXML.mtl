@@ -126,6 +126,13 @@
           type="[getProperty('default_extension')/]">
     </parser>
 	[/if]
+	<!--XMI FILE EXTENSION PARSER FOR PACKAGES-->
+	[for (c : ClassRoleInstance | anPatternInstance.Get_FolderClassRoleInstance())]
+		<parser
+          class="org.mondo.generate.modular.project.general.create.project.main.api.PerformantXMIResourceFactoryImpl"
+          type="[i/]">
+		</parser>
+	[/for]	
 	</extension>
 	<!--PROJECT MODULAR NATURE-->
    <extension
