@@ -71,7 +71,7 @@ public class EolStandAlone extends EpsilonStandAlone{
 	public List<IModel> getModels() throws Exception {
 		
 		List<IModel> models = new ArrayList<IModel>();
-		models.add(createEmfModel("Model", true, true));		
+		models.add(createEmfModel("Model", true, false));		
 		return models;
 	}
 	

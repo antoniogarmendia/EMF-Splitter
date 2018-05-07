@@ -18,6 +18,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -393,13 +394,17 @@ public class ExecuteEOLConstraint {
 	}
 	
 	private String fileUriToPlatform(String fileURI) {
-		
-		URIConverter converter = new ExtensibleURIConverterImpl();
-		org.eclipse.emf.common.util.URI platformURI = org.eclipse.emf.common.util.URI.createPlatformResourceURI("/", false);
-		org.eclipse.emf.common.util.URI fileUri = org.eclipse.emf.common.util.URI.createFileURI(ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString() + File.separator);
-		converter.getURIMap().put(fileUri, platformURI);
-		org.eclipse.emf.common.util.URI afileURI = converter.normalize(org.eclipse.emf.common.util.URI.createURI(fileURI));
-		return afileURI.toString();
+		try {
+			IFile['['/]] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(new java.net.URI(fileURI));
+			if (files.length > 0) {
+				IFile file = files['['/]0];
+				return URI.createPlatformResourceURI(file.getFullPath().toString(), true).toString();
+			}
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+
+		return fileURI;
 	}
 	
 	private boolean markResourceWithoutContext(Object result, Constraint constraint, java.net.URI mmURI, IResource iResource) {

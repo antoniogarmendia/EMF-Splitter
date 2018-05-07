@@ -96,7 +96,8 @@ public abstract class EpsilonStandAlone {
 				getModelURI().toString());
 		properties.put(EmfModel.PROPERTY_READONLOAD, readOnLoad + "");
 		properties.put(EmfModel.PROPERTY_STOREONDISPOSAL, 
-				storeOnDisposal + "");
+				storeOnDisposal + "");	
+		
 		emfModel.load(properties, (IRelativePathResolver) null);
 		return emfModel;
 	}
