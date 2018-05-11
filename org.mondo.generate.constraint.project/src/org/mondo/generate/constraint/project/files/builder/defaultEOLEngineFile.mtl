@@ -36,6 +36,11 @@ public class DefaultEolExecutionEngine implements IExecuteConstraint {
 		}		
 		return null;
 	}
+
+	@Override
+	public void update() {
+		// Nothing to do.		
+	}
 }
 [/file]
 [/template]

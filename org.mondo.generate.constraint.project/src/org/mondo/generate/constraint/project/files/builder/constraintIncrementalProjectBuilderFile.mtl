@@ -46,9 +46,17 @@ public class ConstraintIncrementalProjectBuilder implements IModularBuilder {
 		return null;
 	}
 
+	private void executeUpdate() {
+		
+		String extension = Activator.getDefault().getPreferenceStore().getString(PreferenceOptions.ENGINE_CHOICE);
+		EvaluateConstraintEngineContributor eval = new EvaluateConstraintEngineContributor();
+		eval.executeUpdate(Platform.getExtensionRegistry(), extension);
+	}
+
 	public void fullBuild(IProject iProject,IProgressMonitor monitor) {
 		
 		try {
+			executeUpdate();
 			 iProject.accept(new IResourceVisitor() {
 				
 				@Override
@@ -65,7 +73,7 @@ public class ConstraintIncrementalProjectBuilder implements IModularBuilder {
 	private void incrementalBuild(IResourceDelta delta, final IProgressMonitor monitor) {
 		
 		try {
-			
+			executeUpdate();
 			delta.accept(new IResourceDeltaVisitor() {
 				
 				@Override

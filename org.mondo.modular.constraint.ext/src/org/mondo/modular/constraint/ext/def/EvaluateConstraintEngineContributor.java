@@ -109,6 +109,30 @@ public class EvaluateConstraintEngineContributor {
 		return false;	
 	}	
 	
+	/*Execute Update*/
+	
+	@Execute
+	public void executeUpdate(IExtensionRegistry registry,String paramId) {
+		
+		IConfigurationElement[] config =
+		        registry.getConfigurationElementsFor(ICONSTRAINT_EXECUTION_ID);
+		    try {
+		      for (IConfigurationElement e : config) {
+		        final Object o =
+		            e.createExecutableExtension("class");
+		        if (o instanceof IExecuteConstraint) {
+		          final String Id = (String) e.getAttribute("Id");
+		          if(Id.equals(paramId)){
+			         ((IExecuteConstraint) o).update();			          
+		          }
+		        }
+		      }
+		    } catch (CoreException ex) {
+		      System.out.println(ex.getMessage());
+		    }		
+	}
+	
+	
 	/*Getters*/
 	
 	public Object getResultConstraint() {
