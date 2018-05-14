@@ -12,6 +12,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
@@ -156,19 +157,23 @@ public class EcoreMatrixContainmentImpl extends MinimalEObjectImpl.Container imp
 			current_containments = obj.getEAllContainments();
 			if(current_containments.size()>0){
 				 for (int j = 0; j < current_containments.size(); j++) {
-					 EClass objEClass = (EClass) current_containments.get(j).getEType();
-					 index = listEClass.indexOf(objEClass);
-					 /*
-					  * Maybe the object is not defined in this meta-model
-					  * I ignored, maybe in the future...
-					  * */
-					 if(index!=-1)
-						 direct_MatrixContainment.get(i).set(index,true);
-					 listChilds = getEAllChilds(objEClass, listEClass);
-					 int countSuperTypes = listChilds.size();
-					 for (int k = 0; k < countSuperTypes; k++) {
-						indexSuperType = listEClass.indexOf(listChilds.get(k));
-						direct_MatrixContainment.get(i).set(indexSuperType, true);
+					 
+					EClassifier eClassifier = current_containments.get(j).getEType();
+					if (eClassifier instanceof EClass) {					 
+						 EClass objEClass = (EClass) current_containments.get(j).getEType();
+						 index = listEClass.indexOf(objEClass);
+						 /*
+						  * Maybe the object is not defined in this meta-model
+						  * I ignored, maybe in the future...
+						  * */
+						 if(index!=-1)
+							 direct_MatrixContainment.get(i).set(index,true);
+						 listChilds = getEAllChilds(objEClass, listEClass);
+						 int countSuperTypes = listChilds.size();
+						 for (int k = 0; k < countSuperTypes; k++) {
+							indexSuperType = listEClass.indexOf(listChilds.get(k));
+							direct_MatrixContainment.get(i).set(indexSuperType, true);
+						}
 					}
 				}
 			}
